@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Nightmares</title>
+	</head>
+	<body>
+		<canvas id="canvas" width="900" height="600" style="position:absolute;z-index:3"></canvas>
+		<img src="" width="900" height="600" style="position: absolute;z-index:1">
+		<img id="grid" src="../images/grid.png" width="900" height="600" style="position: absolute;z-index:2;display:none">
+		<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2">
+		<img id="skeleton" width="25" height="37" src="../images/skeleton.png">
+		<div id="UI" style="position: absolute; left: 900px; border: 1px solid black; background-color: grey; width: 300px; height: 600px; top: 0px;" >
+			<br>
+			<button class="btnDress" id="enemy" onclick=enemy() style="margin: 5px">Enter Enemy</button>
+			<br>
+			<div style="width:100%; height:100px">
+			<img id="tower" onclick=placeTower() width="45" height="60" style="position:absolute; margin: 20px 10px 10px 10px; border: 1px solid black"src="../images/tower.png">
+			<br>
+			<p style="position:absolute;left:75px"> Cost: 50 gold<br>Damage: 20<br>Range: 300</p>
+			</div>
+			<p id="outputHp"></p>
+			<br>
+			<p id="outputGold"></p>
+			<br><br>
+			<button class="btnDress" id="togGrid" onclick=togGrid() style="margin: 5px">Toggle Grid</button>
+		</div>
+	</body>
+</html>
+
+<style>
+*{
+	margin:0;
+	font-family:Tahoma;
+}
+.btnDress {
+	background-color: #669999;
+}
+</style>
+
+<script>
+
+//Create the map of stages
+var stage = [];
+
+stage[0] = "Child's Bedroom";
+stage[1] = "";
+stage[2] = "";
+stage[3] = "";
+
+//Set the player's start stage
+var currentStage = 0;
+var show = true;
+var towerLocations = [];
+var numOfTowers = 0;
+var towerxy = {x:0, y:0};
+var objObstruct = false;
+var playerHealth = 100;
+var gold = 1000;
+
+//Set the images
+var images = [];
+
+images[0] = "ChildBedroomStage.jpg";
+images[1] = "";
+images[2] = "";
+images[3] = "";
+
+var grid = [];
+
+var xyCord = {x:0, y:0};
+for (var i = 0; i <40; i++){
+	grid[i] = [];
+	for (var j = 0; j <60; j++){
+		var tempObj = {x:xyCord.x, y:xyCord.y};
+		grid [i][j] = tempObj;
+		xyCord.x += 15;
+	}
+	xyCord.y += 15;
+	xyCord.x = 0;
+}
+
+/*for (var i = 0; i <= 40; i++) {
+	for (var j = 0;j<= 60;j++) {
+		console.log(grid[i][j]);
+	}
+}
+*/
+
+var path = [grid[5][59], grid[5][58], grid[5][57], grid[5][56], grid[5][55], grid[5][54], grid[5][53], 
+			grid[5][52], grid[5][51], grid[5][50], grid[5][49], grid[6][49], grid[7][49], grid[8][49], 
+			grid[9][49], grid[10][49], grid[11][49], grid[12][49], grid[12][48], grid[12][47], grid[12][46], 
+			grid[12][45], grid[12][44], grid[12][43], grid[12][42], grid[12][41], grid[12][40], grid[12][39], 
+			grid[12][38], grid[12][37], grid[12][36], grid[12][35], grid[12][34], grid[12][33], grid[12][32], 
+			grid[12][31], grid[12][30], grid[12][29], grid[12][28], grid[12][27], grid[12][26], grid[12][25], 
+			grid[12][24], grid[13][24], grid[14][24], grid[15][24], grid[16][24], grid[17][24], grid[18][24], 
+			grid[19][24], grid[20][24], grid[21][24], grid[22][24], grid[23][24], grid[24][24], grid[25][24], 
+			grid[25][25], grid[25][26], grid[25][27], grid[25][28], grid[25][29], grid[25][30], grid[25][31], 
+			grid[25][32], grid[25][33], grid[25][34], grid[25][35], grid[25][36], grid[25][37], grid[25][38], 
+			grid[25][39], grid[25][40], grid[26][40], grid[27][40], grid[28][40], grid[29][40], grid[30][40], 
+			grid[31][40], grid[32][40], grid[33][40], grid[34][40], grid[35][40], grid[35][39], grid[35][38], 
+			grid[35][37], grid[35][36], grid[35][35], grid[35][34], grid[35][33], grid[35][32], grid[35][31], 
+			grid[35][30], grid[35][29], grid[35][28], grid[35][27], grid[35][26], grid[35][25], grid[35][24], 
+			grid[35][23], grid[35][22], grid[35][21], grid[35][20], grid[35][19], grid[35][18], grid[35][17], 
+			grid[35][16], grid[35][15], grid[35][14], grid[35][13], grid[35][12], grid[35][11], grid[35][10], 
+			grid[35][9], grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], 
+			grid[35][2], grid[35][1], grid[35][0]];
+			
+
+//The img elements
+var image = document.querySelector("img");
+var skeleton = document.getElementById("skeleton");
+var imgTower = new Image();
+imgTower.src = '../images/tower.png';
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+
+//The input and output fields
+var outputHp = document.querySelector("#outputHp");
+var outputGold = document.querySelector("#outputGold");
+
+render();
+
+function render()
+{
+  //Render the location
+  image.src = "../images/" + images[currentStage];
+  
+  outputHp.innerHTML = "<b>Child's health remaining: </b>" + playerHealth;
+  outputGold.innerHTML += "<b>Gold: </b>" + gold;
+}
+
+function togGrid(){
+	if (show) {
+		document.getElementById("grid").style.display = "block";
+		show = false;
+	} else {
+		document.getElementById("grid").style.display = "none";
+		show = true;
+	}
+}
+
+function enemy()
+{
+	if (canvas.getContext) {
+		var count = 0;
+		var pathPrint = setInterval(function() {
+			ctx.clearRect(path[count].x-13,path[count].y-20, 25, 37);
+			count++;
+			ctx.drawImage(skeleton, path[count].x-13, path[count].y-20, 25, 37);
+			if (count >= path.length - 1) {
+			playerHealth--;
+			outputHp.innerHTML = "<b>Child's health remaining: </b>" + playerHealth;
+			if (playerHealth <= 0){
+				outputHp.innerHTML = "You let the child die to his own nightmare. You are a terrible person. :'(";
+			}
+			clearInterval(pathPrint);
+			ctx.clearRect(path[count].x-13,path[count].y-20, 25, 37);
+			}
+		}, 100);
+	
+		/*for (var i = 0; i < path.length; i++) {
+			ctx.fillRect(path[i].x, path[i].y, 5, 5);
+		}*/
+	}
+	
+}
+
+function placeTower(){
+	document.body.style.cursor = "url('../images/tower.png'),auto";
+	document.getElementById('canvas').addEventListener ("click", handler); 
+	
+	function handler(e){
+	event = e;
+		towerxy.x = event.clientX;     // Get the horizontal coordinate
+		towerxy.y = event.clientY;     // Get the vertical coordinate
+		document.body.style.cursor = "auto";
+		for (var i = 0; i < 40; i++){
+			for (var j = 0; j < 60; j++){
+				if ( (grid[i][j].x - towerxy.x > -15) && (grid[i][j].x - towerxy.x < 15) && (grid[i][j].y - towerxy.y > -15) && (grid[i][j].y - towerxy.y < 15) ) {
+					towerLocations[numOfTowers] = grid[i-1][j-1];
+				}
+			}
+		}
+		for (var i = 0; i < path.length; i++){
+			if ( (path[i].x - towerLocations[numOfTowers].x > -30) && (path[i].x - towerLocations[numOfTowers].x < 60) && (path[i].y - towerLocations[numOfTowers].y > -30) && (path[i].y - towerLocations[numOfTowers].y < 75) ){
+				objObstruct = true;
+			}
+			
+		}
+		if (numOfTowers > 0){
+			for (var i = 0; i < towerLocations.length-1; i++){
+				if ( (towerLocations[i].x - towerLocations[numOfTowers].x > -45) && (towerLocations[i].x - towerLocations[numOfTowers].x < 45) && (towerLocations[i].y - towerLocations[numOfTowers].y > -45) && (towerLocations[i].y - towerLocations[numOfTowers].y < 45) ){
+					objObstruct = true;
+				}
+			}
+		}
+		if (!objObstruct){
+			ctx.drawImage(imgTower, towerLocations[numOfTowers].x, towerLocations[numOfTowers].y, 45, 60);
+			numOfTowers++;
+			gold -= 50;
+			outputGold.innerHTML = "<b>Gold: </b>" + gold;
+		}
+		objObstruct = false;
+		e.target.removeEventListener(e.type, arguments.callee);
+	}
+	
+}
+
+
+</script>
