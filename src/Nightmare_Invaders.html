@@ -1,0 +1,26 @@
+<!doctype html>
+<link rel="stylesheet" href="Styles.css">
+
+<html>
+	<head>
+		<title>Nightmare Invaders</title>
+	</head>
+	<body>
+		<img id="currentStageImage" width="900" height="600">
+		<img id="grid" src="../images/grid.png" width="900" height="600"> <!--Temp grid for easier development-->
+		<canvas id="canvas" width="900" height="600"></canvas>
+		
+		<!--Temporary display of path, will be removed when path and stage image are the same picture-->
+		<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2">
+		
+		<div class="UI">
+			<div class="Towers">
+				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 20px 10px 10px 10px; border: 1px solid black"src="../images/toyCarLauncher.png">
+				<img id="flashlight" onclick=placeTower("flashlight") width="45" height="45" style="position:absolute; margin: 20px 10px 60px 60px; border: 1px solid black"src="../images/flashlight.png">
+			</div>
+			<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
+		</div>
+		
+		<script src="JS.js"></script>
+	</body>
+</html>
