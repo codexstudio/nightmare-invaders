@@ -1,7 +1,40 @@
 corners =  {5, 59, 5, 49, 12, 49, 12, 24, 25, 24, 25, 40, 35, 40, 35, 0}
 path = ""
 
-function PathAlgorithm(index)
+function PathAlgorithm(index, difference)
+	if index%2 == 1 then
+		--print("difference:" .. difference)
+		if difference > 0 then
+			x = corners[index+1]
+			y = corners[index]
+			for i=1, difference do
+				x = x - 1
+				path = path .. "grid[" .. y .. "][" .. x .. "], "
+			end
+		end
+	end
+	if index%2 == 0 then
+		difference = corners[index] - corners[index+2] - 1
+		print("%2=0 difference: " .. difference)
+	end
+end
+
+path = path .. "grid[" .. corners[1] .. "][" .. corners[2] .. "], "
+for i = 1, #corners, 2 do
+	print(i)
+	if corners[i] == corners[i+2] then
+		PathAlgorithm(i, corners[i+1] - corners[i+3] - 1)
+		path = path .. "grid[" .. corners[i+2] .. "][" .. corners[i+3] .. "], "
+	end
+	if corners[i+1] == corners[i+3] then
+		--print("check")
+		PathAlgorithm(i, corners[i+2] - corners[i+4] - 1)
+		path = path .. "grid[" .. corners[i+3] .. "][" .. corners[i+4] .. "], "
+	end
+end
+print(path)
+
+--[[function PathAlgorithm(index)
 	if #corners ~= index+4 then
 		difference = corners[index+1] - corners[index+3] - 1
 		print("DIFFERENCE: " .. difference)
@@ -48,7 +81,7 @@ for i = 1, #corners do
 	counter = counter + 2
 end
 
-print (path)
+print (path)[[--
 --[[
 y = 0
 x = 0
