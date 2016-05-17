@@ -1,10 +1,20 @@
+//Set FPS
+var fps = setInterval(update, 33.34); // 30fps
+
+
+//Determines the distance between two points
+function distance(x1, x2, y1, y2){
+	return Math.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1)));
+}
+
+
 //Creating our grid
 var grid = [];
 
 var xyCord = {x:0, y:0};
-for (var i = 0; i <40; i++){
+for (var i = 0; i <=40; i++){
 	grid[i] = [];
-	for (var j = 0; j <60; j++){
+	for (var j = 0; j <=60; j++){
 		var tempObj = {x:xyCord.x, y:xyCord.y};
 		grid [i][j] = tempObj;
 		xyCord.x += 15;
@@ -34,7 +44,7 @@ stageImages[3] = "";
 
 
 //List of stage paths (Paths not to be used for enemy path anymore like in prototype. Purpose is now for tower placement checking.)
-var pathChildBedroom = [grid[5][59], grid[5][58], grid[5][57], grid[5][56], grid[5][55], grid[5][54], grid[5][53], 
+var pathChildBedroom = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid[5][56], grid[5][55], grid[5][54], grid[5][53], 
 			grid[5][52], grid[5][51], grid[5][50], grid[5][49], grid[6][49], grid[7][49], grid[8][49], 
 			grid[9][49], grid[10][49], grid[11][49], grid[12][49], grid[12][48], grid[12][47], grid[12][46], 
 			grid[12][45], grid[12][44], grid[12][43], grid[12][42], grid[12][41], grid[12][40], grid[12][39], 
@@ -78,6 +88,133 @@ function togGrid(){
 	}
 }
 
+//Enemy related section-----------------------------------------------------------------------------------------------------------
+var enemiesOnBoard = [];
+
+
+//Enemies Bluprint Section----------------------------------------------------------
+ var enemy = function(health, damage, income, speed, xCoord, yCoord, pathPos){
+	this.health = health;
+	this.damage = damage;
+	this.income = income;
+	this.speed = speed;
+	this.xCoord = (stagePaths[currentStage])[0].x;
+	this.yCoord = (stagePaths[currentStage])[0].y;
+	this.pathPos = 0;
+	this.enemyNextMove;
+ }
+
+enemy.prototype.enemyMovement = function(enemyObj, enemyType){
+	var enemyImgToPrint = new Image();
+	enemyImgToPrint.src = '../images/' + enemyType + '.png';
+	
+	this.enemyNextMove = setInterval(function() {
+		//console.log("x: " + (stagePaths[currentStage])[enemyObj.pathPos].x + " <= " + enemyObj.xCoord);
+		//console.log("y: " + (stagePaths[currentStage])[enemyObj.pathPos].y + " <= " + enemyObj.yCoord);
+		if (((stagePaths[currentStage])[enemyObj.pathPos].x <= enemyObj.xCoord) && ((stagePaths[currentStage])[enemyObj.pathPos].y == enemyObj.yCoord)){
+			if((stagePaths[currentStage])[enemyObj.pathPos].x % enemyObj.xCoord == 0){
+				enemyObj.pathPos++;
+			}
+			ctx.clearRect(enemyObj.xCoord-13, enemyObj.yCoord-20, 25, 37);
+			enemyObj.xCoord--;
+			ctx.drawImage(enemyImgToPrint, enemyObj.xCoord-13, enemyObj.yCoord-20, 25, 37);
+		}
+		
+		else if (((stagePaths[currentStage])[enemyObj.pathPos].x >= enemyObj.xCoord) && ((stagePaths[currentStage])[enemyObj.pathPos].y == enemyObj.yCoord)){
+			if((stagePaths[currentStage])[enemyObj.pathPos].x % enemyObj.xCoord == 0){
+				enemyObj.pathPos++;
+			}
+			ctx.clearRect(enemyObj.xCoord-13, enemyObj.yCoord-20, 25, 37);
+			enemyObj.xCoord++;
+			ctx.drawImage(enemyImgToPrint, enemyObj.xCoord-13, enemyObj.yCoord-20, 25, 37);
+		}
+		
+		else if (((stagePaths[currentStage])[enemyObj.pathPos].y <= enemyObj.yCoord) && ((stagePaths[currentStage])[enemyObj.pathPos].x == enemyObj.xCoord)){
+			if((stagePaths[currentStage])[enemyObj.pathPos].y % enemyObj.xCoord == 0){
+				enemyObj.pathPos++;
+			}
+			ctx.clearRect(enemyObj.xCoord-13, enemyObj.yCoord-20, 25, 37);
+			enemyObj.yCoord--;
+			ctx.drawImage(enemyImgToPrint, enemyObj.xCoord-13, enemyObj.yCoord-20, 25, 37);
+		}
+		
+		else if (((stagePaths[currentStage])[enemyObj.pathPos].y >= enemyObj.yCoord) && ((stagePaths[currentStage])[enemyObj.pathPos].x == enemyObj.xCoord+1)){
+			if((stagePaths[currentStage])[enemyObj.pathPos].y % enemyObj.yCoord == 0){
+				enemyObj.pathPos++;
+			}
+			ctx.clearRect(enemyObj.xCoord-13, enemyObj.yCoord-20, 25, 37);
+			enemyObj.yCoord++;
+			ctx.drawImage(enemyImgToPrint, enemyObj.xCoord-13, enemyObj.yCoord-20, 25, 37);
+		}
+		if (enemyObj.pathPos > (stagePaths[currentStage]).length-1) {
+				ctx.clearRect(enemyObj.xCoord-13, enemyObj.yCoord-20, 25, 37);
+				enemiesOnBoard.splice(enemyObj,1);
+				clearInterval(enemyObj.enemyNextMove);
+			}
+		
+	}, this.speed);
+}
+
+
+function basicSkeleton(health, damage, income, speed, xCoord, yCoord, pathPos){
+	enemy.call(this, health, damage, income, speed, xCoord, yCoord, pathPos);
+	this.health = 200;
+	this.damage = 1;
+	this.income = 50;
+	this.speed = 40;
+	this.enemyNextMove;
+}
+basicSkeleton.prototype = Object.create(enemy.prototype);
+basicSkeleton.prototype.constructor = basicSkeleton;
+
+basicSkeleton.prototype.thisChildMetohdNeedsAName = function(){
+	console.log("Undefined Child Method");
+};
+
+function redSkeleton(health, damage, income, speed, xCoord, yCoord, pathPos){
+	enemy.call(this, health, damage, income, speed, xCoord, yCoord, pathPos);
+	this.health = 500;
+	this.damage = 2;
+	this.income = 100;
+	this.speed = 80;
+}
+redSkeleton.prototype = Object.create(enemy.prototype);
+redSkeleton.prototype.constructor = redSkeleton;
+
+redSkeleton.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+};
+
+function blueSkeleton(health, damage, income, speed, xCoord, yCoord, pathPos){
+	enemy.call(this, health, damage, income, speed, xCoord, yCoord, pathPos)
+	this.health = 100;
+	this.damage = 1;
+	this.income = 75;
+	this.speed = 20;
+}
+blueSkeleton.prototype = Object.create(enemy.prototype);
+blueSkeleton.prototype.constructor = blueSkeleton;
+
+blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method");
+};
+// End of enemy bluprint section----------------------------------------------------
+
+
+function spawnEnemy(enemyType){
+	var tempEnemyObj = new (eval(enemyType))(null, null, null, null, null, null);
+	enemiesOnBoard.push(tempEnemyObj);
+	console.log("NEW " + enemyType + " MADE!");
+	console.log("Health = " + enemiesOnBoard[enemiesOnBoard.length-1].health);
+	console.log("Damage = " + enemiesOnBoard[enemiesOnBoard.length-1].damage);
+	console.log("Income = " + enemiesOnBoard[enemiesOnBoard.length-1].income);
+	console.log("Speed = " + enemiesOnBoard[enemiesOnBoard.length-1].speed);
+	//console.log("x Loc = " + enemiesOnBoard[enemiesOnBoard.length-1].xCoord);
+	//console.log("y Loc = " + enemiesOnBoard[enemiesOnBoard.length-1].yCoord);
+	enemiesOnBoard[enemiesOnBoard.length-1].enemyMovement(tempEnemyObj, enemyType);
+}
+//End of enemy related section-------------------------------------------------------------------------------------------------------------
+
 
 //Tower related section -------------------------------------------------------------------------------------------------------------------
 var towersOnBoard = [];
@@ -88,7 +225,7 @@ var objObstruct = false;
 
 
 //Tower blueprints section--------------------------------------------------------
-var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, hasTarget){
 	this.cost = cost;
 	this.damage = damage;
 	this.range = range;
@@ -96,20 +233,47 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded)
 	this.xCoord = xCoord;
 	this.yCoord = yCoord;
 	this.upgraded = false;
+	this.hasTarget = false;
 };
 
-tower.prototype.thisParentMethodNeedsAName = function(){
-	console.log("Undefined Parent Method.")
+/*
+tower.prototype.getTargets = function(towerObj){
+	if (towersOnBoard.length != 0 && enemiesOnBoard.length != 0){
+		for(var i = 0; i < enemiesOnBoard.length; i++){
+			if (towersOnBoard.length != 0 && enemiesOnBoard.length != 0){
+				var distanceObj = distance (enemiesOnBoard[i].xCoord, towerObj.xCoord, enemiesOnBoard[i].yCoord, towerObj.yCoord);
+				
+				if(distanceObj <= towerObj.range && (towerObj.hasTarget == false)){
+					towerObj.hasTarget = true;
+					
+					var attack = setInterval(function() {
+						console.log(enemiesOnBoard[i].health);
+						//console.log(i);
+						if (enemiesOnBoard[i].health > 0){
+							enemiesOnBoard[i].health -= towerObj.damage;
+						}
+						else if (enemiesOnBoard[i].health <= 0){
+							towerObj.hasTarget = false;
+							ctx.clearRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, 25, 37);
+							clearInterval(enemiesOnBoard[i].enemyNextMove);
+							enemiesOnBoard.splice(i,1);
+							clearInterval(attack);
+						}
+					}, towerObj.attackSpeed);
+				}
+			}	
+		}
+	}
 };
+*/
 
-
-function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, hasTarget){
 	
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, hasTarget);
 	this.cost = 50;
-	this.damage = 25;
+	this.damage = 15;
 	this.range = 200;
-	this.attackSpeed = 2;
+	this.attackSpeed = 500;
 }
 toyCarLauncher.prototype = Object.create(tower.prototype);
 toyCarLauncher.prototype.constructor = toyCarLauncher;
@@ -118,15 +282,14 @@ toyCarLauncher.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined toyCarLauncher Method.")
 };
 
-function flashlight(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+function flashlight(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, hasTarget){
 	
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, hasTarget);
 	this.cost = 30;
 	this.damage = 0;
 	this.range = 100;
 	this.attackSpeed = 100;
 }
-
 flashlight.prototype = Object.create(tower.prototype);
 flashlight.prototype.constructor = flashlight;
 
@@ -141,13 +304,13 @@ function createTowerObject(towerType, x, y){
 	towersOnBoard.push(tempTowerObject);
 	//Temp console log for debugging, can be removed later.
 	console.log("NEW " + towerType + " MADE!");
-	console.log("Cost = " + towersOnBoard[numOfTowers].cost);
-	console.log("Damage = " + towersOnBoard[numOfTowers].damage);
-	console.log("Range = " + towersOnBoard[numOfTowers].range);
-	console.log("Attack Speed = " + towersOnBoard[numOfTowers].attackSpeed);
-	console.log("x pixel loc = " + towersOnBoard[numOfTowers].xCoord);
-	console.log("y pixel loc = " + towersOnBoard[numOfTowers].yCoord);
-	console.log("Upgraded? = " + towersOnBoard[numOfTowers].upgraded);
+	console.log("Cost = " + towersOnBoard[towersOnBoard.length-1].cost);
+	console.log("Damage = " + towersOnBoard[towersOnBoard.length-1].damage);
+	console.log("Range = " + towersOnBoard[towersOnBoard.length-1].range);
+	console.log("Attack Speed = " + towersOnBoard[towersOnBoard.length-1].attackSpeed);
+	//console.log("x pixel loc = " + towersOnBoard[towersOnBoard.length-1].xCoord);
+	//console.log("y pixel loc = " + towersOnBoard[towersOnBoard.length-1].yCoord);
+	console.log("Upgraded? = " + towersOnBoard[towersOnBoard.length-1].upgraded);
 }
 
 function placeTower(towerType){
@@ -195,6 +358,42 @@ function placeTower(towerType){
 	}
 	
 }
+
+
+//Towers search for enemies then attack
+function getTargets(){
+	for(a=0; a < enemiesOnBoard.length; ++a){
+		i = a;
+		for(b=0; b < towersOnBoard.length; ++b){
+			x = b;
+			var distanceObj = distance (enemiesOnBoard[a].xCoord, towersOnBoard[b].xCoord, enemiesOnBoard[a].yCoord, towersOnBoard[b].yCoord);
+			if(distanceObj <= towersOnBoard[b].range && (towersOnBoard[b].hasTarget == false)){
+				towersOnBoard[b].hasTarget = true;
+				//setInterval(attack(enemiesOnBoard[a].health, towersOnBoard[b].damage), towersOnBoard[b].attackSpeed);
+				//console.log(a,b,enemiesOnBoard[a]);
+				//console.log(a);
+				var attack = setInterval(function() {
+					
+					console.log(i,x,enemiesOnBoard[i].health);
+					
+					if (enemiesOnBoard[i].health > 0){
+						enemiesOnBoard[i].health -= towersOnBoard[x].damage;
+					}
+					else if (enemiesOnBoard[i].health <= 0){
+						towersOnBoard[x].hasTarget = false;
+						ctx.clearRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, 25, 37);
+						clearInterval(enemiesOnBoard[i].enemyNextMove);
+						enemiesOnBoard.splice(i,1);
+						clearInterval(attack);
+					}
+				}, towersOnBoard[b].attackSpeed);
+			}
+		}
+	}
+}
+
+
+
 //End tower section ---------------------------------------------------------------------------------------------------------------------------
 
 //Initialize Game
@@ -202,4 +401,10 @@ initGame();
 function initGame()
 {
 	currentStageImage.src = "../images/" + stageImages[currentStage];
+}
+
+function update(){
+	if (towersOnBoard.length != 0 && enemiesOnBoard.length != 0){
+		getTargets();
+	}
 }
