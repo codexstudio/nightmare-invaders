@@ -16,14 +16,131 @@
 		<div class="UI">
 			<div class="Towers">
 				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 20px 10px 10px 10px; border: 1px solid black"src="../images/toyCarLauncher.png">
-				<img id="flashlight" onclick=placeTower("flashlight") width="45" height="45" style="position:absolute; margin: 20px 10px 60px 60px; border: 1px solid black"src="../images/flashlight.png">
+				<img id="flashlight" onclick=placeTower("flashlight") width="45" height="45" style="position:absolute; margin: 70px 60px 10px 10px; border: 1px solid black"src="../images/flashlight.png">
+				
 			</div>
-			<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
-			<button class="btnDress" id="Enter Basic Skeleton" onclick=spawnEnemy("basicSkeleton")>Enter Basic Skeleton</button>
-			<button class="btnDress" id="Enter Red Skeleton" onclick=spawnEnemy("redSkeleton")>Enter Red Skeleton</button>
-			<button class="btnDress" id="Enter Blue Skeleton" onclick=spawnEnemy("blueSkeleton")>Enter Blue Skeleton</button>
+			
+		<div class ="turret">
+			<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 20px 10px 10px 10px; border: 1px solid black"src="../images/toyCarLauncher.png">
+			<div class ="towerStats">
+				Toy-Car Launcher <br>
+				Gold: 50 <br>
+				Damage: 15 <br>
+				Attack Speed: 2 <br>
+				Range: 200 <br>
+			</div>
 		</div>
 		
+		<div class ="turret">
+			<img id="flashlight" onclick=placeTower("flashlight") width="45" height="45" style="position:absolute; margin: 70px 60px 10px 10px; border: 1px solid black"src="../images/flashlight.png">
+			<div class ="towerStats">
+			Flash Light Tower <br>
+			Gold: 30 <br>
+			Damage: 0 <br>
+			Attack Speed: 100 <br>
+			Range: 100 <br>
+			</div>
+		</div>
+			
+		
+			<div class ="info">
+				<div class = "words">
+				<p>Gold: 500</p>
+				<p>Level: 1<p>
+				<p>Wave: 1</p>
+				</div>
+			</div>
+			
+			<div class="buttons">
+				<button class= "btnDress" id="start" onclick=start()>Start</button>	
+				<button class= "btnDress" id="fastForward" onclick=fastForward()>Fast Forward</button>
+				<button class= "btnDress" id="pause" onclick=pause()>Pause</button>
+				<button class= "btnDress" id="menu" onclick=menu()>Main Menu</button>
+				<button class= "btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
+				
+				<!-- Debugging purposes
+				<button class= "btnDress" id="Enter Basic Skeleton" onclick=spawnEnemy("basicSkeleton")>Enter Basic Skeleton</button>
+				<button class= "btnDress" id="Enter Red Skeleton" onclick=spawnEnemy("redSkeleton")>Enter Red Skeleton</button>
+				<button class= "btnDress" id="Enter Blue Skeleton" onclick=spawnEnemy("blueSkeleton")>Enter Blue Skeleton</button>
+				-->
+				
+			</div>
+			
+			<div class="message">
+			
+				<p>GameMessage HERE<p>
+			<div>
+			
+		</div>
+
 		<script src="JS.js"></script>
 	</body>
+	
+	
+	<!-- <style>
+	img{display:block;}
+	.imgwrap {
+		float:left;
+		width:30%;
+		position:relative;
+		margin:0 2% 20px 0;
+		overflow: hidden;
+		
+	}
+	.imgwrap img {
+		width:100%;
+		height:auto;
+	}
+	.rollover {
+		position:absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		background:rgba(0,0,0,0.6);
+		color:#fff;
+		transorm:translateX(-100%);
+		transition: all .5s ease;
+	} -->
+	
 </html>
+
+
+
+
+	<!-- ul li {display: inline-block;}
+ul li:hover {background: #555;}
+ul li:hover ul {display: block;}
+ul li ul {
+  position: absolute;
+  width: 200px;
+  display: none;
+}
+
+ul li ul li { 
+  background: #555; 
+  display: block; 
+} 
+
+
+
+ul li ul li a {display:block !important;} 
+ul li ul li:hover {background: #666;}
+</style>
+</head>
+<body>
+
+<div>
+  <a href="#">Useless Link</a>
+  <ul>
+    <li>
+      <a href="#">Dropdown Link</a>
+      <ul>
+        <li><p>blah</p></li>
+        <li><p>blah</p></li>
+        <li><p>blah</p></li>
+      </ul>
+    </li>
+  </ul>
+</div> -->
+		
