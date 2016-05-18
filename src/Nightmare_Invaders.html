@@ -13,18 +13,17 @@
 		<!--Temporary display of path, will be removed when path and stage image are the same picture-->
 		<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2">
 		
-		<div class="UI">
-			<div class="Towers">
-				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 20px 10px 10px 10px; border: 1px solid black"src="../images/toyCarLauncher.png">
-				<img id="flashlight" onclick=placeTower("flashlight") width="45" height="45" style="position:absolute; margin: 70px 60px 10px 10px; border: 1px solid black"src="../images/flashlight.png">
-				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
-				<button class="btnDress" id="Enter Basic Skeleton" onclick=spawnEnemy("basicSkeleton")>Enter Basic Skeleton</button>
-				<button class="btnDress" id="Enter Red Skeleton" onclick=spawnEnemy("redSkeleton")>Enter Red Skeleton</button>
-				<button class="btnDress" id="Enter Blue Skeleton" onclick=spawnEnemy("blueSkeleton")>Enter Blue Skeleton</button>
-			</div>
+		<div class="UI">	
+				<div class="toggle">
+				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button><br>
+				<button class="btnDress" id="Enter Basic Skeleton" onclick=spawnEnemy("basicSkeleton")>Basic Skeleton</button><br>
+				<button class="btnDress" id="Enter Red Skeleton" onclick=spawnEnemy("redSkeleton")>Red Skeleton</button><br>
+				<button class="btnDress" id="Enter Blue Skeleton" onclick=spawnEnemy("blueSkeleton")>Blue Skeleton</button><br>
+				</div>
+			
 			
 		<div class ="turret">
-			<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 20px 10px 10px 10px; border: 1px solid black"src="../images/toyCarLauncher.png">
+			<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 30px 30px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
 			<div class ="towerStats">
 				Toy-Car Launcher <br>
 				Gold: 50 <br>
@@ -35,7 +34,7 @@
 		</div>
 		
 		<div class ="turret">
-			<img id="flashlight" onclick=placeTower("flashlight") width="45" height="45" style="position:absolute; margin: 70px 60px 10px 10px; border: 1px solid black"src="../images/flashlight.png">
+			<img id="flashlight" onclick=placeTower("flashlight") width="45" height="45" style="position:relative; margin: 80px 90px 30px 30px; border: 2px solid black"src="../images/flashlight.png">
 			<div class ="towerStats">
 			Flash Light Tower <br>
 			Gold: 30 <br>
@@ -47,11 +46,9 @@
 			
 		
 			<div class ="info">
-				<div class = "words">
 				<p>Gold: 500</p>
 				<p>Level: 1<p>
 				<p>Wave: 1</p>
-				</div>
 			</div>
 			
 			<div class="buttons">
@@ -59,12 +56,11 @@
 				<button class= "btnDress" id="fastForward" onclick=fastForward()>Fast Forward</button>
 				<button class= "btnDress" id="pause" onclick=pause()>Pause</button>
 				<button class= "btnDress" id="menu" onclick=menu()>Main Menu</button>
-				<button class= "btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
 			</div>
 			
 			<div class="message">
 			
-				<p>GameMessage HERE<p>
+				<p style="margin:10px 50px -50px 30px; font-size: 18px;">GameMessage HERE!</p>
 			</div>
 			
 		</div>
