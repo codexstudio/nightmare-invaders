@@ -37,7 +37,7 @@ stages[3] = "";
 //List of stage images
 var stageImages = [];
 
-stageImages[0] = "ChildBedroomStage.jpg";
+stageImages[0] = "Stage1.png";
 stageImages[1] = "";
 stageImages[2] = "";
 stageImages[3] = "";
