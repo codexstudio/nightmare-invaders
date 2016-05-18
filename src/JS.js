@@ -27,7 +27,7 @@ stages[3] = "";
 //List of stage images
 var stageImages = [];
 
-stageImages[0] = "ChildBedroomStage.jpg";
+stageImages[0] = "Stage1.png";
 stageImages[1] = "";
 stageImages[2] = "";
 stageImages[3] = "";
@@ -110,6 +110,7 @@ function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgrad
 	this.damage = 25;
 	this.range = 200;
 	this.attackSpeed = 2;
+	
 }
 toyCarLauncher.prototype = Object.create(tower.prototype);
 toyCarLauncher.prototype.constructor = toyCarLauncher;
@@ -201,5 +202,6 @@ function placeTower(towerType){
 initGame();
 function initGame()
 {
+	
 	currentStageImage.src = "../images/" + stageImages[currentStage];
 }
