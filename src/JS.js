@@ -209,8 +209,6 @@ function spawnEnemy(enemyType){
 	console.log("Damage = " + enemiesOnBoard[enemiesOnBoard.length-1].damage);
 	console.log("Income = " + enemiesOnBoard[enemiesOnBoard.length-1].income);
 	console.log("Speed = " + enemiesOnBoard[enemiesOnBoard.length-1].speed);
-	//console.log("x Loc = " + enemiesOnBoard[enemiesOnBoard.length-1].xCoord);
-	//console.log("y Loc = " + enemiesOnBoard[enemiesOnBoard.length-1].yCoord);
 	enemiesOnBoard[enemiesOnBoard.length-1].enemyMovement(tempEnemyObj, enemyType);
 }
 //End of enemy related section-------------------------------------------------------------------------------------------------------------
@@ -225,7 +223,7 @@ var objObstruct = false;
 
 
 //Tower blueprints section--------------------------------------------------------
-var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, hasTarget){
+var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	this.cost = cost;
 	this.damage = damage;
 	this.range = range;
@@ -233,46 +231,41 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.xCoord = xCoord;
 	this.yCoord = yCoord;
 	this.upgraded = false;
-	this.hasTarget = false;
 };
 
 
-tower.prototype.getTargets = function(towerObj){
+tower.prototype.attack = function(towerObj){
 	
-	for(var a = 0; a < enemiesOnBoard.length; ++a){
-		i = a;
-		if (towersOnBoard.length >= 0 && enemiesOnBoard.length >= 0){
-			var distanceObj = distance (enemiesOnBoard[i].xCoord, towerObj.xCoord, enemiesOnBoard[i].yCoord, towerObj.yCoord);
+	for (var a = 0; a < enemiesOnBoard.length; a++){
+		var i = a;
+		if(towersOnBoard.length > 0 && enemiesOnBoard.length > 0){
+			var distanceEnemy = distance (enemiesOnBoard[i].xCoord, towerObj.xCoord, enemiesOnBoard[i].yCoord, towerObj.yCoord);
 			
-			if(distanceObj <= towerObj.range && (towerObj.hasTarget == false)){
-				towerObj.hasTarget = true;
+			if(distanceEnemy <= towerObj.range){
+				console.log(enemiesOnBoard[i].health);
 				
-				var attack = setInterval(function() {
-					console.log(enemiesOnBoard[i].health);
-					//console.log(i);
-					if (enemiesOnBoard[i].health > 0){
-						enemiesOnBoard[i].health -= towerObj.damage;
-					}
-					else if (enemiesOnBoard[i].health <= 0){
-						towerObj.hasTarget = false;
-						ctx.clearRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
-						clearInterval(enemiesOnBoard[i].enemyNextMove);
-						enemiesOnBoard.splice(i,1);
-						clearInterval(attack);
-					}
-				}, towerObj.attackSpeed);
+				if (enemiesOnBoard[i].health > 0){
+					enemiesOnBoard[i].health -= towerObj.damage;
+					return;
+				}
+				else if (enemiesOnBoard[i].health <= 0){
+					ctx.clearRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
+					clearInterval(enemiesOnBoard[i].enemyNextMove);
+					enemiesOnBoard.splice(i,1);
+					return;
+				}
 			}
-		}	
+		}
 	}
 };
 
 
-function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, hasTarget){
+function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, hasTarget);
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
 	this.cost = 50;
 	this.damage = 15;
-	this.range = 200;
+	this.range = 150;
 	this.attackSpeed = 500;
 }
 toyCarLauncher.prototype = Object.create(tower.prototype);
@@ -282,9 +275,9 @@ toyCarLauncher.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined toyCarLauncher Method.")
 };
 
-function flashlight(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, hasTarget){
+function flashlight(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, hasTarget);
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
 	this.cost = 30;
 	this.damage = 0;
 	this.range = 100;
@@ -313,10 +306,10 @@ function createTowerObject(towerType, x, y){
 	console.log("Upgraded? = " + towersOnBoard[towersOnBoard.length-1].upgraded);
 	
 	var attackTarget = setInterval(function() {
-		if (towersOnBoard.length >= 0 && enemiesOnBoard.length >= 0){
-			towersOnBoard[towersOnBoard.length-1].getTargets(tempTowerObject);
+		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0){
+			tempTowerObject.attack(tempTowerObject);
 		}
-	}, 33.34);
+	}, tempTowerObject.attackSpeed);
 	
 }
 
@@ -365,42 +358,6 @@ function placeTower(towerType){
 	}
 	
 }
-
-
-//Towers search for enemies then attack
-/*function getTargets(){
-	for(a=0; a < enemiesOnBoard.length; ++a){
-		i = a;
-		for(b=0; b < towersOnBoard.length; ++b){
-			x = b;
-			var distanceObj = distance (enemiesOnBoard[a].xCoord, towersOnBoard[b].xCoord, enemiesOnBoard[a].yCoord, towersOnBoard[b].yCoord);
-			if(distanceObj <= towersOnBoard[b].range && (towersOnBoard[b].hasTarget == false)){
-				towersOnBoard[b].hasTarget = true;
-				//setInterval(attack(enemiesOnBoard[a].health, towersOnBoard[b].damage), towersOnBoard[b].attackSpeed);
-				//console.log(a,b,enemiesOnBoard[a]);
-				//console.log(a);
-				var attack = setInterval(function() {
-					
-					console.log(i,x,enemiesOnBoard[i].health);
-					
-					if (enemiesOnBoard[i].health > 0){
-						enemiesOnBoard[i].health -= towersOnBoard[x].damage;
-					}
-					else if (enemiesOnBoard[i].health <= 0){
-						towersOnBoard[x].hasTarget = false;
-						ctx.clearRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
-						clearInterval(enemiesOnBoard[i].enemyNextMove);
-						enemiesOnBoard.splice(i,1);
-						clearInterval(attack);
-					}
-				}, towersOnBoard[b].attackSpeed);
-			}
-		}
-	}
-}
-*/
-
-
 //End tower section ---------------------------------------------------------------------------------------------------------------------------
 
 //Initialize Game
@@ -411,9 +368,7 @@ function initGame()
 }
 
 function update(){
-	//if (towersOnBoard.length != 0 && enemiesOnBoard.length != 0){
-		//getTargets();
-	//}
+	
 }
 
 //temp funtion for demonstrative purposes of the First Playable
