@@ -372,7 +372,7 @@ function update(){
 }
 
 //temp funtion for demonstrative purposes of the First Playable
-function start (){
+function sampleWave (){
 	var i = 0;
 	
 	var e1 = setInterval(function() {
