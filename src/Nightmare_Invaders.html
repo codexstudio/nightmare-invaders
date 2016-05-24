@@ -13,17 +13,51 @@
 		<!--Temporary display of path, will be removed when path and stage image are the same picture-->
 		<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2">
 		
-		<div class="UI">
-			<div class="Towers">
-				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 20px 10px 10px 10px; border: 1px solid black"src="../images/toyCarLauncher.png">
-				<img id="flashlight" onclick=placeTower("flashlight") width="45" height="45" style="position:absolute; margin: 20px 10px 60px 60px; border: 1px solid black"src="../images/flashlight.png">
+		<div class="UI">	
+			
+		<div class ="turret">
+			<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 30px 30px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
+			<div class ="towerStats">
+				Toy-Car Launcher <br>
+				Gold: 50 <br>
+				Damage: 25 <br>
+				Attack Speed: 2 <br>
+				Range: 200 <br>
 			</div>
-			<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
-			<button class="btnDress" id="Enter Basic Skeleton" onclick=spawnEnemy("basicSkeleton")>Enter Basic Skeleton</button>
-			<button class="btnDress" id="Enter Red Skeleton" onclick=spawnEnemy("redSkeleton")>Enter Red Skeleton</button>
-			<button class="btnDress" id="Enter Blue Skeleton" onclick=spawnEnemy("blueSkeleton")>Enter Blue Skeleton</button>
 		</div>
 		
+		<div class ="turret">
+			<img id="flashlight" onclick=placeTower("flashlight") width="45" height="45" style="position:relative; margin: 80px 90px 30px 30px; border: 2px solid black"src="../images/flashlight.png">
+			<div class ="towerStats">
+			Flash Light Tower <br>
+			Gold: 30 <br>
+			Damage: 0 <br>
+			Attack Speed: 100 <br>
+			Range: 100 <br>
+			</div>
+		</div>
+			
+			<div class ="info">
+				<p id="outputHp"></p>
+				<p id="outputGold"></p>
+				<p>Level: 1<p>
+				<p>Wave: 1</p>
+			</div>
+			
+			<div class="buttons">
+				<button class= "btnDress" id="sampleWave" onclick=sampleWave()>Sample Wave</button>	
+				<button class= "btnDress" id="fastForward" onclick=fastForward()>Fast Forward</button>
+				<button class= "btnDress" id="pause" onclick=pause()>Pause</button>
+				<button class= "btnDress" id="menu" onclick=menu()>Main Menu</button>
+				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button><br>
+			</div>
+			
+			<div class="message">
+			
+				<p id = "gameMessage" style="margin:10px 50px -50px 30px; font-size: 18px;"></p>
+			</div>
+			
+		</div>
 		<script src="JS.js"></script>
 	</body>
 </html>
