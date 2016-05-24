@@ -93,11 +93,12 @@ var enemiesOnBoard = [];
 
 
 //Enemies Bluprint Section----------------------------------------------------------
- var enemy = function(health, damage, income, speed, xCoord, yCoord, pathPos){
+ var enemy = function(health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
 	this.health = health;
 	this.damage = damage;
 	this.income = income;
 	this.speed = speed;
+	this.killReward = killReward;
 	this.xCoord = (stagePaths[currentStage])[0].x;
 	this.yCoord = (stagePaths[currentStage])[0].y;
 	this.pathPos = 0;
@@ -156,13 +157,13 @@ enemy.prototype.enemyMovement = function(enemyObj, enemyType){
 }
 
 
-function basicSkeleton(health, damage, income, speed, xCoord, yCoord, pathPos){
-	enemy.call(this, health, damage, income, speed, xCoord, yCoord, pathPos);
+function basicSkeleton(health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
+	enemy.call(this, health, damage, income, speed, killReward, xCoord, yCoord, pathPos);
 	this.health = 200;
 	this.damage = 1;
 	this.income = 50;
 	this.speed = 30;
-	this.enemyNextMove;
+	this.killReward = 5;
 }
 basicSkeleton.prototype = Object.create(enemy.prototype);
 basicSkeleton.prototype.constructor = basicSkeleton;
@@ -171,12 +172,13 @@ basicSkeleton.prototype.thisChildMetohdNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
 
-function redSkeleton(health, damage, income, speed, xCoord, yCoord, pathPos){
-	enemy.call(this, health, damage, income, speed, xCoord, yCoord, pathPos);
+function redSkeleton(health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
+	enemy.call(this, health, damage, income, speed, killReward, xCoord, yCoord, pathPos);
 	this.health = 500;
 	this.damage = 2;
 	this.income = 100;
 	this.speed = 60;
+	this.killReward = 15;
 }
 redSkeleton.prototype = Object.create(enemy.prototype);
 redSkeleton.prototype.constructor = redSkeleton;
@@ -185,12 +187,13 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blueSkeleton(health, damage, income, speed, xCoord, yCoord, pathPos){
-	enemy.call(this, health, damage, income, speed, xCoord, yCoord, pathPos)
+function blueSkeleton(health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
+	enemy.call(this, health, damage, income, speed, killReward, xCoord, yCoord, pathPos)
 	this.health = 100;
 	this.damage = 1;
 	this.income = 75;
 	this.speed = 20;
+	this.killReward = 10;
 }
 blueSkeleton.prototype = Object.create(enemy.prototype);
 blueSkeleton.prototype.constructor = blueSkeleton;
@@ -209,6 +212,7 @@ function spawnEnemy(enemyType){
 	console.log("Damage = " + enemiesOnBoard[enemiesOnBoard.length-1].damage);
 	console.log("Income = " + enemiesOnBoard[enemiesOnBoard.length-1].income);
 	console.log("Speed = " + enemiesOnBoard[enemiesOnBoard.length-1].speed);
+	console.log("Kill Reward = " + enemiesOnBoard[enemiesOnBoard.length-1].killReward);
 	enemiesOnBoard[enemiesOnBoard.length-1].enemyMovement(tempEnemyObj, enemyType);
 }
 //End of enemy related section-------------------------------------------------------------------------------------------------------------
@@ -242,7 +246,7 @@ tower.prototype.attack = function(towerObj){
 			var distanceEnemy = distance (enemiesOnBoard[i].xCoord, towerObj.xCoord, enemiesOnBoard[i].yCoord, towerObj.yCoord);
 			
 			if(distanceEnemy <= towerObj.range){
-				console.log(enemiesOnBoard[i].health);
+				console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
 				
 				if (enemiesOnBoard[i].health > 0){
 					enemiesOnBoard[i].health -= towerObj.damage;
@@ -281,7 +285,7 @@ function flashlight(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	this.cost = 30;
 	this.damage = 0;
 	this.range = 100;
-	this.attackSpeed = 100;
+	this.attackSpeed = 50;
 }
 flashlight.prototype = Object.create(tower.prototype);
 flashlight.prototype.constructor = flashlight;
