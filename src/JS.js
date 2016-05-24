@@ -82,7 +82,8 @@ function togGrid(){
 	if (show) {
 		document.getElementById("grid").style.display = "block";
 		show = false;
-	} else {
+	} 
+	else {
 		document.getElementById("grid").style.display = "none";
 		show = true;
 	}
@@ -93,7 +94,8 @@ var enemiesOnBoard = [];
 
 
 //Enemies Bluprint Section----------------------------------------------------------
- var enemy = function(health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
+ var enemy = function(startHealth, health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
+	this.startHealth = startHealth;
 	this.health = health;
 	this.damage = damage;
 	this.income = income;
@@ -116,39 +118,47 @@ enemy.prototype.enemyMovement = function(enemyObj, enemyType){
 			if((stagePaths[currentStage])[enemyObj.pathPos].x % enemyObj.xCoord == 0){
 				enemyObj.pathPos++;
 			}
-			ctx.clearRect(enemyObj.xCoord-13, enemyObj.yCoord-15, 25, 32);
+			ctx.clearRect(enemyObj.xCoord-15, enemyObj.yCoord-20, 27, 37);
 			enemyObj.xCoord--;
 			ctx.drawImage(enemyImgToPrint, enemyObj.xCoord-13, enemyObj.yCoord-15, 25, 32);
+			ctx.fillStyle = "rgb(0,204,0)";
+			ctx.fillRect(enemyObj.xCoord-13, enemyObj.yCoord-20, (25 * (enemyObj.health / enemyObj.startHealth)), 5);
 		}
 		
 		else if (((stagePaths[currentStage])[enemyObj.pathPos].x >= enemyObj.xCoord) && ((stagePaths[currentStage])[enemyObj.pathPos].y == enemyObj.yCoord)){
 			if((stagePaths[currentStage])[enemyObj.pathPos].x % enemyObj.xCoord == 0){
 				enemyObj.pathPos++;
 			}
-			ctx.clearRect(enemyObj.xCoord-13, enemyObj.yCoord-15, 25, 32);
+			ctx.clearRect(enemyObj.xCoord-15, enemyObj.yCoord-20, 27, 37);
 			enemyObj.xCoord++;
 			ctx.drawImage(enemyImgToPrint, enemyObj.xCoord-13, enemyObj.yCoord-15, 25, 32);
+			ctx.fillStyle = "rgb(0,204,0)";
+			ctx.fillRect(enemyObj.xCoord-13, enemyObj.yCoord-20, (25 * (enemyObj.health / enemyObj.startHealth)), 5);
 		}
 		
 		else if (((stagePaths[currentStage])[enemyObj.pathPos].y <= enemyObj.yCoord) && ((stagePaths[currentStage])[enemyObj.pathPos].x == enemyObj.xCoord)){
 			if((stagePaths[currentStage])[enemyObj.pathPos].y % enemyObj.xCoord == 0){
 				enemyObj.pathPos++;
 			}
-			ctx.clearRect(enemyObj.xCoord-13, enemyObj.yCoord-15, 25, 32);
+			ctx.clearRect(enemyObj.xCoord-15, enemyObj.yCoord-20, 27, 37);
 			enemyObj.yCoord--;
 			ctx.drawImage(enemyImgToPrint, enemyObj.xCoord-13, enemyObj.yCoord-15, 25, 32);
+			ctx.fillStyle = "rgb(0,204,0)";
+			ctx.fillRect(enemyObj.xCoord-13, enemyObj.yCoord-20, (25 * (enemyObj.health / enemyObj.startHealth)), 5);
 		}
 		
 		else if (((stagePaths[currentStage])[enemyObj.pathPos].y >= enemyObj.yCoord) && ((stagePaths[currentStage])[enemyObj.pathPos].x == enemyObj.xCoord+1)){
 			if((stagePaths[currentStage])[enemyObj.pathPos].y % enemyObj.yCoord == 0){
 				enemyObj.pathPos++;
 			}
-			ctx.clearRect(enemyObj.xCoord-13, enemyObj.yCoord-15, 25, 32);
+			ctx.clearRect(enemyObj.xCoord-15, enemyObj.yCoord-20, 27, 37);
 			enemyObj.yCoord++;
 			ctx.drawImage(enemyImgToPrint, enemyObj.xCoord-13, enemyObj.yCoord-15, 25, 32);
+			ctx.fillStyle = "rgb(0,204,0)";
+			ctx.fillRect(enemyObj.xCoord-13, enemyObj.yCoord-20, (25 * (enemyObj.health / enemyObj.startHealth)), 5);
 		}
 		if (enemyObj.pathPos > (stagePaths[currentStage]).length-1) {
-				ctx.clearRect(enemyObj.xCoord-13, enemyObj.yCoord-15, 25, 32);
+				ctx.clearRect(enemyObj.xCoord-15, enemyObj.yCoord-20, 27, 37);
 				enemiesOnBoard.splice(0,1);
 				clearInterval(enemyObj.enemyNextMove);
 		}
@@ -157,8 +167,9 @@ enemy.prototype.enemyMovement = function(enemyObj, enemyType){
 }
 
 
-function basicSkeleton(health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, health, damage, income, speed, killReward, xCoord, yCoord, pathPos);
+function basicSkeleton(startHealth, health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
+	enemy.call(this, startHealth,health, damage, income, speed, killReward, xCoord, yCoord, pathPos);
+	this.startHealth = 200;
 	this.health = 200;
 	this.damage = 1;
 	this.income = 50;
@@ -172,8 +183,9 @@ basicSkeleton.prototype.thisChildMetohdNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
 
-function redSkeleton(health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, health, damage, income, speed, killReward, xCoord, yCoord, pathPos);
+function redSkeleton(startHealth, health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
+	enemy.call(this, startHealth, health, damage, income, speed, killReward, xCoord, yCoord, pathPos);
+	this.startHealth = 500;
 	this.health = 500;
 	this.damage = 2;
 	this.income = 100;
@@ -187,8 +199,9 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blueSkeleton(health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, health, damage, income, speed, killReward, xCoord, yCoord, pathPos)
+function blueSkeleton(startHealth, health, damage, income, speed, killReward, xCoord, yCoord, pathPos){
+	enemy.call(this, startHealth, health, damage, income, speed, killReward, xCoord, yCoord, pathPos)
+	this.startHealth = 100;
 	this.health = 100;
 	this.damage = 1;
 	this.income = 75;
@@ -205,7 +218,7 @@ blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 
 
 function spawnEnemy(enemyType){
-	var tempEnemyObj = new (eval(enemyType))(null, null, null, null, null, null);
+	var tempEnemyObj = new (eval(enemyType))();
 	enemiesOnBoard.push(tempEnemyObj);
 	console.log("NEW " + enemyType + " MADE!");
 	console.log("Health = " + enemiesOnBoard[enemiesOnBoard.length-1].health);
@@ -253,7 +266,7 @@ tower.prototype.attack = function(towerObj){
 					return;
 				}
 				else if (enemiesOnBoard[i].health <= 0){
-					ctx.clearRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
+					ctx.clearRect(enemiesOnBoard[i].xCoord-15, enemiesOnBoard[i].yCoord-20, 27, 37);
 					clearInterval(enemiesOnBoard[i].enemyNextMove);
 					enemiesOnBoard.splice(i,1);
 					return;
@@ -375,7 +388,7 @@ function update(){
 	
 }
 
-//temp funtion for demonstrative purposes of the First Playable
+//temp function for demonstrative purposes of the First Playable
 function sampleWave (){
 	var i = 0;
 	
