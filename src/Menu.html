@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+<title>Nightmare Invaders</title>
+<style>
+
+@font-face
+{
+	font-family: BoneText; 
+	src: url(SketchBones.ttf);
+}
+body
+{
+	font-family: BoneText;
+	background-image: url("../images/menu-background.png");
+	background-size: 900px 600px;
+	background-repeat: no-repeat;
+}
+#gameTitle
+{
+	margin-left: 175px;
+	font-size: 60px;
+	font-weight: bold;
+	font-stretch: ultra-condensed;
+	color: #38004D;
+	text-decoration: none;
+}
+#play
+{	
+	color: black;
+	margin-left: 280px;
+	font-size: 30px;
+	font-weight: 400;
+	text-decoration: none;
+	cursor:default;
+}
+#continue
+{
+	color: black;
+	margin-left: 376px;
+	font-size: 30px;
+	font-weight: 400;
+	text-decoration: none;
+	cursor:default;
+}
+#load
+{
+	color: black;
+	margin-left: 395px;
+	font-size: 30px;
+	font-weight: 400;
+	text-decoration: none;
+	cursor:default;
+}
+#highscores
+{
+	color: black;
+	margin-left: 360px;
+	font-size: 30px;
+	font-weight: 400;
+	text-decoration: none;
+	cursor:default;
+}
+#exit
+{
+	color: black;
+	margin-left: 375px;
+	font-size: 30px;
+	font-weight: 400;
+	text-decoration: none;
+	cursor:default;
+}
+#gameTitle:hover
+{
+	cursor: auto;
+}
+#play:hover
+{
+	cursor: 
+	color: #001A00;
+	font-weight: bold;
+}
+audio
+{
+	opacity: 0; 
+}
+#mute
+{
+	margin-left: 850px;
+	margin-top: 120px;
+}
+</style>
+</head>
+<body>
+
+<audio id=background_audio src="../audio/They're Here.mp3" loop="true" autoplay="true" controls></audio>
+<br><br><br><br>
+<a id=gameTitle href=Menu.html>Nightmare Invaders</a>
+
+<br><br><br>
+<a id=play href=Nightmare_Invaders.html>Start Your Nightmare</a>
+<br>
+<a id=continue >Continue</a>
+<br>
+<a id=load >Load</a>
+<br>
+<a id=highscores >Highscores</a>
+<br>
+<a id=exit >Wake Up</a>
+<br>
+<img src="../images/sound_on.png" id=mute onclick="changeImage()">
+</body>        
+</html>
+
+<script>
+var audio = document.getElementById('background_audio')
+document.getElementById('mute').addEventListener('click', function (e)
+{
+	e = e || window.event;
+	audio.muted = !audio.muted;
+	e.preventDefault();
+}, false);
+function changeImage()
+	{
+		var image = document.getElementById('mute');
+		if(image.src.match("sound_on")) 
+		{
+		image.src = "../images/sound_off.png";
+		}
+		else 
+		{
+			image.src = "../images/sound_on.png";
+		}
+	}
+ 
+</script>
