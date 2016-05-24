@@ -166,6 +166,7 @@ enemy.prototype.enemyMovement = function(enemyObj, enemyType){
 		if (enemyObj.pathPos > (stagePaths[currentStage]).length-1) {
 				ctx.clearRect(enemyObj.xCoord-15, enemyObj.yCoord-20, 27, 37);
 				enemiesOnBoard.splice(0,1);
+				Hp -= enemyObj.damage;
 				clearInterval(enemyObj.enemyNextMove);
 		}
 		
