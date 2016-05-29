@@ -15,27 +15,27 @@
 		
 		<div class="UI">	
 			
-		<div class ="turret">
-			<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 30px 30px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
-			<div class ="towerStats">
-				Toy-Car Launcher <br>
-				Gold: 50 <br>
-				Damage: 25 <br>
-				Attack Speed: 2 <br>
-				Range: 200 <br>
+			<div class ="turret">
+				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") onmouseover=getStats("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 30px 30px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
+				<div class ="towerStats">
+					Toy-Car Launcher <br>
+					<p id="outputCosttoyCarLauncher"></p>
+					<p id="outputDamagetoyCarLauncher"></p>
+					<p id="outputRangetoyCarLauncher"></p>
+					<p id="outputAspdtoyCarLauncher"></p>
+				</div>
 			</div>
-		</div>
-		
-		<div class ="turret">
-			<img id="flashlight" onclick=placeTower("flashlight") width="45" height="45" style="position:relative; margin: 80px 90px 30px 30px; border: 2px solid black"src="../images/flashlight.png">
-			<div class ="towerStats">
-			Flash Light Tower <br>
-			Gold: 30 <br>
-			Damage: 0 <br>
-			Attack Speed: 100 <br>
-			Range: 100 <br>
+			
+			<div class ="turret">
+				<img id="flashlight" onclick=placeTower("flashlight") onmouseover=getStats("flashlight") width="45" height="45" style="position:absolute; margin: 80px 90px 30px 30px; border: 2px solid black"src="../images/flashlight.png">
+				<div class ="towerStats">
+					Flash Light Tower <br>
+					<p id="outputCostflashlight"></p>
+					<p id="outputDamageflashlight"></p>
+					<p id="outputRangeflashlight"></p>
+					<p id="outputAspdflashlight"></p>
+				</div>
 			</div>
-		</div>
 			
 			<div class ="info">
 				<p id="outputHp"></p>
@@ -45,15 +45,12 @@
 			</div>
 			
 			<div class="buttons">
-				<button class= "btnDress" id="sampleWave" onclick=sampleWave()>Sample Wave</button>	
-				<button class= "btnDress" id="fastForward" onclick=fastForward()>Fast Forward</button>
-				<button class= "btnDress" id="pause" onclick=pause()>Pause</button>
+				<button class= "btnDress" id="sampleWave" onclick=sampleWave()>Sample Wave</button>
 				<button class= "btnDress" id="menu" onclick=menu()>Main Menu</button>
-				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button><br>
+				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
 			</div>
 			
 			<div class="message">
-			
 				<p id = "gameMessage" style="margin:10px 50px -50px 30px; font-size: 18px;"></p>
 			</div>
 			

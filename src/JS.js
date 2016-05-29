@@ -68,12 +68,15 @@ stagePaths[0] = pathChildBedroom;
 //stagePaths[1] = ;
 //stagePaths[2] = ;
 
+
+//UI Variables
 var Gold = 100;
 var Hp = 100;
 var gameMessage = "Welcome to Nightmare Invaders!";
 var outputHp = document.querySelector("#outputHp");
 var outputGold = document.querySelector("#outputGold");
 var outputGameMessage = document.querySelector("#gameMessage");
+
 
 //The img elements
 var currentStageImage = document.getElementById("currentStageImage");
@@ -313,7 +316,7 @@ flashlight.prototype.thisChildMethodNeedsAName = function(){
 //End tower blueprints section----------------------------------------------------
 
 
-	function createTowerObject(towerType, x, y){
+function createTowerObject(towerType, x, y){
 	var tempTowerObject = new (eval(towerType))(null, null, null, null, x, y, null);
 	towersOnBoard.push(tempTowerObject);
 	Gold -= tempTowerObject.cost;
@@ -386,7 +389,23 @@ function placeTower(towerType){
 	}
 	
 }
+
+
+function getStats(turret) {
+	var outputCost = document.querySelector("#outputCost" + turret);
+	var outputDamage = document.querySelector("#outputDamage" + turret);
+	var outputRange = document.querySelector("#outputRange" + turret);
+	var outputAspd = document.querySelector("#outputAspd" + turret);
+	
+	var towerPlaceholder = new (eval(turret))();
+		outputCost.innerHTML = "Cost: " + towerPlaceholder.cost;
+		outputDamage.innerHTML = "Damage: " + towerPlaceholder.damage;
+		outputRange.innerHTML = "Range: " + towerPlaceholder.range;
+		outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed;
+}
+
 //End tower section ---------------------------------------------------------------------------------------------------------------------------
+
 
 //Initialize Game
 initGame();
@@ -398,6 +417,7 @@ function initGame()
 	outputGameMessage.innerHTML = gameMessage;
 }
 
+//Update Game
 function update(){
 	outputHp.innerHTML = "<b>Health: </b>" + Hp;
 	outputGold.innerHTML = "<b>Gold: </b>" + Gold;
@@ -434,6 +454,7 @@ function sampleWave (){
 			i++;
 		}
 		if(i > 11){
+			gameMessage = "End of sample wave.";
 			clearInterval(e3);
 		}
 	}, 5000);
