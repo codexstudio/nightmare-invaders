@@ -222,10 +222,10 @@ blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 };
 function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
-	this.startHealth = 2000;
-	this.health = 2000;
+	this.startHealth = 350;
+	this.health = 350;
 	this.damage = 2;
-	this.speed = 60;
+	this.speed = 50;
 	this.killReward = 25;
 	this.isVisible = false;
 }
@@ -272,7 +272,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded)
 };
 
 
-tower.prototype.attack = function(towerObj){
+tower.prototype.attack = function(towerObj, towerName){
 	
 	for (var a = 0; a < enemiesOnBoard.length; a++){
 		var i = a;
@@ -282,7 +282,7 @@ tower.prototype.attack = function(towerObj){
 			if(distanceEnemy <= towerObj.range){
 				//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
 				var rotatedTowerImg = new Image();
-				rotatedTowerImg.src = '../images/toyCarLauncher' + rotateTower(towerObj.xCoord, towerObj.yCoord, enemiesOnBoard[i].xCoord, enemiesOnBoard[i].yCoord) + '.png';
+				rotatedTowerImg.src = '../images/rotatedTowerImages/' + towerName + rotateTower(towerObj.xCoord, towerObj.yCoord, enemiesOnBoard[i].xCoord, enemiesOnBoard[i].yCoord) + '.png';
 				ctx.clearRect(towerObj.xCoord, towerObj.yCoord, 45, 45);
 				ctx.drawImage(rotatedTowerImg, towerObj.xCoord, towerObj.yCoord, 45, 45);
 				
@@ -309,7 +309,7 @@ function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgrad
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
 	this.cost = 50;
 	this.damage = 15;
-	this.range = 150;
+	this.range = 120;
 	this.attackSpeed = 500;
 }
 toyCarLauncher.prototype = Object.create(tower.prototype);
@@ -352,7 +352,7 @@ function createTowerObject(towerType, x, y){
 
 	var attackTarget = setInterval(function() {
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0){
-			tempTowerObject.attack(tempTowerObject);
+			tempTowerObject.attack(tempTowerObject, towerType);
 		}
 	}, tempTowerObject.attackSpeed);
 	
@@ -457,10 +457,10 @@ function getStats(turret) {
 	var outputAspd = document.querySelector("#outputAspd" + turret);
 	
 	var towerPlaceholder = new (eval(turret))();
-		outputCost.innerHTML = "Cost: " + towerPlaceholder.cost;
-		outputDamage.innerHTML = "Damage: " + towerPlaceholder.damage;
-		outputRange.innerHTML = "Range: " + towerPlaceholder.range;
-		outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed;
+	outputCost.innerHTML = "Cost: " + towerPlaceholder.cost;
+	outputDamage.innerHTML = "Damage: " + towerPlaceholder.damage;
+	outputRange.innerHTML = "Range: " + towerPlaceholder.range;
+	outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed;
 }
 
 //End tower section ---------------------------------------------------------------------------------------------------------------------------
