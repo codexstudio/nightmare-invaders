@@ -438,7 +438,7 @@ function rotateTower(towerX, towerY, enemyX, enemyY) {
 	else if (c >= 157.5 && c < 202.5) { //South
 		direction = 'South'; 
 	}
-	else if (c >= 202.5 && c < 247.5) { //Southwest
+	else if (c >= 202.5 && c < 247.5) { //Southwest github gay
 		direction = 'Southwest';
 	}
 	else if (c >= 247.5 && c < 292.5) { //West
