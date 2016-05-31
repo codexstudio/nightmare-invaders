@@ -68,12 +68,15 @@ stagePaths[0] = pathChildBedroom;
 //stagePaths[1] = ;
 //stagePaths[2] = ;
 
+
+//UI Variables
 var Gold = 100;
 var Hp = 100;
 var gameMessage = "Welcome to Nightmare Invaders!";
 var outputHp = document.querySelector("#outputHp");
 var outputGold = document.querySelector("#outputGold");
 var outputGameMessage = document.querySelector("#gameMessage");
+
 
 //The img elements
 var currentStageImage = document.getElementById("currentStageImage");
@@ -217,6 +220,22 @@ blueSkeleton.prototype.constructor = blueSkeleton;
 blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
+function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
+	this.startHealth = 350;
+	this.health = 350;
+	this.damage = 2;
+	this.speed = 50;
+	this.killReward = 25;
+	this.isVisible = false;
+}
+ghost.prototype = Object.create(enemy.prototype);
+ghost.prototype.constructor = ghost;
+
+ghost.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method");
+};
+
 // End of enemy bluprint section----------------------------------------------------
 
 
@@ -253,7 +272,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded)
 };
 
 
-tower.prototype.attack = function(towerObj){
+tower.prototype.attack = function(towerObj, towerName){
 	
 	for (var a = 0; a < enemiesOnBoard.length; a++){
 		var i = a;
@@ -261,7 +280,11 @@ tower.prototype.attack = function(towerObj){
 			var distanceEnemy = distance (enemiesOnBoard[i].xCoord, towerObj.xCoord, enemiesOnBoard[i].yCoord, towerObj.yCoord);
 			
 			if(distanceEnemy <= towerObj.range){
-				console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
+				//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
+				var rotatedTowerImg = new Image();
+				rotatedTowerImg.src = '../images/rotatedTowerImages/' + towerName + rotateTower(towerObj.xCoord, towerObj.yCoord, enemiesOnBoard[i].xCoord, enemiesOnBoard[i].yCoord) + '.png';
+				ctx.clearRect(towerObj.xCoord, towerObj.yCoord, 45, 45);
+				ctx.drawImage(rotatedTowerImg, towerObj.xCoord, towerObj.yCoord, 45, 45);
 				
 				if (enemiesOnBoard[i].health > 0){
 					enemiesOnBoard[i].health -= towerObj.damage;
@@ -286,7 +309,7 @@ function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgrad
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
 	this.cost = 50;
 	this.damage = 15;
-	this.range = 150;
+	this.range = 120;
 	this.attackSpeed = 500;
 }
 toyCarLauncher.prototype = Object.create(tower.prototype);
@@ -296,24 +319,24 @@ toyCarLauncher.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined toyCarLauncher Method.")
 };
 
-function flashlight(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+function lamp(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
 	this.cost = 30;
 	this.damage = 0;
 	this.range = 100;
-	this.attackSpeed = 50;
+	this.attackSpeed = 1;
 }
-flashlight.prototype = Object.create(tower.prototype);
-flashlight.prototype.constructor = flashlight;
+lamp.prototype = Object.create(tower.prototype);
+lamp.prototype.constructor = lamp;
 
-flashlight.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined flashlight method.")
+lamp.prototype.lampAbility = function(){
+	
 };
 //End tower blueprints section----------------------------------------------------
 
 
-	function createTowerObject(towerType, x, y){
+function createTowerObject(towerType, x, y){
 	var tempTowerObject = new (eval(towerType))(null, null, null, null, x, y, null);
 	towersOnBoard.push(tempTowerObject);
 	Gold -= tempTowerObject.cost;
@@ -329,7 +352,7 @@ flashlight.prototype.thisChildMethodNeedsAName = function(){
 
 	var attackTarget = setInterval(function() {
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0){
-			tempTowerObject.attack(tempTowerObject);
+			tempTowerObject.attack(tempTowerObject, towerType);
 		}
 	}, tempTowerObject.attackSpeed);
 	
@@ -386,7 +409,62 @@ function placeTower(towerType){
 	}
 	
 }
+
+function rotateTower(towerX, towerY, enemyX, enemyY) {
+	var direction;
+	
+	var a = enemyX - (towerX + 22.5) - 1.5;
+	var b = enemyY - (towerY + 22.5) - 1.5; 
+	
+	var c = Math.atan2(b , a) * 180 / Math.PI;
+	c+=90;
+	
+	if (c <= 0){
+		c = 360 - Math.abs(c);
+	}
+	
+	if (c >= 337.5 || c < 22.5) { //North
+		direction = 'North';
+	}
+ 	else if (c >= 22.5 && c < 67.5) { //Northwest
+		direction = 'Northeast';
+	} 
+	else if (c >= 67.5 && c < 112.5) { //East
+		direction = 'East'; 
+	}
+	else if (c >= 112.5 && c < 157.5) { //West
+		direction = 'Southeast';
+	}
+	else if (c >= 157.5 && c < 202.5) { //South
+		direction = 'South'; 
+	}
+	else if (c >= 202.5 && c < 247.5) { //Southwest
+		direction = 'Southwest';
+	}
+	else if (c >= 247.5 && c < 292.5) { //West
+		direction = 'West'; 
+	}
+	else if (c >= 292.5 && c < 337.5) { //Northwest
+		direction = 'Northwest'; 
+	}
+	return direction;
+}
+
+function getStats(turret) {
+	var outputCost = document.querySelector("#outputCost" + turret);
+	var outputDamage = document.querySelector("#outputDamage" + turret);
+	var outputRange = document.querySelector("#outputRange" + turret);
+	var outputAspd = document.querySelector("#outputAspd" + turret);
+	
+	var towerPlaceholder = new (eval(turret))();
+	outputCost.innerHTML = "Cost: " + towerPlaceholder.cost;
+	outputDamage.innerHTML = "Damage: " + towerPlaceholder.damage;
+	outputRange.innerHTML = "Range: " + towerPlaceholder.range;
+	outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed;
+}
+
 //End tower section ---------------------------------------------------------------------------------------------------------------------------
+
 
 //Initialize Game
 initGame();
@@ -398,6 +476,7 @@ function initGame()
 	outputGameMessage.innerHTML = gameMessage;
 }
 
+//Update Game
 function update(){
 	outputHp.innerHTML = "<b>Health: </b>" + Hp;
 	outputGold.innerHTML = "<b>Gold: </b>" + Gold;
@@ -437,4 +516,15 @@ function sampleWave (){
 			clearInterval(e3);
 		}
 	}, 5000);
+	
+	var e4 = setInterval (function() {
+		if(i > 11){
+			spawnEnemy("ghost");
+			i++;
+		}
+		if(i > 13){
+			gameMessage = "End of sample wave.";
+			clearInterval(e4);
+		}
+	}, 6500);
 }

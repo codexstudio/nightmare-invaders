@@ -52,7 +52,7 @@ body{
 .message{
 	position:absolute;
 	margin-left: 25px;
-	bottom: 230px;
+	bottom: 280px;
 }
 
 .btnDress {
@@ -70,22 +70,23 @@ body{
 	border: 1px solid black;
 	border-radius: 15px;
 }
+
 .btnDress:hover{
 	background-color: #517A7A;
 }
 
 .btnDress: active {
-  background-color: #517A7A;
+	background-color: #517A7A;
 }
 
 .turret:hover .towerStats {
 	opacity:0.6;
 	text-align:justify;
 	color: black;
-	font-size: 20px;
+	font-size: 14px;
 	font-weight: 700;
 	font-family: "Times New Roman", Times, serif;
-	padding:30px;
+	padding: 20px;
 }
 .towerStats{
 	position: absolute;
