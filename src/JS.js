@@ -358,9 +358,11 @@ function createTowerObject(towerType, x, y){
 	
 }
 
+
 function placeTower(towerType){
 	document.body.style.cursor = "url('../images/" + towerType + ".png'),auto";
 	document.getElementById('canvas').addEventListener ("click", handler); 
+	
 	
 	function handler(e){
 	event = e;
@@ -528,3 +530,12 @@ function sampleWave (){
 		}
 	}, 6500);
 }
+
+/*function rangeIndicator (towerType, range) {
+	
+	var circle = document.getElementById('circle').addEventListener ("click", handler);
+	var ctx = circle.getContext("2d");
+	ctx.beginPath(range);
+	ctx.arc(100, 75, 50, 0, (2 * Math.PI * range));
+	ctx.stroke();
+}*/
