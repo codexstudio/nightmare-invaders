@@ -32,7 +32,15 @@ var images = new Array()
 				'../images/rotatedTowerImages/marbleShooterSoutheast.png',
 				'../images/rotatedTowerImages/marbleShooterSouth.png',
 				'../images/rotatedTowerImages/marbleShooterSouthwest.png',
-				'../images/rotatedTowerImages/marbleShooterWest.png'
+				'../images/rotatedTowerImages/marbleShooterWest.png',
+				'../images/rotatedTowerImages/lampNorth.png',
+				'../images/rotatedTowerImages/lampNortheast.png',
+				'../images/rotatedTowerImages/lampNorthwest.png',
+				'../images/rotatedTowerImages/lampEast.png',
+				'../images/rotatedTowerImages/lampSoutheast.png',
+				'../images/rotatedTowerImages/lampSouth.png',
+				'../images/rotatedTowerImages/lampSouthwest.png',
+				'../images/rotatedTowerImages/lampWest.png'
 			)
 		//--><!]]>
 
