@@ -1,6 +1,40 @@
 //Set FPS
 var fps = setInterval(update, 33.34); // 30fps
 
+var images = new Array()
+			function preload() {
+				for (i = 0; i < preload.arguments.length; i++) {
+					images[i] = new Image()
+					images[i].src = preload.arguments[i]
+				}
+			}
+			preload(
+				'../images/rotatedTowerImages/toyCarLauncherNorth.png',
+				'../images/rotatedTowerImages/toyCarLauncherNortheast.png',
+				'../images/rotatedTowerImages/toyCarLauncherNorthwest.png',
+				'../images/rotatedTowerImages/toyCarLauncherEast.png', 
+				'../images/rotatedTowerImages/toyCarLauncherSoutheast.png',
+				'../images/rotatedTowerImages/toyCarLauncherSouth.png',
+				'../images/rotatedTowerImages/toyCarLauncherSouthwest.png', 
+				'../images/rotatedTowerImages/toyCarLauncherWest.png',
+				'../images/rotatedTowerImages/actionFigureNorth.png',
+				'../images/rotatedTowerImages/actionFigureNortheast.png',
+				'../images/rotatedTowerImages/actionFigureNorthwest.png',
+				'../images/rotatedTowerImages/actionFigureEast.png',
+				'../images/rotatedTowerImages/actionFigureSouth.png',
+				'../images/rotatedTowerImages/actionFigureSoutheast.png',
+				'../images/rotatedTowerImages/actionFigureSouthwest.png',
+				'../images/rotatedTowerImages/actionFigureWest.png',
+				'../images/rotatedTowerImages/marbleShooterNorth.png',
+				'../images/rotatedTowerImages/marbleShooterNortheast.png',
+				'../images/rotatedTowerImages/marbleShooterNorthwest.png',
+				'../images/rotatedTowerImages/marbleShooterEast.png',
+				'../images/rotatedTowerImages/marbleShooterSoutheast.png',
+				'../images/rotatedTowerImages/marbleShooterSouth.png',
+				'../images/rotatedTowerImages/marbleShooterSouthwest.png',
+				'../images/rotatedTowerImages/marbleShooterWest.png'
+			)
+		//--><!]]>
 
 //Determines the distance between two points
 function distance(x1, x2, y1, y2){
@@ -333,6 +367,36 @@ lamp.prototype.constructor = lamp;
 lamp.prototype.lampAbility = function(){
 	
 };
+
+function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
+	this.cost = 200;
+	this.damage = 250;
+	this.range = 80;
+	this.attackSpeed = 2000;
+}
+actionFigure.prototype = Object.create(tower.prototype);
+actionFigure.prototype.constructor = actionFigure;
+
+actionFigure.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Action Figure Method.")
+};
+
+function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
+	this.cost = 75;
+	this.damage = 5;
+	this.range = 200;
+	this.attackSpeed = 400;
+}
+marbleShooter.prototype = Object.create(tower.prototype);
+marbleShooter.prototype.constructor = marbleShooter;
+
+toyCarLauncher.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined toyCarLauncher Method.")
+};
 //End tower blueprints section----------------------------------------------------
 
 
@@ -341,14 +405,14 @@ function createTowerObject(towerType, x, y){
 	towersOnBoard.push(tempTowerObject);
 	Gold -= tempTowerObject.cost;
 	//Temp console log for debugging, can be removed later.
-	console.log("NEW " + towerType + " MADE!");
+	/*console.log("NEW " + towerType + " MADE!");
 	console.log("Cost = " + towersOnBoard[towersOnBoard.length-1].cost);
 	console.log("Damage = " + towersOnBoard[towersOnBoard.length-1].damage);
 	console.log("Range = " + towersOnBoard[towersOnBoard.length-1].range);
 	console.log("Attack Speed = " + towersOnBoard[towersOnBoard.length-1].attackSpeed);
 	//console.log("x pixel loc = " + towersOnBoard[towersOnBoard.length-1].xCoord);
 	//console.log("y pixel loc = " + towersOnBoard[towersOnBoard.length-1].yCoord);
-	console.log("Upgraded? = " + towersOnBoard[towersOnBoard.length-1].upgraded);
+	console.log("Upgraded? = " + towersOnBoard[towersOnBoard.length-1].upgraded);*/
 
 	var attackTarget = setInterval(function() {
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0){
@@ -528,3 +592,29 @@ function sampleWave (){
 		}
 	}, 6500);
 }
+
+function preloader() {
+	if (document.images) {
+		var img1 = new Image();
+		var img2 = new Image();
+		var img3 = new Image();
+		var img4 = new Image
+		img1.src = '../images/rotatedTowerImages/toyCarLauncherNorth';
+		img2.src = '../images/rotatedTowerImages/toyCarLauncherNortheast';
+		img3.src = "http://domain.tld/path/to/image-003.gif";
+	}
+}
+function addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			if (oldonload) {
+				oldonload();
+			}
+			func();
+		}
+	}
+}
+addLoadEvent(preloader);
