@@ -13,6 +13,8 @@
 		<!--Temporary display of path, will be removed when path and stage image are the same picture-->
 		<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2">
 		
+		<img src="../images/sound_on.png" id=mute onclick="changeImage()">
+		
 		<div class="UI">	
 			
 			<div class ="turret">
@@ -37,6 +39,28 @@
 				</div>
 			</div>
 			
+			<div class="turret">
+				<img <img id="actionFigure" onclick=placeTower("actionFigure") onmouseover=getStats("actionFigure") width="45" height="45" style="position:absolute; top: 50px; margin: 80px 90px 30px 30px; border: 2px solid black"src="../images/actionFigure.png">
+				<div class ="towerStats">
+					Action Figure <br>
+					<p id="outputCostactionFigure"></p>
+					<p id="outputDamageactionFigure"></p>
+					<p id="outputRangeactionFigure"></p>
+					<p id="outputAspdactionFigure"></p>
+				</div>
+			</div>
+			
+			<div class="turret">
+				<img <img id="marbleShooter" onclick=placeTower("marbleShooter") onmouseover=getStats("marbleShooter") width="45" height="45" style="position:absolute; top: 100px; margin: 80px 90px 30px 30px; border: 2px solid black"src="../images/marbleShooter.png">
+				<div class ="towerStats">
+					Marble Shooter <br>
+					<p id="outputCostmarbleShooter"></p>
+					<p id="outputDamagemarbleShooter"></p>
+					<p id="outputRangemarbleShooter"></p>
+					<p id="outputAspdmarbleShooter"></p>
+				</div>
+			</div>
+			
 			<div class ="info">
 				<p id="outputHp"></p>
 				<p id="outputGold"></p>
@@ -53,8 +77,31 @@
 			<div class="message">
 				<p id = "gameMessage" style="margin:10px 50px -50px 30px; font-size: 18px;"></p>
 			</div>
-			
+			<div class="hidden">
 		</div>
 		<script src="JS.js"></script>
+		<!-- <script>
+		var audio = document.getElementById('background_audio')
+		document.getElementById('mute').addEventListener('click', function (e)
+		{
+		e = e || window.event;
+		audio.muted = !audio.muted;
+		e.preventDefault();
+		}, false);
+		
+		function changeImage() {
+			var image = document.getElementById('mute');
+			if(image.src.match("sound_on")) 
+			{
+			image.src = "../images/sound_off.png";
+			}
+			else 
+			{
+				image.src = "../images/sound_on.png";
+			}
+		}
+		
+		</script> -->
+		
 	</body>
 </html>
