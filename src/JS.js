@@ -2,6 +2,43 @@
 var fps = setInterval(update, 33.34); // 30fps
 
 
+var images = new Array()
+			function preload() {
+				for (i = 0; i < preload.arguments.length; i++) {
+					images[i] = new Image()
+					images[i].src = preload.arguments[i]
+				}
+			}
+			preload(
+				'../images/rotatedTowerImages/toyCarLauncherNorth.png',
+				'../images/rotatedTowerImages/toyCarLauncherNortheast.png',
+				'../images/rotatedTowerImages/toyCarLauncherNorthwest.png',
+				'../images/rotatedTowerImages/toyCarLauncherEast.png', 
+				'../images/rotatedTowerImages/toyCarLauncherSoutheast.png',
+				'../images/rotatedTowerImages/toyCarLauncherSouth.png',
+				'../images/rotatedTowerImages/toyCarLauncherSouthwest.png', 
+				'../images/rotatedTowerImages/toyCarLauncherWest.png',
+				'../images/rotatedTowerImages/actionFigureNorth.png',
+				'../images/rotatedTowerImages/actionFigureNortheast.png',
+				'../images/rotatedTowerImages/actionFigureNorthwest.png',
+				'../images/rotatedTowerImages/actionFigureEast.png',
+				'../images/rotatedTowerImages/actionFigureSouth.png',
+				'../images/rotatedTowerImages/actionFigureSoutheast.png',
+				'../images/rotatedTowerImages/actionFigureSouthwest.png',
+				'../images/rotatedTowerImages/actionFigureWest.png',
+				'../images/rotatedTowerImages/marbleShooterNorth.png',
+				'../images/rotatedTowerImages/marbleShooterNortheast.png',
+				'../images/rotatedTowerImages/marbleShooterNorthwest.png',
+				'../images/rotatedTowerImages/marbleShooterEast.png',
+				'../images/rotatedTowerImages/marbleShooterSoutheast.png',
+				'../images/rotatedTowerImages/marbleShooterSouth.png',
+				'../images/rotatedTowerImages/marbleShooterSouthwest.png',
+				'../images/rotatedTowerImages/marbleShooterWest.png',
+				'../images/lamp.png',
+				'../images/lampOn.png'
+			)
+			
+			
 //Determines the distance between two points
 function distance(x1, x2, y1, y2){
 	return Math.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1)));
@@ -29,18 +66,18 @@ var currentStage = 0;
 var stages = [];
 
 stages[0] = "Child's Bedroom";
-stages[1] = "";
-stages[2] = "";
-stages[3] = "";
+stages[1] = "Basement";
+//stages[2] = "";
+//stages[3] = "";
 
 
 //List of stage images
 var stageImages = [];
 
 stageImages[0] = "Stage1.png";
-stageImages[1] = "";
-stageImages[2] = "";
-stageImages[3] = "";
+stageImages[1] = "Stage2.png";
+//stageImages[2] = "";
+//stageImages[3] = "";
 
 
 //List of stage paths (Paths not to be used for enemy path anymore like in prototype. Purpose is now for tower placement checking.)
@@ -63,19 +100,91 @@ var pathChildBedroom = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid
 			grid[35][9], grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], 
 			grid[35][2], grid[35][1], grid[35][0]];
 			
+var pathBasement = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid[5][56], grid[5][55], grid[5][54], grid[5][53], 
+			grid[5][52], grid[5][51], grid[5][50], grid[5][49], grid[6][49], grid[7][49], grid[8][49], 
+			grid[9][49], grid[10][49], grid[11][49], grid[12][49], grid[12][48], grid[12][47], grid[12][46], 
+			grid[12][45], grid[12][44], grid[12][43], grid[12][42], grid[12][41], grid[12][40], grid[12][39], 
+			grid[12][38], grid[12][37], grid[12][36], grid[12][35], grid[12][34], grid[12][33], grid[12][32], 
+			grid[12][31], grid[12][30], grid[12][29], grid[12][28], grid[12][27], grid[12][26], grid[12][25], 
+			grid[12][24], grid[13][24], grid[14][24], grid[15][24], grid[16][24], grid[17][24], grid[18][24], 
+			grid[19][24], grid[20][24], grid[21][24], grid[22][24], grid[23][24], grid[24][24], grid[25][24], 
+			grid[25][25], grid[25][26], grid[25][27], grid[25][28], grid[25][29], grid[25][30], grid[25][31], 
+			grid[25][32], grid[25][33], grid[25][34], grid[25][35], grid[25][36], grid[25][37], grid[25][38], 
+			grid[25][39], grid[25][40], grid[26][40], grid[27][40], grid[28][40], grid[29][40], grid[30][40], 
+			grid[31][40], grid[32][40], grid[33][40], grid[34][40], grid[35][40], grid[35][39], grid[35][38], 
+			grid[35][37], grid[35][36], grid[35][35], grid[35][34], grid[35][33], grid[35][32], grid[35][31], 
+			grid[35][30], grid[35][29], grid[35][28], grid[35][27], grid[35][26], grid[35][25], grid[35][24], 
+			grid[35][23], grid[35][22], grid[35][21], grid[35][20], grid[35][19], grid[35][18], grid[35][17], 
+			grid[35][16], grid[35][15], grid[35][14], grid[35][13], grid[35][12], grid[35][11], grid[35][10], 
+			grid[35][9], grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], 
+			grid[35][2], grid[35][1], grid[35][0]];
+			
 var stagePaths = [];
 stagePaths[0] = pathChildBedroom;
-//stagePaths[1] = ;
+stagePaths[1] = pathBasement;
 //stagePaths[2] = ;
 
 
-//UI Variables
+//UI Elements
 var Gold = 100;
 var Hp = 100;
 var gameMessage = "Welcome to Nightmare Invaders!";
 var outputHp = document.querySelector("#outputHp");
 var outputGold = document.querySelector("#outputGold");
+var outputLevel = document.querySelector("#outputLevel");
 var outputGameMessage = document.querySelector("#gameMessage");
+var outputStageName = document.querySelector("#stageName");
+
+
+function menu(){
+	window.location="Menu.html";
+}
+
+function prevStage(){
+	if(currentStage > 0){
+		Gold = 100;
+		currentStage--;
+		currentStageImage.src = "../images/" + stageImages[currentStage];
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		while (towersOnBoard.length > 0){
+			towersOnBoard.splice(0, 1);
+		}
+		while (enemiesOnBoard.length > 0){
+			enemiesOnBoard.splice(0, 1);
+		}
+		while (towerLocationsByPixelPosition.length > 0){
+			towerLocationsByPixelPosition.splice(0, 1);
+		}
+		numOfTowers = 0;
+	}
+	else{
+		gameMessage = "This is the first stage!";
+	}
+}
+
+function nextStage(){
+	if(currentStage < stages.length-1){
+		Gold = 100;
+		currentStage++;
+		currentStageImage.src = "../images/" + stageImages[currentStage];
+		
+		while (towersOnBoard.length > 0){
+			towersOnBoard.splice(0, 1);
+			
+		}
+		while (enemiesOnBoard.length > 0){
+			enemiesOnBoard.splice(0, 1);
+		}
+		while (towerLocationsByPixelPosition.length > 0){
+			towerLocationsByPixelPosition.splice(0, 1);
+		}
+		numOfTowers = 0;
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+	}
+	else {
+		gameMessage = "This is that last stage!";
+	}
+}
 
 
 //The img elements
@@ -83,6 +192,15 @@ var currentStageImage = document.getElementById("currentStageImage");
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var clickedTowerImg = new Image();
+
+
+//Gold Over Time
+var awardGoldOverTime;
+var goldOverTime = setInterval(function(){
+	if (awardGoldOverTime == true){
+		Gold++;
+	}
+}, 1000);
 
 
 //Temporary grid toggle
@@ -171,7 +289,9 @@ enemy.prototype.enemyMovement = function(enemyObj, enemyType){
 				Hp -= enemyObj.damage;
 				clearInterval(enemyObj.enemyNextMove);
 		}
-		
+		if (enemyObj instanceof ghost){
+			enemyObj.checkGhostVisibility();
+		}
 	}, this.speed);
 }
 
@@ -196,7 +316,7 @@ function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCo
 	this.startHealth = 500;
 	this.health = 500;
 	this.damage = 2;
-	this.speed = 60;
+	this.speed = 50;
 	this.killReward = 20;
 }
 redSkeleton.prototype = Object.create(enemy.prototype);
@@ -220,6 +340,40 @@ blueSkeleton.prototype.constructor = blueSkeleton;
 blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
+function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
+	this.startHealth = 350;
+	this.health = 350;
+	this.damage = 2;
+	this.speed = 50;
+	this.killReward = 25;
+	this.isVisible = false;
+}
+ghost.prototype = Object.create(enemy.prototype);
+ghost.prototype.constructor = ghost;
+
+ghost.prototype.checkGhostVisibility = function(){
+	
+	var seenByLamp = false;
+	
+	for (var a = 0; a < towersOnBoard.length; a++){
+		var i = a;
+		if(towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towersOnBoard[i] instanceof lamp){
+			var distanceLamp = distance (towersOnBoard[i].xCoord, this.xCoord, towersOnBoard[i].yCoord, this.yCoord);
+			
+			if (distanceLamp <= towersOnBoard[i].range){
+				seenByLamp = true;
+			}
+		}
+	}
+	if (seenByLamp){
+		this.isVisible = true;
+	}
+	else if (!seenByLamp){
+		this.isVisible = false;
+	}
+};
+
 // End of enemy bluprint section----------------------------------------------------
 
 
@@ -231,6 +385,7 @@ function spawnEnemy(enemyType){
 	console.log("Damage = " + enemiesOnBoard[enemiesOnBoard.length-1].damage);
 	console.log("Speed = " + enemiesOnBoard[enemiesOnBoard.length-1].speed);
 	console.log("Kill Reward = " + enemiesOnBoard[enemiesOnBoard.length-1].killReward);
+	
 	enemiesOnBoard[enemiesOnBoard.length-1].enemyMovement(tempEnemyObj, enemyType);
 }
 //End of enemy related section-------------------------------------------------------------------------------------------------------------
@@ -256,29 +411,35 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded)
 };
 
 
-tower.prototype.attack = function(towerObj){
+tower.prototype.attack = function(towerObj, towerName){
 	
 	for (var a = 0; a < enemiesOnBoard.length; a++){
 		var i = a;
 		if(towersOnBoard.length > 0 && enemiesOnBoard.length > 0){
+			if(enemiesOnBoard[i] instanceof ghost && enemiesOnBoard[i].isVisible == false){
+				continue;
+			}
+				
 			var distanceEnemy = distance (enemiesOnBoard[i].xCoord, towerObj.xCoord, enemiesOnBoard[i].yCoord, towerObj.yCoord);
 			
 			if(distanceEnemy <= towerObj.range){
-				console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
+				//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
+				var rotatedTowerImg = new Image();
+				rotatedTowerImg.src = '../images/rotatedTowerImages/' + towerName + rotateTower(towerObj.xCoord, towerObj.yCoord, enemiesOnBoard[i].xCoord, enemiesOnBoard[i].yCoord) + '.png';
+				ctx.clearRect(towerObj.xCoord, towerObj.yCoord, 45, 45);
+				ctx.drawImage(rotatedTowerImg, towerObj.xCoord, towerObj.yCoord, 45, 45);
 				
-				if (enemiesOnBoard[i].health > 0){
-					enemiesOnBoard[i].health -= towerObj.damage;
-					return;
-				}
-				else if (enemiesOnBoard[i].health <= 0){
+				enemiesOnBoard[i].health -= towerObj.damage;
+				
+				if (enemiesOnBoard[i].health <= 0){
 					ctx.clearRect(enemiesOnBoard[i].xCoord-15, enemiesOnBoard[i].yCoord-20, 27, 37);
 					clearInterval(enemiesOnBoard[i].enemyNextMove);
 					Gold += enemiesOnBoard[i].killReward;
 					enemiesOnBoard.splice(i,1);
-					
-					return;
 				}
+				return;
 			}
+			
 		}
 	}
 };
@@ -287,10 +448,10 @@ tower.prototype.attack = function(towerObj){
 function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
-	this.cost = 50;
+	this.cost = 70;
 	this.damage = 15;
 	this.range = 150;
-	this.attackSpeed = 500;
+	this.attackSpeed = 450;
 }
 toyCarLauncher.prototype = Object.create(tower.prototype);
 toyCarLauncher.prototype.constructor = toyCarLauncher;
@@ -299,20 +460,84 @@ toyCarLauncher.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined toyCarLauncher Method.")
 };
 
-function flashlight(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+function lamp(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
 	this.cost = 30;
 	this.damage = 0;
-	this.range = 100;
-	this.attackSpeed = 50;
+	this.range = 170;
+	this.attackSpeed = 1;
 }
-flashlight.prototype = Object.create(tower.prototype);
-flashlight.prototype.constructor = flashlight;
+lamp.prototype = Object.create(tower.prototype);
+lamp.prototype.constructor = lamp;
 
-flashlight.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined flashlight method.")
+lamp.prototype.lampIO = function(){
+
+	var seenGhost = false;
+	
+	for (var a = 0; a < enemiesOnBoard.length; a++){
+		var i = a;
+		if(towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && enemiesOnBoard[i] instanceof ghost){
+			var distanceLamp = distance (this.xCoord, enemiesOnBoard[i].xCoord, this.yCoord, enemiesOnBoard[i].yCoord);
+			
+			if (distanceLamp <= this.range){
+				seenGhost = true;
+			}
+		}
+	}
+	
+	if (seenGhost){
+		var lampOnOff = new Image();
+		lampOnOff.src = '../images/lampOn.png';
+		ctx.clearRect(this.xCoord, this.yCoord, 45, 45);
+		ctx.drawImage(lampOnOff, this.xCoord, this.yCoord, 45, 45);
+		seenGhost = false;
+	}
+	else if (!seenGhost){
+		var lampOnOff = new Image();
+		lampOnOff.src = '../images/lamp.png';
+		ctx.clearRect(this.xCoord, this.yCoord, 45, 45);
+		ctx.drawImage(lampOnOff, this.xCoord, this.yCoord, 45, 45);
+		seenGhost = false;
+	}
+	else if (enemiesOnBoard.length == 0){
+		var lampOnOff = new Image();
+		lampOnOff.src = '../images/lamp.png';
+		ctx.clearRect(this.xCoord, this.yCoord, 45, 45);
+		ctx.drawImage(lampOnOff, this.xCoord, this.yCoord, 45, 45);
+		seenGhost = false;
+	}
 };
+
+function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
+	this.cost = 150;
+	this.damage = 250;
+	this.range = 80;
+	this.attackSpeed = 4000;
+}
+actionFigure.prototype = Object.create(tower.prototype);
+actionFigure.prototype.constructor = actionFigure;
+
+actionFigure.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Action Figure Method.")
+};
+
+function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
+	this.cost = 50;
+	this.damage = 5;
+	this.range = 250;
+	this.attackSpeed = 400;
+}
+marbleShooter.prototype = Object.create(tower.prototype);
+marbleShooter.prototype.constructor = marbleShooter;
+
+marbleShooter.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined marble shooter Method.")
+}
 //End tower blueprints section----------------------------------------------------
 
 
@@ -331,8 +556,11 @@ function createTowerObject(towerType, x, y){
 	console.log("Upgraded? = " + towersOnBoard[towersOnBoard.length-1].upgraded);
 
 	var attackTarget = setInterval(function() {
-		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0){
-			tempTowerObject.attack(tempTowerObject);
+		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerType != "lamp"){
+			tempTowerObject.attack(tempTowerObject, towerType);
+		}
+		else if (towersOnBoard.length > 0 && towerType == "lamp"){
+			tempTowerObject.lampIO();
 		}
 	}, tempTowerObject.attackSpeed);
 	
@@ -362,6 +590,7 @@ function placeTower(towerType){
 		for (var i = 0; i < (stagePaths[currentStage]).length; i++){
 			if ( ((stagePaths[currentStage])[i].x - towerLocationsByPixelPosition[numOfTowers].x > -30) && ((stagePaths[currentStage])[i].x - towerLocationsByPixelPosition[numOfTowers].x < 60) && ((stagePaths[currentStage])[i].y - towerLocationsByPixelPosition[numOfTowers].y > -15) && ((stagePaths[currentStage])[i].y - towerLocationsByPixelPosition[numOfTowers].y < 60) ){
 				objObstruct = true;
+				gameMessage = "Failed to place. Too close to the path.";
 			}
 			
 		}
@@ -369,6 +598,7 @@ function placeTower(towerType){
 			for (var i = 0; i < towerLocationsByPixelPosition.length-1; i++){
 				if ( (towerLocationsByPixelPosition[i].x - towerLocationsByPixelPosition[numOfTowers].x > -45) && (towerLocationsByPixelPosition[i].x - towerLocationsByPixelPosition[numOfTowers].x < 45) && (towerLocationsByPixelPosition[i].y - towerLocationsByPixelPosition[numOfTowers].y > -45) && (towerLocationsByPixelPosition[i].y - towerLocationsByPixelPosition[numOfTowers].y < 45) ){
 					objObstruct = true;
+					gameMessage = "Failed to place. Cannot place a tower on top of another tower.";
 				}
 			}
 		}
@@ -390,18 +620,57 @@ function placeTower(towerType){
 	
 }
 
+function rotateTower(towerX, towerY, enemyX, enemyY) {
+	var direction;
+	
+	var a = enemyX - (towerX + 22.5) - 1.5;
+	var b = enemyY - (towerY + 22.5) - 1.5; 
+	
+	var c = Math.atan2(b , a) * 180 / Math.PI;
+	c+=90;
+	
+	if (c <= 0){
+		c = 360 - Math.abs(c);
+	}
+	
+	if (c >= 337.5 || c < 22.5) { //North
+		direction = 'North';
+	}
+ 	else if (c >= 22.5 && c < 67.5) { //Northwest
+		direction = 'Northeast';
+	} 
+	else if (c >= 67.5 && c < 112.5) { //East
+		direction = 'East'; 
+	}
+	else if (c >= 112.5 && c < 157.5) { //West
+		direction = 'Southeast';
+	}
+	else if (c >= 157.5 && c < 202.5) { //South
+		direction = 'South'; 
+	}
+	else if (c >= 202.5 && c < 247.5) { //Southwest
+		direction = 'Southwest';
+	}
+	else if (c >= 247.5 && c < 292.5) { //West
+		direction = 'West'; 
+	}
+	else if (c >= 292.5 && c < 337.5) { //Northwest
+		direction = 'Northwest'; 
+	}
+	return direction;
+}
 
 function getStats(turret) {
-	var outputCost = document.querySelector("#outputCost" + turret);
-	var outputDamage = document.querySelector("#outputDamage" + turret);
-	var outputRange = document.querySelector("#outputRange" + turret);
-	var outputAspd = document.querySelector("#outputAspd" + turret);
+	var outputCost = document.querySelector("#outputCost-" + turret);
+	var outputDamage = document.querySelector("#outputDamage-" + turret);
+	var outputRange = document.querySelector("#outputRange-" + turret);
+	var outputAspd = document.querySelector("#outputAspd-" + turret);
 	
 	var towerPlaceholder = new (eval(turret))();
-		outputCost.innerHTML = "Cost: " + towerPlaceholder.cost;
-		outputDamage.innerHTML = "Damage: " + towerPlaceholder.damage;
-		outputRange.innerHTML = "Range: " + towerPlaceholder.range;
-		outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed;
+	outputCost.innerHTML = "Cost: " + towerPlaceholder.cost;
+	outputDamage.innerHTML = "Damage: " + towerPlaceholder.damage;
+	outputRange.innerHTML = "Range: " + towerPlaceholder.range;
+	outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed;
 }
 
 //End tower section ---------------------------------------------------------------------------------------------------------------------------
@@ -422,40 +691,225 @@ function update(){
 	outputHp.innerHTML = "<b>Health: </b>" + Hp;
 	outputGold.innerHTML = "<b>Gold: </b>" + Gold;
 	outputGameMessage.innerHTML = gameMessage;
+	outputStageName.innerHTML = stages[currentStage];	
+	outputLevel.innerHTML = "<b>Level: </b>" + (currentStage+1);
+	
+	if(Hp <= 0){
+		gameMessage = "Game Over. You got rekt by your nightmares and peed your pants";
+	}
+	
+	if (enemiesOnBoard.length > 0){
+		awardGoldOverTime = true;
+	}
+	else if (enemiesOnBoard.length == 0){
+		awardGoldOverTime = false;
+	}
 }
 
-//temp function for demonstrative purposes of the First Playable
+
+//temp function for demonstrative purposes of the First Playable/Alpha
 function sampleWave (){
 	var i = 0;
 	
 	var e1 = setInterval(function() {
 		if(i > -1){
+			spawnEnemy("basicSkeleton");
+			i++;
+		}
+		if(i > 5){
+			clearInterval(e1);
+		}
+	}, 4000);
+	
+	var e2 = setInterval(function() {
+		if(i > 5){
 			spawnEnemy("blueSkeleton");
 			i++;
 		}
-		if(i > 3){
-			clearInterval(e1);
+		if(i > 6){
+			clearInterval(e2);
 		}
-	}, 2000);
+	}, 6000);
 	
-	var e2 = setInterval(function() {
-		if(i > 3){
+	var e3 = setInterval(function() {
+		if(i > 6){
 			spawnEnemy("basicSkeleton");
 			i++;
 		}
 		if(i > 7){
-			clearInterval(e2);
+			clearInterval(e3);
 		}
-	}, 3500);
+	}, 6000);
 	
-	var e3 = setInterval(function() {
+	var e4 = setInterval(function() {
 		if(i > 7){
 			spawnEnemy("redSkeleton");
 			i++;
 		}
-		if(i > 11){
-			gameMessage = "End of sample wave.";
+		if(i > 8){
+			clearInterval(e4);
+		}
+	}, 6500);
+	
+	var e5 = setInterval(function() {
+		if(i > 8){
+			spawnEnemy("basicSkeleton");
+			i++;
+		}
+		if(i > 9){
 			clearInterval(e3);
 		}
-	}, 5000);
+	}, 8000);
+	
+	var e6= setInterval(function() {
+		if(i > 9){
+			spawnEnemy("basicSkeleton");
+			i++;
+		}
+		if(i > 10){
+			clearInterval(e6);
+		}
+	}, 9500);
+	
+	var e7 = setInterval(function() {
+		if(i > 10){
+			spawnEnemy("blueSkeleton");
+			i++;
+		}
+		if(i > 11){
+			clearInterval(e7);
+		}
+	}, 10000);
+	
+	var e8 = setInterval(function() {
+		if(i > 11){
+			spawnEnemy("redSkeleton");
+			i++;
+		}
+		if(i > 12){
+			clearInterval(e8);
+		}
+	}, 10500);
+	
+	var e9 = setInterval(function() {
+		if(i > 12){
+			spawnEnemy("blueSkeleton");
+			i++;
+		}
+		if(i > 21){
+			clearInterval(e9);
+		}
+	}, 11000);
+
+	var e10 = setInterval(function() {
+		if(i > 21){
+			spawnEnemy("redSkeleton");
+			i++;
+		}
+		if(i > 26){
+			clearInterval(e10);
+		}
+	}, 13000);
+	
+	var e11 = setInterval(function() {
+		if(i > 26){
+			spawnEnemy("basicSkeleton");
+			i++;
+		}
+		if(i > 32){
+			clearInterval(e11);
+		}
+	}, 14500);
+	
+	var e12 = setInterval(function() {
+		if(i > 32){
+			spawnEnemy("ghost");
+			i++;
+		}
+		if(i > 33){
+			clearInterval(e12);
+		}
+	}, 20000);
+	
+	var e13 = setInterval(function() {
+		if(i > 33){
+			spawnEnemy("basicSkeleton");
+			i++;
+		}
+		if(i > 35){
+			clearInterval(e13);
+		}
+	}, 22000);
+	
+	var e14 = setInterval(function() {
+		if(i > 35){
+			spawnEnemy("blueSkeleton");
+			i++;
+		}
+		if(i > 38){
+			clearInterval(e14);
+		}
+	}, 24000);
+	
+	var e15 = setInterval (function() {
+		if(i > 38){
+			spawnEnemy("ghost");
+			i++;
+		}
+		if(i > 40){
+			clearInterval(e15);
+		}
+	}, 25500);
+	
+	var e16 = setInterval(function() {
+		if(i > 40){
+			spawnEnemy("basicSkeleton");
+			i++;
+		}
+		if(i > 50){
+			clearInterval(e16);
+		}
+	}, 28000);
+	
+	var e17 = setInterval(function() {
+		if(i > 50){
+			spawnEnemy("redSkeleton");
+			i++;
+		}
+		if(i > 55){
+			clearInterval(e17);
+		}
+	}, 37000);
+	
+	var e18 = setInterval (function() {
+		if(i > 55){
+			spawnEnemy("blueSkeleton");
+			i++;
+		}
+		if(i > 60){
+			clearInterval(e18);
+		}
+	}, 42000);
+	
+	var e19 = setInterval (function() {
+		if(i > 60){
+			spawnEnemy("ghost");
+			i++;
+		}
+		if(i > 65){
+			clearInterval(e19);
+		}
+	}, 47000);
+	
+	var e20 = setInterval (function() {
+		if(i > 65){
+			spawnEnemy("basicSkeleton");
+			i++;
+		}
+		if(i > 75){
+			gameMessage = "End of sample wave.";
+			clearInterval(e20);
+		}
+	}, 55000);
 }
+	

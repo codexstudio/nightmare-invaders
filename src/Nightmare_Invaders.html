@@ -13,40 +13,72 @@
 		<!--Temporary display of path, will be removed when path and stage image are the same picture-->
 		<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2">
 		
+		<!-- 
+		<img src="../images/sound_on.png" id=mute onclick="changeImage()">
+		-->
+		<audio id=background_audio src="../audio/They're Here.mp3" loop="true" autoplay="true" controls></audio>
+		
 		<div class="UI">	
 			
 			<div class ="turret">
 				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") onmouseover=getStats("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 30px 30px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
 				<div class ="towerStats">
 					Toy-Car Launcher <br>
-					<p id="outputCosttoyCarLauncher"></p>
-					<p id="outputDamagetoyCarLauncher"></p>
-					<p id="outputRangetoyCarLauncher"></p>
-					<p id="outputAspdtoyCarLauncher"></p>
+					<p id="outputCost-toyCarLauncher"></p>
+					<p id="outputDamage-toyCarLauncher"></p>
+					<p id="outputRange-toyCarLauncher"></p>
+					<p id="outputAspd-toyCarLauncher"></p>
 				</div>
 			</div>
 			
 			<div class ="turret">
-				<img id="flashlight" onclick=placeTower("flashlight") onmouseover=getStats("flashlight") width="45" height="45" style="position:absolute; margin: 80px 90px 30px 30px; border: 2px solid black"src="../images/flashlight.png">
+				<img id="lamp" onclick=placeTower("lamp") onmouseover=getStats("lamp") width="45" height="45" style="position:absolute; margin: 80px 30px 30px 30px; border: 2px solid black"src="../images/lamp.png">
 				<div class ="towerStats">
-					Flash Light Tower <br>
-					<p id="outputCostflashlight"></p>
-					<p id="outputDamageflashlight"></p>
-					<p id="outputRangeflashlight"></p>
-					<p id="outputAspdflashlight"></p>
+					Lamp <br>
+					<p id="outputCost-lamp"></p>
+					<p id="outputDamage-lamp"></p>
+					<p id="outputRange-lamp"></p>
+					<p id="outputAspd-lamp"></p>
+					<p>Ability: Alows ghosts in range of lamps to be seen by other towers.</p>
 				</div>
 			</div>
+			
+			<div class="turret">
+				<img <img id="actionFigure" onclick=placeTower("actionFigure") onmouseover=getStats("actionFigure") width="45" height="45" style="position:absolute; margin: 130px 30px 30px 30px; border: 2px solid black"src="../images/actionFigure.png">
+				<div class ="towerStats">
+					Action Figure <br>
+					<p id="outputCost-actionFigure"></p>
+					<p id="outputDamage-actionFigure"></p>
+					<p id="outputRange-actionFigure"></p>
+					<p id="outputAspd-actionFigure"></p>
+				</div>
+			</div>
+			
+			<div class="turret">
+				<img <img id="marbleShooter" onclick=placeTower("marbleShooter") onmouseover=getStats("marbleShooter") width="45" height="45" style="position:absolute; margin: 180px 30px 30px 30px; border: 2px solid black"src="../images/marbleShooter.png">
+				<div class ="towerStats">
+					Marble Shooter <br>
+					<p id="outputCost-marbleShooter"></p>
+					<p id="outputDamage-marbleShooter"></p>
+					<p id="outputRange-marbleShooter"></p>
+					<p id="outputAspd-marbleShooter"></p>
+				</div>
+			</div>
+			
+			<p id = "stageName" style="margin:10px 10px -50px 140px; font-size: 22px;"></p>
 			
 			<div class ="info">
 				<p id="outputHp"></p>
 				<p id="outputGold"></p>
-				<p>Level: 1<p>
+				<p id="outputLevel"></p>
 				<p>Wave: 1</p>
 			</div>
 			
 			<div class="buttons">
 				<button class= "btnDress" id="sampleWave" onclick=sampleWave()>Sample Wave</button>
 				<button class= "btnDress" id="menu" onclick=menu()>Main Menu</button>
+				<button class= "btnDress" id="prevStage" onclick=prevStage()>Previous Stage</button><br>
+				<button class= "btnDress" id="nextStage" onclick=nextStage()>Next Stage</button><br>
 				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
 			</div>
 			
@@ -54,7 +86,35 @@
 				<p id = "gameMessage" style="margin:10px 50px -50px 30px; font-size: 18px;"></p>
 			</div>
 			
+			<img src="../images/sound_on.png" id=mute onclick="changeImage()" style="margin: 20px 10px 10px 350px;">
+			
+			<div class="hidden">
+			</div>
 		</div>
 		<script src="JS.js"></script>
+		
+		<script>
+		var audio = document.getElementById('background_audio')
+		document.getElementById('mute').addEventListener('click', function (e)
+		{
+		e = e || window.event;
+		audio.muted = !audio.muted;
+		e.preventDefault();
+		}, false);
+		
+		function changeImage() {
+			var image = document.getElementById('mute');
+			if(image.src.match("sound_on")) 
+			{
+			image.src = "../images/sound_off.png";
+			}
+			else 
+			{
+				image.src = "../images/sound_on.png";
+			}
+		}
+		
+		</script>
+		
 	</body>
 </html>
