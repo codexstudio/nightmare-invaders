@@ -418,7 +418,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.xCoord = xCoord;
 	this.yCoord = yCoord;
 	this.upgraded = false;
-	this.orientation = "North";
+	this.orientation = 0;
 	this.attackEnemy;
 };
 
@@ -631,7 +631,7 @@ function placeTower(towerType){
 }
 
 function rotateTower(towerX, towerY, enemyX, enemyY) {
-	var direction;
+	//var direction;
 	
 	var a = enemyX - (towerX + 22.5) - 1.5;
 	var b = enemyY - (towerY + 22.5) - 1.5; 
@@ -639,6 +639,8 @@ function rotateTower(towerX, towerY, enemyX, enemyY) {
 	var c = Math.atan2(b , a) * 180 / Math.PI;
 	c+=90;
 	
+	//THIS FUNCTION NOW RETURNS THE ANGLE FROM TOWER TO ENEMY
+/*	
 	if (c <= 0){
 		c = 360 - Math.abs(c);
 	}
@@ -667,8 +669,8 @@ function rotateTower(towerX, towerY, enemyX, enemyY) {
 	else if (c >= 292.5 && c < 337.5) { //Northwest
 		direction = "Northwest"; 
 	}
-	console.log(direction);
-	return direction;
+	console.log(direction);*/
+	return c;
 }
 
 function getStats(turret) {
@@ -717,7 +719,6 @@ function update(){
 	}
 }
 
-var ang = 0;
 render();
 function render(){
 	requestID = requestAnimationFrame(render);
@@ -751,12 +752,27 @@ function render(){
 			//console.log(towersOnBoard[i].orientation);
 			towerImg.src = '../images/' + towersOnBoard[i].constructor.name +  '.png';
 			var cache = towerImg;
+			//if rotateTower function returns error then ang = 0
+			try {
+				var ang = rotateTower(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord, enemiesOnBoard[i].xCoord, enemiesOnBoard[i].yCoord);
+				//CURRENT PROBLEMS: towers only *visually* trace/follow it's fellow index enemy
+				//for example, the first tower will only trace enemy[0], second tower only traces enemy[1]
+				//and so forth.
+			} catch (e) {
+				var ang = 0;
+			}
+			//console.log(ang);
+
 			ctx.save();
+			//snapshot of canvas
 			ctx.translate(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord);
+			//image is originally at (0,0), this translates it to it's proper coordinates
 			ctx.translate(towerImg.width/2,towerImg.height/2);
-			ctx.rotate(Math.PI / 180 * (ang+=1));
+			ctx.rotate(Math.PI / 180 * ang);
 			ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
+			//above rotates and centres the image
 			ctx.restore();
+			//restores canvas
 		}
 	}
 }
@@ -781,32 +797,32 @@ function sampleWave (){
 			spawnEnemy("ghost");
 			i++;
 		}
-		if(i > 6){
+		if(i > 8){
 			clearInterval(e2);
 		}
 	}, 4000);
 	
 	var e3 = setInterval(function() {
-		if(i > 6){
+		if(i > 8){
 			spawnEnemy("basicSkeleton");
 			i++;
 		}
-		if(i > 7){
+		if(i > 10){
 			clearInterval(e3);
 		}
 	}, 4000);
 	
 	var e4 = setInterval(function() {
-		if(i > 7){
+		if(i > 10){
 			spawnEnemy("redSkeleton");
 			i++;
 		}
-		if(i > 8){
+		if(i > 13){
 			clearInterval(e4);
 		}
 	}, 4000);
 	
-	var e5 = setInterval(function() {
+/*	var e5 = setInterval(function() {
 		if(i > 8){
 			spawnEnemy("basicSkeleton");
 			i++;
@@ -1046,6 +1062,6 @@ function sampleWave (){
 			clearInterval(e28);
 		}
 	}, 20000);	
-	
+*/	
 }
 	
