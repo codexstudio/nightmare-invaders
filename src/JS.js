@@ -199,6 +199,8 @@ var currentStageImage = document.getElementById("currentStageImage");
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var towerImg = new Image();
+var lampOnOff = new Image();
+var enemyImgToPrint = new Image();
 
 
 //Gold Over Time
@@ -716,8 +718,6 @@ function update(){
 }
 
 
-var lampOnOff = new Image();
-var enemyImgToPrint = new Image();
 render();
 function render(){
 	requestID = requestAnimationFrame(render);
