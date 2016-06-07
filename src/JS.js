@@ -749,8 +749,14 @@ function render(){
 	for (var i = 0; i < towersOnBoard.length; i++){
 		if (!(towersOnBoard[i] instanceof lamp)){
 			//console.log(towersOnBoard[i].orientation);
-			towerImg.src = '../images/rotatedTowerImages/' + towersOnBoard[i].constructor.name + towersOnBoard[i].orientation + '.png';
-			ctx.drawImage(towerImg, towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, 45, 45);
+			towerImg.src = '../images/' + towersOnBoard[i].constructor.name +  '.png';
+			var cache = towerImg;
+			ctx.save();
+			ctx.translate(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord);
+			ctx.translate(towerImg.width/2,towerImg.height/2);
+			ctx.rotate(Math.PI / 180 * (ang+=1));
+			ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
+			ctx.restore();
 		}
 	}
 }
