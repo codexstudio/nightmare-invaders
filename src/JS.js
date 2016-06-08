@@ -799,9 +799,12 @@ function stageWin() {
 	}
 	
 	if (bActive == false && bossSpawned == true) {
-		bossSpawned = false;
-		bActive = false;
-		nextStage();
+		gameMessage = "STAGE COMPLETE!";
+		setTimeout(function(){ 
+			bossSpawned = false;
+			bActive = false;
+			nextStage();
+		}, 4000);
 	}
 }
 
