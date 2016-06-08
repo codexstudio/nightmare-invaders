@@ -106,7 +106,7 @@ stagePaths[1] = pathBasement;
 
 
 //UI Elements
-var Gold = 100;
+var Gold = 1000;
 var Hp = 100;
 var gameMessage = "Welcome to Nightmare Invaders!";
 var outputHp = document.querySelector("#outputHp");
@@ -148,6 +148,7 @@ function prevStage(){
 function nextStage(){
 	if(currentStage < stages.length-1){
 		Gold = 100;
+		hasSpawned = false;
 		currentStage++;
 		currentStageImage.src = "../images/" + stageImages[currentStage];
 		while (towersOnBoard.length > 0){
@@ -208,7 +209,8 @@ var enemiesOnBoard = [];
 var ang = 0;
 
 //Enemies Bluprint Section----------------------------------------------------------
- var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+ var enemy = function(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+	this.ID = ID;
 	this.startHealth = startHealth;
 	this.health = health;
 	this.damage = damage;
@@ -270,8 +272,9 @@ enemy.prototype.enemyMovement = function(enemyObj, enemyType){
 }
 
 
-function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+function basicSkeleton(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos);
+	this.ID = 1;
 	this.startHealth = 200;
 	this.health = 200;
 	this.damage = 1;
@@ -285,8 +288,9 @@ basicSkeleton.prototype.thisChildMetohdNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
 
-function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+function redSkeleton(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+	this.ID = 2;
 	this.startHealth = 500;
 	this.health = 500;
 	this.damage = 2;
@@ -300,8 +304,9 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+function blueSkeleton(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
+	this.ID = 3;
 	this.startHealth = 100;
 	this.health = 100;
 	this.damage = 1;
@@ -314,8 +319,9 @@ blueSkeleton.prototype.constructor = blueSkeleton;
 blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
-function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible){
+function ghost(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
+	this.ID = 4;
 	this.startHealth = 350;
 	this.health = 350;
 	this.damage = 2;
@@ -348,8 +354,9 @@ ghost.prototype.checkGhostVisibility = function(){
 	}
 };
 
-function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+function bigBoss(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+	this.ID = 5;
 	this.startHealth = 20000;
 	this.health = 20000;
 	this.damage = 100;
@@ -712,6 +719,8 @@ function update(){
 	else if (enemiesOnBoard.length == 0){
 		awardGoldOverTime = false;
 	}
+	
+	Win();
 }
 
 render();
@@ -775,6 +784,34 @@ function render(){
 }
 
 
+
+var hasSpawned = false; //Checks to see if boss has spawned 
+
+console.log("hasSpawned: " + hasSpawned);
+//Checks if player has beat the current stage
+function Win() {
+	var bActive = false; //If boss is on map, turns to true
+	for(var i = 0; i < enemiesOnBoard.length; i++) {
+		var enemy = enemiesOnBoard[i];
+		if (enemy.ID == 5) {
+			bActive = true;
+			gameMessage = "BOSS";
+			break;
+		} 	
+	}
+	
+	console.log("bActive: " + bActive);
+	console.log("hasSpawned: " + hasSpawned);
+	
+	if (bActive == true) {
+		hasSpawned = true;
+	}
+	
+	if (bActive == false && hasSpawned == true) {
+		nextStage();
+	}
+}
+
 //temp function for demonstrative purposes of the First Playable/Alpha
 function sampleWave (){
 	var i = 0;
@@ -819,7 +856,7 @@ function sampleWave (){
 		}
 	}, 4000);
 	
-/*	var e5 = setInterval(function() {
+	var e5 = setInterval(function() {
 		if(i > 8){
 			spawnEnemy("basicSkeleton");
 			i++;
@@ -1059,6 +1096,5 @@ function sampleWave (){
 			clearInterval(e28);
 		}
 	}, 20000);	
-*/	
 }
 	
