@@ -410,7 +410,7 @@ var objObstruct = false;
 
 
 //Tower blueprints section--------------------------------------------------------
-var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, orientation){
+var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice){
 	this.cost = cost;
 	this.damage = damage;
 	this.range = range;
@@ -418,7 +418,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.xCoord = xCoord;
 	this.yCoord = yCoord;
 	this.upgraded = false;
-	this.orientation = 0;
+	this.targetIndice = -1;
 	this.attackEnemy;
 };
 
@@ -426,38 +426,55 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 tower.prototype.attack = function(towerObj, towerName){
 	
 	this.attackEnemy = setInterval (function(){
+		var max = 0;
+		
 		if (towersOnBoard.length > 0 && towerName == "lamp"){
 			towerObj.lampIO();
 		}
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "marbleShooter") {
 			towerObj.marbleBuffShot();
 		}
-		if(towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName != "lamp"){
+		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName != "lamp"){
+			
 			for (var a = 0; a < enemiesOnBoard.length; a++){
 				var i = a;
-				if(towersOnBoard.length > 0 && enemiesOnBoard.length > 0){
-					if(enemiesOnBoard[i] instanceof ghost && enemiesOnBoard[i].isVisible == false){
+				if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0){
+					if (enemiesOnBoard[i] instanceof ghost && enemiesOnBoard[i].isVisible == false){
 						continue;
 					}
-						
+					
 					var distanceEnemy = distance (enemiesOnBoard[i].xCoord, towerObj.xCoord, enemiesOnBoard[i].yCoord, towerObj.yCoord);
 					
-					if(distanceEnemy <= towerObj.range){
-						//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
-						towerObj.orientation = rotateTower(towerObj.xCoord, towerObj.yCoord, enemiesOnBoard[i].xCoord, enemiesOnBoard[i].yCoord);
-						enemiesOnBoard[i].health -= towerObj.damage;
-						if (towerObj instanceof marbleShooter) {
-							this.shotCounter++;
-						}
-						
-						if (enemiesOnBoard[i].health <= 0){
-							clearInterval(enemiesOnBoard[i].enemyNextMove);
-							Gold += enemiesOnBoard[i].killReward;
-							enemiesOnBoard.splice(i,1);
-						}
-						return;
+					if (distanceEnemy > towerObj.range){
+						continue;
+					}
+				
+					if (enemiesOnBoard[i].pathPos > max){
+						max = enemiesOnBoard[i].pathPos;
+					}
+				}
+			}
+			
+			if (max == 0){
+				towerObj.targetIndice = -1;
+			}
+			
+			for (var b = 0; b < enemiesOnBoard.length; b++){
+				var j = b;
+				if (enemiesOnBoard[j].pathPos == max){
+					//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
+					towerObj.targetIndice = j;
+					enemiesOnBoard[j].health -= towerObj.damage;
+					if (towerObj instanceof marbleShooter) {
+						this.shotCounter++;
 					}
 					
+					if (enemiesOnBoard[j].health <= 0){
+						clearInterval(enemiesOnBoard[j].enemyNextMove);
+						Gold += enemiesOnBoard[j].killReward;
+						enemiesOnBoard.splice(j,1);
+					}
+					break;
 				}
 			}
 		}
@@ -465,12 +482,12 @@ tower.prototype.attack = function(towerObj, towerName){
 };
 
 
-function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, orientation){
+function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice){
 	
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, orientation);
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice);
 	this.cost = 80;
 	this.damage = 20;
-	this.range = 150;
+	this.range = 160;
 	this.attackSpeed = 900;
 }
 toyCarLauncher.prototype = Object.create(tower.prototype);
@@ -485,7 +502,7 @@ function lamp(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, on){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
 	this.cost = 30;
 	this.damage = 0;
-	this.range = 170;
+	this.range = 180;
 	this.attackSpeed = 1;
 	this.on = false;
 }
@@ -521,12 +538,12 @@ lamp.prototype.lampIO = function(){
 	}
 };
 
-function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, orientation){
+function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice){
 	
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, orientation);
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice);
 	this.cost = 150;
 	this.damage = 250;
-	this.range = 80;
+	this.range = 90;
 	this.attackSpeed = 4000;
 }
 actionFigure.prototype = Object.create(tower.prototype);
@@ -536,9 +553,9 @@ actionFigure.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Action Figure Method.")
 };
 
-function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, orientation, shotCounter){
+function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter){
 	
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, orientation, shotCounter);
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter);
 	this.cost = 50;
 	this.damage = 10;
 	this.range = 250;
@@ -749,18 +766,20 @@ function render(){
 	//draw towers
 	for (var i = 0; i < towersOnBoard.length; i++){
 		if (!(towersOnBoard[i] instanceof lamp)){
-			//console.log(towersOnBoard[i].orientation);
 			towerImg.src = '../images/' + towersOnBoard[i].constructor.name +  '.png';
+			
 			var cache = towerImg;
 			//if rotateTower function returns error then ang = 0
 			try {
-				var ang = rotateTower(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord, enemiesOnBoard[i].xCoord, enemiesOnBoard[i].yCoord);
-				//CURRENT PROBLEMS: towers only *visually* trace/follow it's fellow index enemy
-				//for example, the first tower will only trace enemy[0], second tower only traces enemy[1]
-				//and so forth.
+				var ang = rotateTower(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
 			} catch (e) {
 				var ang = 0;
 			}
+			
+			if(towersOnBoard[i] instanceof actionFigure){
+				ang = 0;
+			}
+			
 			//console.log(ang);
 
 			ctx.save();
