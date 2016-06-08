@@ -388,7 +388,7 @@ var objObstruct = false;
 
 
 //Tower blueprints section--------------------------------------------------------
-var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice){
+var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
 	this.cost = cost;
 	this.damage = damage;
 	this.range = range;
@@ -397,6 +397,8 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.yCoord = yCoord;
 	this.upgraded = false;
 	this.targetIndice = -1;
+	this.isShooting = false;
+	this.bulletArr = [];
 	this.attackEnemy;
 };
 
@@ -405,6 +407,7 @@ tower.prototype.attack = function(towerObj, towerName){
 	
 	this.attackEnemy = setInterval (function(){
 		var max = 0;
+		towerObj.isShooting = false;
 		
 		if (towersOnBoard.length > 0 && towerName == "lamp"){
 			towerObj.lampIO();
@@ -442,6 +445,7 @@ tower.prototype.attack = function(towerObj, towerName){
 					var j = b;
 					if (enemiesOnBoard[j].pathPos == max){
 						//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
+						towerObj.isShooting = true;
 						towerObj.targetIndice = j;
 						enemiesOnBoard[j].health -= towerObj.damage;
 						if (towerObj instanceof marbleShooter) {
@@ -462,9 +466,9 @@ tower.prototype.attack = function(towerObj, towerName){
 };
 
 
-function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice){
+function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
 	
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice);
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr);
 	this.cost = 80;
 	this.damage = 20;
 	this.range = 160;
@@ -533,9 +537,9 @@ actionFigure.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Action Figure Method.")
 };
 
-function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter){
+function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter, isShooting, bulletArr){
 	
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter);
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter, isShooting, bulletArr);
 	this.cost = 50;
 	this.damage = 10;
 	this.range = 250;
@@ -818,11 +822,15 @@ function stageWin() {
 	}
 	
 	if (bActive == false && bossSpawned == true) {
-		bossSpawned = false;
-		bActive = false;
-		nextStage();
+		gameMessage = "STAGE COMPLETE!";
+		setTimeout(function(){ 
+			bossSpawned = false;
+			bActive = false;
+			nextStage();
+		}, 4000);
 	}
 }
+
 
 //temp function for demonstrative purposes of the First Playable/Alpha
 function sampleWave (){
