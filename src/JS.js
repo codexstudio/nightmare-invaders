@@ -148,7 +148,6 @@ function prevStage(){
 function nextStage(){
 	if(currentStage < stages.length-1){
 		Gold = 100;
-		hasSpawned = false;
 		currentStage++;
 		currentStageImage.src = "../images/" + stageImages[currentStage];
 		while (towersOnBoard.length > 0){
@@ -209,8 +208,7 @@ var enemiesOnBoard = [];
 var ang = 0;
 
 //Enemies Bluprint Section----------------------------------------------------------
- var enemy = function(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	this.ID = ID;
+ var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	this.startHealth = startHealth;
 	this.health = health;
 	this.damage = damage;
@@ -272,9 +270,8 @@ enemy.prototype.enemyMovement = function(enemyObj, enemyType){
 }
 
 
-function basicSkeleton(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.ID = 1;
 	this.startHealth = 200;
 	this.health = 200;
 	this.damage = 1;
@@ -288,9 +285,8 @@ basicSkeleton.prototype.thisChildMetohdNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
 
-function redSkeleton(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.ID = 2;
 	this.startHealth = 500;
 	this.health = 500;
 	this.damage = 2;
@@ -304,9 +300,8 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blueSkeleton(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
-	this.ID = 3;
 	this.startHealth = 100;
 	this.health = 100;
 	this.damage = 1;
@@ -319,9 +314,8 @@ blueSkeleton.prototype.constructor = blueSkeleton;
 blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
-function ghost(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible){
+function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
-	this.ID = 4;
 	this.startHealth = 350;
 	this.health = 350;
 	this.damage = 2;
@@ -354,9 +348,8 @@ ghost.prototype.checkGhostVisibility = function(){
 	}
 };
 
-function bigBoss(ID, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.ID = 5;
 	this.startHealth = 20000;
 	this.health = 20000;
 	this.damage = 100;
@@ -444,22 +437,24 @@ tower.prototype.attack = function(towerObj, towerName){
 				towerObj.targetIndice = -1;
 			}
 			
-			for (var b = 0; b < enemiesOnBoard.length; b++){
-				var j = b;
-				if (enemiesOnBoard[j].pathPos == max){
-					//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
-					towerObj.targetIndice = j;
-					enemiesOnBoard[j].health -= towerObj.damage;
-					if (towerObj instanceof marbleShooter) {
-						this.shotCounter++;
+			if (max > 0){
+				for (var b = 0; b < enemiesOnBoard.length; b++){
+					var j = b;
+					if (enemiesOnBoard[j].pathPos == max){
+						//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
+						towerObj.targetIndice = j;
+						enemiesOnBoard[j].health -= towerObj.damage;
+						if (towerObj instanceof marbleShooter) {
+							this.shotCounter++;
+						}
+						
+						if (enemiesOnBoard[j].health <= 0){
+							clearInterval(enemiesOnBoard[j].enemyNextMove);
+							Gold += enemiesOnBoard[j].killReward;
+							enemiesOnBoard.splice(j,1);
+						}
+						break;
 					}
-					
-					if (enemiesOnBoard[j].health <= 0){
-						clearInterval(enemiesOnBoard[j].enemyNextMove);
-						Gold += enemiesOnBoard[j].killReward;
-						enemiesOnBoard.splice(j,1);
-					}
-					break;
 				}
 			}
 		}
@@ -720,7 +715,7 @@ function update(){
 		awardGoldOverTime = false;
 	}
 	
-	Win();
+	stageWin();
 }
 
 render();
@@ -785,29 +780,27 @@ function render(){
 
 
 
-var hasSpawned = false; //Checks to see if boss has spawned 
-
-console.log("hasSpawned: " + hasSpawned);
+var bossSpawned = false; //Checks to see if boss has spawned 
 //Checks if player has beat the current stage
-function Win() {
+function stageWin() {
 	var bActive = false; //If boss is on map, turns to true
 	for(var i = 0; i < enemiesOnBoard.length; i++) {
-		var enemy = enemiesOnBoard[i];
-		if (enemy.ID == 5) {
+		if (enemiesOnBoard[i] instanceof bigBoss) {
+			if (bossSpawned == false){
+				gameMessage = "BOSS INCOMING!";
+			}
 			bActive = true;
-			gameMessage = "BOSS";
 			break;
 		} 	
 	}
 	
-	console.log("bActive: " + bActive);
-	console.log("hasSpawned: " + hasSpawned);
-	
 	if (bActive == true) {
-		hasSpawned = true;
+		bossSpawned = true;
 	}
 	
-	if (bActive == false && hasSpawned == true) {
+	if (bActive == false && bossSpawned == true) {
+		bossSpawned = false;
+		bActive = false;
 		nextStage();
 	}
 }
