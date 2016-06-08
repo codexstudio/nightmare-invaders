@@ -204,6 +204,8 @@ function togGrid(){
 //Enemy related section-----------------------------------------------------------------------------------------------------------
 var enemiesOnBoard = [];
 
+//Angle variable
+var ang = 0;
 
 //Enemies Bluprint Section----------------------------------------------------------
  var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
@@ -746,10 +748,10 @@ function render(){
 			
 			var cache = towerImg;
 			//if rotateTower function returns error then ang = 0
-			if (towersOnBoard[i].targetIndice >= 0) {
-				var ang = rotateTower(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
+			if (enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined) {
+				ang = 0;
 			} else {
-				var ang = 0;
+				ang = rotateTower(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
 			}
 
 			if(towersOnBoard[i] instanceof actionFigure){
