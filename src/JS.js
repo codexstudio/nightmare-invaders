@@ -115,6 +115,10 @@ var outputLevel = document.querySelector("#outputLevel");
 var outputGameMessage = document.querySelector("#gameMessage");
 var outputStageName = document.querySelector("#stageName");
 
+//global variables
+var ang = 0;
+var traj = 0;
+const TRAJ_SPEED = 5;
 
 function menu(){
 	window.location="Menu.html";
@@ -203,9 +207,6 @@ function togGrid(){
 
 //Enemy related section-----------------------------------------------------------------------------------------------------------
 var enemiesOnBoard = [];
-
-//Angle variable
-var ang = 0;
 
 //Enemies Bluprint Section----------------------------------------------------------
  var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
@@ -386,7 +387,6 @@ var numOfTowers = 0;
 var towerxy = {x:0, y:0};
 var objObstruct = false;
 
-
 //Tower blueprints section--------------------------------------------------------
 var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
 	this.cost = cost;
@@ -402,6 +402,13 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.attackEnemy;
 };
 
+tower.prototype.bullet = function() {
+	console.log("pushed");
+	this.bulletArr.push( {
+		trajectory: 0,
+		distance: 0
+	});
+};
 
 tower.prototype.attack = function(towerObj, towerName){
 	
@@ -563,6 +570,7 @@ marbleShooter.prototype.marbleBuffShot = function() {
 function createTowerObject(towerType, x, y){
 	var tempTowerObject = new (eval(towerType))(null, null, null, null, x, y, null);
 	towersOnBoard.push(tempTowerObject);
+	
 	Gold -= tempTowerObject.cost;
 	//Temp console log for debugging, can be removed later.
 	//console.log("NEW " + towerType + " MADE!");
@@ -576,6 +584,7 @@ function createTowerObject(towerType, x, y){
 
 		if (towersOnBoard.length > 0){
 			tempTowerObject.attack(tempTowerObject, towerType);
+			if (!(tempTowerObject instanceof lamp) && !(tempTowerObject instanceof actionFigure)) { tempTowerObject.bullet(); }
 		}
 }
 
@@ -766,12 +775,27 @@ function render(){
 			}
 			
 			//console.log(ang);
-
+			
+			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined && (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)))) {
+				towersOnBoard[i].bulletArr[0].distance = distance(towersOnBoard[i].xCoord + towerImg.width/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord + towerImg.height/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
+			}
 			ctx.save();
 			ctx.translate(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord);
 			ctx.translate(towerImg.width/2,towerImg.height/2);
 			ctx.rotate(Math.PI / 180 * ang);
+			ctx.fillRect(0,-(towersOnBoard[i].bulletArr[0].trajectory),5,5);
 			ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
+			ctx.restore();
+			towersOnBoard[i].bulletArr[0].trajectory = towersOnBoard[i].bulletArr[0].trajectory + TRAJ_SPEED;
+			console.log(towersOnBoard[i].bulletArr[0].trajectory,towersOnBoard[i].bulletArr[0].distance);
+			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined && (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)))) {
+					if (towersOnBoard[i].bulletArr[0].trajectory > towersOnBoard[i].bulletArr[0].distance)
+					{
+						towersOnBoard[i].bulletArr[0].trajectory = 0;
+					}
+				
+			}
+
 			//above rotates and centres the image
 			/*ctx.fillStyle = "#fefefe";
 			ctx.fillRect(0,0,5,5);
@@ -779,7 +803,7 @@ function render(){
 			ctx.fillRect(0,0,-towerImg.width/2, -towerImg.height/2);
 			ctx.strokeStyle = "rgb(0,0,0)";
 			ctx.lineWidth = 2;
-			ctx.strokeRect(0,0,-towerImg.width/2, -towerImg.height/2);*/
+			ctx.strokeRect(0,0,-towerImg.width/2, -towerImg.height/2);
 			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined)) {
 				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
 					//console.log(-(distance(towersOnBoard[i].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord)));
@@ -787,15 +811,14 @@ function render(){
 					ctx.fillRect(0,0,2,-(distance(towersOnBoard[i].xCoord + towerImg.width/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord + towerImg.height/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord)));
 				}
 			}
-			//ctx.strokeRect(0,0,canvas.width,canvas.height);
-			ctx.restore();
+			ctx.strokeRect(0,0,canvas.width,canvas.height);
 			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined)) {
 				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
 					ctx.fillStyle = "green";
 					ctx.fillRect(enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord, 5, 5);
 					ctx.fillRect(towersOnBoard[i].xCoord + towerImg.width/2, towersOnBoard[i].yCoord + towerImg.height/2, 5, 5);
 				}
-			}
+			}*/
 		}
 	}
 
