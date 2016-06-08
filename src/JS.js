@@ -746,12 +746,12 @@ function render(){
 			
 			var cache = towerImg;
 			//if rotateTower function returns error then ang = 0
-			try {
+			if (towersOnBoard[i].targetIndice >= 0) {
 				var ang = rotateTower(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
-			} catch (e) {
+			} else {
 				var ang = 0;
 			}
-			
+
 			if(towersOnBoard[i] instanceof actionFigure){
 				ang = 0;
 			}
