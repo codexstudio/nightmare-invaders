@@ -106,7 +106,7 @@ stagePaths[1] = pathBasement;
 
 
 //UI Elements
-var Gold = 1000;
+var Gold = 100;
 var Hp = 100;
 var gameMessage = "Welcome to Nightmare Invaders!";
 var outputHp = document.querySelector("#outputHp");
