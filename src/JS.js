@@ -747,48 +747,50 @@ function render(){
 	
 	//draw towers
 	for (var i = 0; i < towersOnBoard.length; i++){
-		towerImg.src = '../images/' + towersOnBoard[i].constructor.name + '.png';
-		if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined)) {
-			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
-				ang = rotateTower(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
-			}
-		} else {
-			ang = 0;
-		}	
+		if (!(towersOnBoard[i] instanceof lamp)) {
+			towerImg.src = '../images/' + towersOnBoard[i].constructor.name + '.png';
+			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined)) {
+				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
+					ang = rotateTower(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
+				}
+			} else {
+				ang = 0;
+			}	
 
-		if(towersOnBoard[i] instanceof actionFigure){
-			ang = 0;
-		}
-		
-		//console.log(ang);
-
-		ctx.save();
-		ctx.translate(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord);
-		ctx.translate(towerImg.width/2,towerImg.height/2);
-		ctx.rotate(Math.PI / 180 * ang);
-		ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
-		//above rotates and centres the image
-		/*ctx.fillStyle = "#fefefe";
-		ctx.fillRect(0,0,5,5);
-		ctx.fillStyle = "rgba(0,0,0,.1)";
-		ctx.fillRect(0,0,-towerImg.width/2, -towerImg.height/2);
-		ctx.strokeStyle = "rgb(0,0,0)";
-		ctx.lineWidth = 2;
-		ctx.strokeRect(0,0,-towerImg.width/2, -towerImg.height/2);*/
-		if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined)) {
-			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
-				//console.log(-(distance(towersOnBoard[i].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord)));
-				ctx.fillStyle = "blue";
-				ctx.fillRect(0,0,2,-(distance(towersOnBoard[i].xCoord + towerImg.width/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord + towerImg.height/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord)));
+			if(towersOnBoard[i] instanceof actionFigure){
+				ang = 0;
 			}
-		}
-		//ctx.strokeRect(0,0,canvas.width,canvas.height);
-		ctx.restore();
-		if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined)) {
-			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
-				ctx.fillStyle = "green";
-				ctx.fillRect(enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord, 5, 5);
-				ctx.fillRect(towersOnBoard[i].xCoord + towerImg.width/2, towersOnBoard[i].yCoord + towerImg.height/2, 5, 5);
+			
+			//console.log(ang);
+
+			ctx.save();
+			ctx.translate(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord);
+			ctx.translate(towerImg.width/2,towerImg.height/2);
+			ctx.rotate(Math.PI / 180 * ang);
+			ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
+			//above rotates and centres the image
+			/*ctx.fillStyle = "#fefefe";
+			ctx.fillRect(0,0,5,5);
+			ctx.fillStyle = "rgba(0,0,0,.1)";
+			ctx.fillRect(0,0,-towerImg.width/2, -towerImg.height/2);
+			ctx.strokeStyle = "rgb(0,0,0)";
+			ctx.lineWidth = 2;
+			ctx.strokeRect(0,0,-towerImg.width/2, -towerImg.height/2);*/
+			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined)) {
+				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
+					//console.log(-(distance(towersOnBoard[i].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord)));
+					ctx.fillStyle = "blue";
+					ctx.fillRect(0,0,2,-(distance(towersOnBoard[i].xCoord + towerImg.width/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord + towerImg.height/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord)));
+				}
+			}
+			//ctx.strokeRect(0,0,canvas.width,canvas.height);
+			ctx.restore();
+			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined)) {
+				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
+					ctx.fillStyle = "green";
+					ctx.fillRect(enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord, 5, 5);
+					ctx.fillRect(towersOnBoard[i].xCoord + towerImg.width/2, towersOnBoard[i].yCoord + towerImg.height/2, 5, 5);
+				}
 			}
 		}
 	}
