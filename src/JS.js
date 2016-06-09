@@ -402,7 +402,6 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 };
 
 tower.prototype.bullet = function() {
-	console.log("pushed");
 	this.bulletArr.push( {
 		trajectory: 0,
 		distance: 0
@@ -706,6 +705,7 @@ function initGame()
 	outputHp.innerHTML = "<b>Health: </b>" + Hp;
 	outputGold.innerHTML = "<b>Gold: </b>" + Gold;
 	outputGameMessage.innerHTML = gameMessage;
+	render();
 }
 
 //Update Game
@@ -730,7 +730,6 @@ function update(){
 	stageWin();
 }
 
-render();
 
 function render(){
 	requestID = requestAnimationFrame(render);

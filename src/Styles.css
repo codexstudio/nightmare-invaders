@@ -30,12 +30,36 @@ body{
 	height: 600px;
 }
 
+#menu{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	margin: 0 auto;
+}
+#menu li{
+	margin: 0;
+	float: left;
+}
+#menu li a{
+	text-indent: -9999px;
+	overflow: hidden;
+	height: 33px;
+}
+.navBar{
+	position: absolute;
+	right: 17px;
+	padding: 20px;
+}
+
 .info {
 	position: absolute;
+	color: black;
+	background: #669999;
 	top: 50px;
 	margin-left: 140px;
 	border: 3px solid;
 	padding: 2px;
+	opacity: 0.6;
 }
 
 .buttons {
@@ -80,6 +104,7 @@ body{
 
 .btnDress:hover{
 	background-color: #517A7A;
+	opacity: 0.6;
 }
 
 .btnDress: active {
@@ -107,6 +132,5 @@ body{
 	opacity: 0;
 }
 #mute {
-	margin-left: 850px;
-	margin-top: 120px;
+	margin: 20px 10px 10px 362px;
 }

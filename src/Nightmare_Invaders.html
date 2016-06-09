@@ -17,7 +17,7 @@
 		<!-- 
 		<img src="../images/sound_on.png" id=mute onclick="changeImage()">
 		-->
-		<audio id=background_audio src="../audio/They're Here.mp3" loop="true" autoplay="true" controls></audio>
+		<audio id=background_audio src="../audio/StarEater.mp3" loop="true" autoplay="true" controls></audio>
 		
 		<div class="UI">	
 			
@@ -76,6 +76,13 @@
 				<p>Wave: 1</p>
 			</div>
 			
+			<div class="navBar">
+			<ul id="menu">
+				<li id="mainMenu"><a href="#" onclick=menu()><img src="../images/return.png" height="32" width="32"><img></a></li>
+				<li id="game_pause"><a href="#" onclick="pauseGame()"><img src="../images/pause.png" onclick="changeAudioImage()" height="32" width="32" id="image_change"></a></li>
+			</ul>
+			</div>
+			
 			<div class="buttons">
 				<button class= "btnDress" id="sampleWave" onclick=sampleWave()>Sample Wave</button>
 				<button class= "btnDress" id="menu" onclick=menu()>Main Menu</button>
@@ -117,6 +124,50 @@
 		}
 		
 		</script>
+		
+		<!--	Working - Ward
+		<script>
+			var pause = true;
+			function pauseGame(){
+			    if(pause){
+			        for (var i = 0; i < towersOnBoard.length; i++){
+			            clearInterval(towersOnBoard[i].attackEnemy);
+			        }
+			        for (var i = 0; i < enemiesOnBoard.length; i++){
+			            clearInterval(enemiesOnBoard[i].enemyNextMove);
+			        }
+			        cancelAnimationFrame(requestID);
+			        requestID = undefined;
+			        pause = false;
+			    }
+			    else{
+			        for (var i = 0; i < towersOnBoard.length; i++){
+			            towersOnBoard[i].attack(towersOnBoard[i], towersOnBoard[i].constructor.name);
+			        }
+			        for (var i = 0; i < enemiesOnBoard.length; i++){
+			            enemiesOnBoard[i].enemyMovement(enemiesOnBoard[i], enemiesOnBoard[i].constructor.name);
+			        }
+			        pause = true;
+			        render();
+
+			    }
+			}
+			-->
+		<!-- Change image function for when you click on pause game
+		function changeAudioImage(){
+			var image = document.getElementById('image_change')
+			if(image.src.match("pause"))
+			{
+			image.src = "../images/play.png";
+			}
+			else 
+			{
+				image.src = "../images/pause.png";
+			}
+		}
+		
+		</script> 
+		End -->
 		
 	</body>
 </html>
