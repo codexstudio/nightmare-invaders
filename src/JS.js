@@ -1,11 +1,11 @@
 //Set FPS
-var fps = setInterval(update, 33.34); // 30fps
+const fps = setInterval(update, 33.34); // 30fps
 
-var images = new Array()
+var images = new Array();
 			function preload() {
 				for (i = 0; i < preload.arguments.length; i++) {
-					images[i] = new Image()
-					images[i].src = preload.arguments[i]
+					images[i] = new Image();
+					images[i].src = preload.arguments[i];
 				}
 			}
 			preload(
@@ -117,7 +117,6 @@ var outputStageName = document.querySelector("#stageName");
 
 //global variables
 var ang = 0;
-var traj = 0;
 const TRAJ_SPEED = 5;
 
 function menu(){
@@ -732,40 +731,51 @@ function update(){
 }
 
 render();
+
 function render(){
 	requestID = requestAnimationFrame(render);
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 	
-	//lamp check
-	for (var i = 0; i < towersOnBoard.length; i++){
-		if (towersOnBoard[i] instanceof lamp){
-			if (towersOnBoard[i].on == true){
+	renderLampCheck();
+	renderEnemyMovement();	
+	renderTowerAndBullet();
+}
+
+// functions for render to call --------------------------------------------------------------------------------------------
+
+function renderLampCheck() {
+	for (var i = 0; i < towersOnBoard.length; i++) {
+		//if tower is lamp, check if ghost is near, change img to "lampOn" if so
+		if (towersOnBoard[i] instanceof lamp) {
+			if (towersOnBoard[i].on == true) {
 				lampOnOff.src = '../images/lampOn.png';
-			}
-			else if (towersOnBoard[i].on == false){
+			} else if (towersOnBoard[i].on == false) {
 				lampOnOff.src = '../images/lamp.png';
 			}
 			ctx.drawImage(lampOnOff, towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, 45, 45);
 		}
 	}
-	
-	//enemy movement
-	for (var i = 0; i < enemiesOnBoard.length; i++){
-		//console.log('../images/' + enemiesOnBoard[i].constructor.name + '.png');
+}
+
+function renderEnemyMovement() {
+	for (var i = 0; i < enemiesOnBoard.length; i++) {
+		//draw enemies
 		enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 		ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
+		//draw health bar
 		ctx.fillStyle = "rgb(0,204,0)";
 		ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 	}
-	
-	//draw towers
+}
+
+function renderTowerAndBullet() {
+	//iterate through towers
 	for (var i = 0; i < towersOnBoard.length; i++){
 		if (!(towersOnBoard[i] instanceof lamp)) {
 			towerImg.src = '../images/' + towersOnBoard[i].constructor.name + '.png';
-			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined)) {
-				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
-					ang = rotateTower(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
-				}
+			//when there are no enemies on board, undefined parameters will be passed in to rotateTower. this if is to check and prevent it from passing through
+			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined) && !(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
+				ang = rotateTower(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
 			} else {
 				ang = 0;
 			}	
@@ -773,30 +783,36 @@ function render(){
 			if(towersOnBoard[i] instanceof actionFigure){
 				ang = 0;
 			}
-			
-			//console.log(ang);
-			
+			//if tower is shooting then push new bullet to towersOnBoard.bulletArr[]
 			if (towersOnBoard[i].isShooting === 1) {
 				towersOnBoard[i].isShooting++;
 				towersOnBoard[i].bullet();
 			}
 			
+			//iterate through bullets
 			for (var b = 0; b < towersOnBoard[i].bulletArr.length; b++) {
+				//same check as above approx 20 lines up, but also checks if it's an action figure
 				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined) && !(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1) && !(towersOnBoard[i] instanceof actionFigure)) {
 					towersOnBoard[i].bulletArr[b].distance = distance(towersOnBoard[i].xCoord + towerImg.width/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord + towerImg.height/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
 				}
+				//save canvas state
 				ctx.save();
+				//origin to centre of tower
 				ctx.translate(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
 				ctx.translate(towerImg.width/2, towerImg.height/2);
+				//angle tower to target
 				ctx.rotate(Math.PI / 180 * ang);
+				//draw bullet with respect to trajectory parameter
 				ctx.fillRect(0, -(towersOnBoard[i].bulletArr[b].trajectory), 5, 5);
+				//restore canvas state
 				ctx.restore();
+				//increment trajectory
 				towersOnBoard[i].bulletArr[b].trajectory = towersOnBoard[i].bulletArr[b].trajectory + TRAJ_SPEED;
-				console.log(towersOnBoard[i].bulletArr[b].trajectory, towersOnBoard[i].bulletArr[b].distance, towersOnBoard[i].isShooting, b);
+				//if bullet goes off map, delete bullet
 				if (towersOnBoard[i].bulletArr[b].trajectory > 1000) { towersOnBoard[i].bulletArr.splice(b,1); }
 				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined && (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)))) {
 					if (towersOnBoard[i].bulletArr[b].trajectory > towersOnBoard[i].bulletArr[b].distance) {
-						//towersOnBoard[i].bulletArr[b].trajectory = 0;
+						//if target hit, delete bullet
 						towersOnBoard[i].bulletArr.splice(b,1);
 					}
 				}
@@ -805,48 +821,13 @@ function render(){
 			ctx.translate(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord);
 			ctx.translate(towerImg.width/2,towerImg.height/2);
 			ctx.rotate(Math.PI / 180 * ang);
-			//ctx.fillRect(0,-(towersOnBoard[i].bulletArr[0].trajectory),5,5);
 			ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
 			ctx.restore();
-			/*towersOnBoard[i].bulletArr[0].trajectory = towersOnBoard[i].bulletArr[0].trajectory + TRAJ_SPEED;
-			console.log(towersOnBoard[i].bulletArr[0].trajectory,towersOnBoard[i].bulletArr[0].distance);
-			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined && (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)))) {
-					if (towersOnBoard[i].bulletArr[0].trajectory > towersOnBoard[i].bulletArr[0].distance)
-					{
-						towersOnBoard[i].bulletArr[0].trajectory = 0;
-					}
-				
-			}*/
-
-			//above rotates and centres the image
-			/*ctx.fillStyle = "#fefefe";
-			ctx.fillRect(0,0,5,5);
-			ctx.fillStyle = "rgba(0,0,0,.1)";
-			ctx.fillRect(0,0,-towerImg.width/2, -towerImg.height/2);
-			ctx.strokeStyle = "rgb(0,0,0)";
-			ctx.lineWidth = 2;
-			ctx.strokeRect(0,0,-towerImg.width/2, -towerImg.height/2);
-			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined)) {
-				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
-					//console.log(-(distance(towersOnBoard[i].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord)));
-					ctx.fillStyle = "blue";
-					ctx.fillRect(0,0,2,-(distance(towersOnBoard[i].xCoord + towerImg.width/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord + towerImg.height/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord)));
-				}
-			}
-			ctx.strokeRect(0,0,canvas.width,canvas.height);
-			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined)) {
-				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
-					ctx.fillStyle = "green";
-					ctx.fillRect(enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord, 5, 5);
-					ctx.fillRect(towersOnBoard[i].xCoord + towerImg.width/2, towersOnBoard[i].yCoord + towerImg.height/2, 5, 5);
-				}
-			}*/
 		}
 	}
-
 }
 
-
+// end of render section -------------------------------------------------------------------------------
 
 var bossSpawned = false; //Checks to see if boss has spawned 
 //Checks if player has beat the current stage
