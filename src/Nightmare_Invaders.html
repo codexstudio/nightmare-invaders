@@ -67,7 +67,7 @@
 				</div>
 			</div>
 			
-			<p id = "stageName" style="margin:10px 10px -50px 140px; font-size: 22px;"></p>
+			<p id = "stageName"></p>
 			
 			<div class ="info">
 				<p id="outputHp"></p>
@@ -80,12 +80,12 @@
 			<ul id="menu">
 				<li id="mainMenu"><a href="#" onclick=menu()><img src="../images/return.png" height="32" width="32"><img></a></li>
 				<li id="game_pause"><a href="#" onclick="pauseGame()"><img src="../images/pause.png" onclick="changeAudioImage()" height="32" width="32" id="image_change"></a></li>
+				<li id="toggleAudio"><a href="#"><img src="../images/sound_on.png" id="mute" onclick="changeImage()"></a></li>
 			</ul>
 			</div>
 			
 			<div class="buttons">
 				<button class= "btnDress" id="sampleWave" onclick=sampleWave()>Sample Wave</button>
-				<button class= "btnDress" id="menu" onclick=menu()>Main Menu</button>
 				<button class= "btnDress" id="prevStage" onclick=prevStage()>Previous Stage</button><br>
 				<button class= "btnDress" id="nextStage" onclick=nextStage()>Next Stage</button><br>
 				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
@@ -94,8 +94,6 @@
 			<div class="message">
 				<p id = "gameMessage" style="margin:10px 50px -50px 30px; font-size: 18px;"></p>
 			</div>
-			
-			<img src="../images/sound_on.png" id=mute onclick="changeImage()" style="margin: 20px 10px 10px 350px;">
 			
 			<div class="hidden">
 			</div>
@@ -151,9 +149,8 @@
 			        render();
 
 			    }
-			}
-			-->
-		<!-- Change image function for when you click on pause game
+			}-->
+		<script>
 		function changeAudioImage(){
 			var image = document.getElementById('image_change')
 			if(image.src.match("pause"))
@@ -167,7 +164,7 @@
 		}
 		
 		</script> 
-		End -->
+		End 
 		
 	</body>
 </html>
