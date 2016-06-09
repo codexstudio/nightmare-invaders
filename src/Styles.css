@@ -23,6 +23,13 @@ body{
 	display:none;
 }
 
+#stageTransition{
+	z-index:4;
+	display:none;
+	width: 900px;
+	height: 600px;
+}
+
 .info {
 	position: absolute;
 	top: 50px;

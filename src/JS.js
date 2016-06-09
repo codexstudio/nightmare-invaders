@@ -847,12 +847,16 @@ function stageWin() {
 		bossSpawned = true;
 	}
 	
-	if (bActive == false && bossSpawned == true) {
+	if (bActive == false && bossSpawned == true && Hp > 0) {
 		gameMessage = "STAGE COMPLETE!";
+		cancelAnimationFrame(requestID);
+		requestID = undefined;
+		ctx.drawImage(stageTransition, 0, 0);
 		setTimeout(function(){ 
 			bossSpawned = false;
 			bActive = false;
 			nextStage();
+			render();
 		}, 4000);
 	}
 }
