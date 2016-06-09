@@ -1,11 +1,11 @@
 //Set FPS
-var fps = setInterval(update, 33.34); // 30fps
+const fps = setInterval(update, 33.34); // 30fps
 
-var images = new Array()
+var images = new Array();
 			function preload() {
 				for (i = 0; i < preload.arguments.length; i++) {
-					images[i] = new Image()
-					images[i].src = preload.arguments[i]
+					images[i] = new Image();
+					images[i].src = preload.arguments[i];
 				}
 			}
 			preload(
@@ -115,6 +115,9 @@ var outputLevel = document.querySelector("#outputLevel");
 var outputGameMessage = document.querySelector("#gameMessage");
 var outputStageName = document.querySelector("#stageName");
 
+//global variables
+var ang = 0;
+const TRAJ_SPEED = 5;
 
 function menu(){
 	window.location="Menu.html";
@@ -203,9 +206,6 @@ function togGrid(){
 
 //Enemy related section-----------------------------------------------------------------------------------------------------------
 var enemiesOnBoard = [];
-
-//Angle variable
-var ang = 0;
 
 //Enemies Bluprint Section----------------------------------------------------------
  var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
@@ -386,7 +386,6 @@ var numOfTowers = 0;
 var towerxy = {x:0, y:0};
 var objObstruct = false;
 
-
 //Tower blueprints section--------------------------------------------------------
 var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
 	this.cost = cost;
@@ -397,17 +396,24 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.yCoord = yCoord;
 	this.upgraded = false;
 	this.targetIndice = -1;
-	this.isShooting = false;
+	this.isShooting = 0;
 	this.bulletArr = [];
 	this.attackEnemy;
 };
 
+tower.prototype.bullet = function() {
+	console.log("pushed");
+	this.bulletArr.push( {
+		trajectory: 0,
+		distance: 0
+	});
+};
 
 tower.prototype.attack = function(towerObj, towerName){
 	
 	this.attackEnemy = setInterval (function(){
 		var max = 0;
-		towerObj.isShooting = false;
+		towerObj.isShooting = 0;
 		
 		if (towersOnBoard.length > 0 && towerName == "lamp"){
 			towerObj.lampIO();
@@ -445,7 +451,7 @@ tower.prototype.attack = function(towerObj, towerName){
 					var j = b;
 					if (enemiesOnBoard[j].pathPos == max){
 						//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
-						towerObj.isShooting = true;
+						towerObj.isShooting = 1;
 						towerObj.targetIndice = j;
 						enemiesOnBoard[j].health -= towerObj.damage;
 						if (towerObj instanceof marbleShooter) {
@@ -563,6 +569,7 @@ marbleShooter.prototype.marbleBuffShot = function() {
 function createTowerObject(towerType, x, y){
 	var tempTowerObject = new (eval(towerType))(null, null, null, null, x, y, null);
 	towersOnBoard.push(tempTowerObject);
+	
 	Gold -= tempTowerObject.cost;
 	//Temp console log for debugging, can be removed later.
 	//console.log("NEW " + towerType + " MADE!");
@@ -576,6 +583,7 @@ function createTowerObject(towerType, x, y){
 
 		if (towersOnBoard.length > 0){
 			tempTowerObject.attack(tempTowerObject, towerType);
+			//if (!(tempTowerObject instanceof lamp) && !(tempTowerObject instanceof actionFigure)) { tempTowerObject.bullet(); }
 		}
 }
 
@@ -723,66 +731,103 @@ function update(){
 }
 
 render();
+
 function render(){
 	requestID = requestAnimationFrame(render);
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 	
-	//lamp check
-	for (var i = 0; i < towersOnBoard.length; i++){
-		if (towersOnBoard[i] instanceof lamp){
-			if (towersOnBoard[i].on == true){
+	renderLampCheck();
+	renderEnemyMovement();	
+	renderTowerAndBullet();
+}
+
+// functions for render to call --------------------------------------------------------------------------------------------
+
+function renderLampCheck() {
+	for (var i = 0; i < towersOnBoard.length; i++) {
+		//if tower is lamp, check if ghost is near, change img to "lampOn" if so
+		if (towersOnBoard[i] instanceof lamp) {
+			if (towersOnBoard[i].on == true) {
 				lampOnOff.src = '../images/lampOn.png';
-			}
-			else if (towersOnBoard[i].on == false){
+			} else if (towersOnBoard[i].on == false) {
 				lampOnOff.src = '../images/lamp.png';
 			}
 			ctx.drawImage(lampOnOff, towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, 45, 45);
 		}
 	}
-	
-	//enemy movement
-	for (var i = 0; i < enemiesOnBoard.length; i++){
-		//console.log('../images/' + enemiesOnBoard[i].constructor.name + '.png');
+}
+
+function renderEnemyMovement() {
+	for (var i = 0; i < enemiesOnBoard.length; i++) {
+		//draw enemies
 		enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 		ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
+		//draw health bar
 		ctx.fillStyle = "rgb(0,204,0)";
 		ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 	}
-	
-	//draw towers
+}
+
+function renderTowerAndBullet() {
+	//iterate through towers
 	for (var i = 0; i < towersOnBoard.length; i++){
-		if (!(towersOnBoard[i] instanceof lamp)){
-			towerImg.src = '../images/' + towersOnBoard[i].constructor.name +  '.png';
-			
-			var cache = towerImg;
-			//if rotateTower function returns error then ang = 0
-			if (enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined) {
-				ang = 0;
-			} else {
+		if (!(towersOnBoard[i] instanceof lamp)) {
+			towerImg.src = '../images/' + towersOnBoard[i].constructor.name + '.png';
+			//when there are no enemies on board, undefined parameters will be passed in to rotateTower. this if is to check and prevent it from passing through
+			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined) && !(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
 				ang = rotateTower(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
-			}
+			} else {
+				ang = 0;
+			}	
 
 			if(towersOnBoard[i] instanceof actionFigure){
 				ang = 0;
 			}
+			//if tower is shooting then push new bullet to towersOnBoard.bulletArr[]
+			if (towersOnBoard[i].isShooting === 1) {
+				towersOnBoard[i].isShooting++;
+				towersOnBoard[i].bullet();
+			}
 			
-			//console.log(ang);
-
+			//iterate through bullets
+			for (var b = 0; b < towersOnBoard[i].bulletArr.length; b++) {
+				//same check as above approx 20 lines up, but also checks if it's an action figure
+				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined) && !(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1) && !(towersOnBoard[i] instanceof actionFigure)) {
+					towersOnBoard[i].bulletArr[b].distance = distance(towersOnBoard[i].xCoord + towerImg.width/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord + towerImg.height/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
+				}
+				//save canvas state
+				ctx.save();
+				//origin to centre of tower
+				ctx.translate(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
+				ctx.translate(towerImg.width/2, towerImg.height/2);
+				//angle tower to target
+				ctx.rotate(Math.PI / 180 * ang);
+				//draw bullet with respect to trajectory parameter
+				ctx.fillRect(0, -(towersOnBoard[i].bulletArr[b].trajectory), 5, 5);
+				//restore canvas state
+				ctx.restore();
+				//increment trajectory
+				towersOnBoard[i].bulletArr[b].trajectory = towersOnBoard[i].bulletArr[b].trajectory + TRAJ_SPEED;
+				//if bullet goes off map, delete bullet
+				if (towersOnBoard[i].bulletArr[b].trajectory > 1000) { towersOnBoard[i].bulletArr.splice(b,1); }
+				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined && (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)))) {
+					if (towersOnBoard[i].bulletArr[b].trajectory > towersOnBoard[i].bulletArr[b].distance) {
+						//if target hit, delete bullet
+						towersOnBoard[i].bulletArr.splice(b,1);
+					}
+				}
+			}
 			ctx.save();
-			//snapshot of canvas
 			ctx.translate(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord);
-			//image is originally at (0,0), this translates it to it's proper coordinates
 			ctx.translate(towerImg.width/2,towerImg.height/2);
 			ctx.rotate(Math.PI / 180 * ang);
 			ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
-			//above rotates and centres the image
 			ctx.restore();
-			//restores canvas
 		}
 	}
 }
 
-
+// end of render section -------------------------------------------------------------------------------
 
 var bossSpawned = false; //Checks to see if boss has spawned 
 //Checks if player has beat the current stage
@@ -857,12 +902,12 @@ function sampleWave (){
 		}
 	}, 4000);
 	
-	var e5 = setInterval(function() {
-		if(i > 8){
+	/*var e5 = setInterval(function() {
+		if(i > 13){
 			spawnEnemy("basicSkeleton");
 			i++;
 		}
-		if(i > 9){
+		if(i > 15){
 			clearInterval(e5);
 		}
 	}, 4000);
@@ -1096,6 +1141,6 @@ function sampleWave (){
 			gameMessage = "End of sample wave.";
 			clearInterval(e28);
 		}
-	}, 20000);	
+	}, 20000);	*/
 }
 	
