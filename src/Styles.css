@@ -1,3 +1,4 @@
+
 *{
 	font-family:Tahoma;
 }
@@ -22,43 +23,40 @@ body{
 	z-index:2;
 	display:none;
 }
-
+/* edit for the info box*/
 .info {
 	position: absolute;
-	top: 20px;	
-	margin-left: 160px;
+	color: black;
+	background: #669999;
+	top: 50px;
+	margin-left: 140px;
 	border: 3px solid;
 	padding: 2px;
+	opacity: 0.6;
 }
 
 .buttons {
 	width: 100px;
 	position: absolute;
 	display: block;
-	top: 150px;
-	margin-left: 180px;
-}
-.toggle{
-	width: 100px;
-	display: block;
-	position: absolute;
-	top: 150px;
-	margin-left: 30px;
+	top: 35px;
+	margin-left: 280px;
+	margin-top: 10px;
 }
 
 .UI{
 	position: absolute;
 	left: 900px;
 	border: 1px solid black;
-	background-color: #006699;
-	width: 300px;
+	background-color: #660000;
+	width: 400px;
 	height: 600px;
 	top: 0px;
 }
 .message{
 	position:absolute;
 	margin-left: 25px;
-	bottom: 230px;
+	bottom: 300px;
 }
 
 .btnDress {
@@ -75,27 +73,25 @@ body{
     cursor: pointer;
 	border: 1px solid black;
 	border-radius: 15px;
-	box-shadow: 0 9px #000;
-	
 }
+/* added opacity for the hover on the button to have same color scheme as UI*/
 .btnDress:hover{
-	background-color: #517A7A;
+	background-color: #669999;
+	opacity: 0.6;
 }
 
 .btnDress: active {
-  background-color: #517A7A;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
+	background-color: #517A7A;
 }
 
 .turret:hover .towerStats {
 	opacity:0.6;
 	text-align:justify;
 	color: black;
-	font-size: 20px;
+	font-size: 14px;
 	font-weight: 700;
 	font-family: "Times New Roman", Times, serif;
-	padding:30px;
+	padding: 20px;
 }
 .towerStats{
 	position: absolute;
@@ -107,4 +103,8 @@ body{
 	background: #669999;
 	border: 1px solid black;
 	opacity: 0;
+}
+/*styling for mute audio button*/
+#mute{
+	margin: 20px 10px 10px 362px;
 }
