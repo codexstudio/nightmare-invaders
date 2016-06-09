@@ -108,10 +108,12 @@ stagePaths[1] = pathBasement;
 //UI Elements
 var Gold = 100;
 var Hp = 100;
+var currentWave = 0;
 var gameMessage = "Welcome to Nightmare Invaders!";
 var outputHp = document.querySelector("#outputHp");
 var outputGold = document.querySelector("#outputGold");
 var outputLevel = document.querySelector("#outputLevel");
+var outputWave = document.querySelector("#outputWave");
 var outputGameMessage = document.querySelector("#gameMessage");
 var outputStageName = document.querySelector("#stageName");
 
@@ -127,6 +129,8 @@ function prevStage(){
 	if(currentStage > 0){
 		Gold = 100;
 		currentStage--;
+		currentWave = 0;
+		waveCounter = 0;
 		currentStageImage.src = "../images/" + stageImages[currentStage];
 
 		while (towersOnBoard.length > 0){
@@ -152,6 +156,8 @@ function nextStage(){
 	if(currentStage < stages.length-1){
 		Gold = 100;
 		currentStage++;
+		currentWave = 0;
+		waveCounter = 0;
 		currentStageImage.src = "../images/" + stageImages[currentStage];
 		while (towersOnBoard.length > 0){
 			clearInterval(towersOnBoard[0].attackEnemy);
@@ -351,7 +357,7 @@ ghost.prototype.checkGhostVisibility = function(){
 function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
 	this.startHealth = 20000;
-	this.health = 20000;
+	this.health = 20;
 	this.damage = 100;
 	this.speed = 80;
 	this.killReward = 0;
@@ -715,6 +721,7 @@ function update(){
 	outputGameMessage.innerHTML = gameMessage;
 	outputStageName.innerHTML = stages[currentStage];	
 	outputLevel.innerHTML = "<b>Level: </b>" + (currentStage+1);
+	outputWave.innerHTML = "<b>Wave: </b>" + (waveCounter+1);
 	
 	if(Hp <= 0){
 		gameMessage = "Game Over. You got rekt by your nightmares and peed your pants";
@@ -861,289 +868,40 @@ function stageWin() {
 }
 
 
-//temp function for demonstrative purposes of the First Playable/Alpha
-function sampleWave (){
-	var i = 0;
-	
-	var e1 = setInterval(function() {
-		if(i > -1){
-			spawnEnemy("basicSkeleton");
-			i++;
-		}
-		if(i > 5){
-			clearInterval(e1);
-		}
-	}, 4000);
-	
-	var e2 = setInterval(function() {
-		if(i > 5){
-			spawnEnemy("ghost");
-			i++;
-		}
-		if(i > 8){
-			clearInterval(e2);
-		}
-	}, 4000);
-	
-	var e3 = setInterval(function() {
-		if(i > 8){
-			spawnEnemy("basicSkeleton");
-			i++;
-		}
-		if(i > 10){
-			clearInterval(e3);
-		}
-	}, 4000);
-	
-	var e4 = setInterval(function() {
-		if(i > 10){
-			spawnEnemy("redSkeleton");
-			i++;
-		}
-		if(i > 13){
-			clearInterval(e4);
-		}
-	}, 4000);
-	
-	/*var e5 = setInterval(function() {
-		if(i > 13){
-			spawnEnemy("basicSkeleton");
-			i++;
-		}
-		if(i > 15){
-			clearInterval(e5);
-		}
-	}, 4000);
-	
-	var e6= setInterval(function() {
-		if(i > 9){
-			spawnEnemy("basicSkeleton");
-			i++;
-		}
-		if(i > 10){
-			clearInterval(e6);
-		}
-	}, 9500);
-	
-	var e7 = setInterval(function() {
-		if(i > 10){
-			spawnEnemy("blueSkeleton");
-			i++;
-		}
-		if(i > 11){
-			clearInterval(e7);
-		}
-	}, 10000);
-	
-	var e8 = setInterval(function() {
-		if(i > 11){
-			spawnEnemy("redSkeleton");
-			i++;
-		}
-		if(i > 12){
-			clearInterval(e8);
-		}
-	}, 10500);
-	
-	var e9 = setInterval(function() {
-		if(i > 12){
-			spawnEnemy("blueSkeleton");
-			i++;
-		}
-		if(i > 21){
-			clearInterval(e9);
-		}
-	}, 3000);
+var stageWave = [[],[],[],[]];
+stageWave[0][0] = ["blueSkeleton"];
+stageWave[0][1] = ["blueSkeleton", "basicSkeleton"];
+stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "bigBoss"];
+stageWave[1][0] = ["blueSkeleton", "blueSkeleton"];
+stageWave[1][1] = ["blueSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton"];
+stageWave[1][2] = ["basicSkeleton", "redSkeleton", "blueSkeleton", "blueSkeleton", "ghost"];
+stageWave[1][3] = ["blueSkeleton", "redSkeleton", "basicSkeleton", "ghost", "basicSkeleton", "ghost", "redSkeleton", "bigBoss"];
 
-	var e10 = setInterval(function() {
-		if(i > 21){
-			spawnEnemy("redSkeleton");
+var inAWave = false;
+var waveCounter = 0;
+function nextWave (){
+	if (!inAWave && enemiesOnBoard.length == 0){
+		inAWave = true;
+		var temp = 0;
+		var i = 0;
+		var wave = setInterval(function(){
+			spawnEnemy(stageWave[currentStage][currentWave][i]);
 			i++;
-		}
-		if(i > 26){
-			clearInterval(e10);
-		}
-	}, 7000);
-	
-	var e11 = setInterval(function() {
-		if(i > 26){
-			spawnEnemy("basicSkeleton");
-			i++;
-		}
-		if(i > 32){
-			clearInterval(e11);
-		}
-	}, 2000);
-	
-	var e12 = setInterval(function() {
-		if(i > 32){
-			spawnEnemy("ghost");
-			i++;
-		}
-		if(i > 33){
-			clearInterval(e12);
-		}
-	}, 3000);
-	
-	var e13 = setInterval(function() {
-		if(i > 33){
-			spawnEnemy("basicSkeleton");
-			i++;
-		}
-		if(i > 35){
-			clearInterval(e13);
-		}
-	}, 1000);
-	
-	var e14 = setInterval(function() {
-		if(i > 35){
-			spawnEnemy("blueSkeleton");
-			i++;
-		}
-		if(i > 38){
-			clearInterval(e14);
-		}
-	}, 1000);
-	
-	var e15 = setInterval (function() {
-		if(i > 38){
-			spawnEnemy("ghost");
-			i++;
-		}
-		if(i > 40){
-			clearInterval(e15);
-		}
-	}, 2000);
-	
-	var e16 = setInterval(function() {
-		if(i > 40){
-			spawnEnemy("basicSkeleton");
-			i++;
-		}
-		if(i > 50){
-			clearInterval(e16);
-		}
-	}, 1500);
-	
-	var e17 = setInterval(function() {
-		if(i > 50){
-			spawnEnemy("redSkeleton");
-			i++;
-		}
-		if(i > 55){
-			clearInterval(e17);
-		}
-	}, 2000);
-	
-	var e18 = setInterval (function() {
-		if(i > 55){
-			spawnEnemy("blueSkeleton");
-			i++;
-		}
-		if(i > 60){
-			clearInterval(e18);
-		}
-	}, 1000);
-	
-	var e19 = setInterval (function() {
-		if(i > 60){
-			spawnEnemy("ghost");
-			i++;
-		}
-		if(i > 65){
-			clearInterval(e19);
-		}
-	}, 5000);
-	
-	var e20 = setInterval (function() {
-		if(i > 65){
-			spawnEnemy("basicSkeleton");
-			i++;
-		}
-		if(i > 75){
-			clearInterval(e20);
-		}
-	}, 1500);
-
-	var e21 = setInterval (function() {
-		if(i > 75){
-			spawnEnemy("ghost");
-			i++;
-		}
-		if(i > 76){
-			clearInterval(e21);
-		}
-	}, 2000);
-	
-	var e22 = setInterval (function() {
-		if(i > 76){
-			spawnEnemy("redSkeleton");
-			i++;
-		}
-		if(i > 78){
-			clearInterval(e22);
-		}
-	}, 1500);
-	
-	var e23 = setInterval (function() {
-		if(i > 78){
-			spawnEnemy("blueSkeleton");
-			i++;
-		}
-		if(i > 83){
-			clearInterval(e23);
-		}
-	}, 1000);
-	
-	var e24 = setInterval (function() {
-		if(i > 83){
-			spawnEnemy("basicSkeleton");
-			i++;
-		}
-		if(i > 88){
-			clearInterval(e24);
-		}
-	}, 1500);
-	
-	var e25 = setInterval (function() {
-		if(i > 88){
-			spawnEnemy("redSkeleton");
-			i++;
-		}
-		if(i > 100){
-			clearInterval(e25);
-		}
-	}, 2000);
-	
-	var e26 = setInterval (function() {
-		if(i > 100){
-			spawnEnemy("basicSkeleton");
-			i++;
-		}
-		if(i > 101){
-			clearInterval(e26);
-		}
-	}, 5000);
-	
-	var e27 = setInterval (function() {
-		if(i > 101){
-			spawnEnemy("basicSkeleton");
-			i++;
-		}
-		if(i > 140){
-			clearInterval(e27);
-		}
-	}, 1000);
-	
-	var e28 = setInterval (function() {
-		if(i > 140){
-			spawnEnemy("bigBoss");
-			i++;
-		}	
-		if(i > 141){
-			gameMessage = "End of sample wave.";
-			clearInterval(e28);
-		}
-	}, 20000);	*/
+			if (temp < currentWave) {
+				waveCounter++;
+			}
+			temp = currentWave;
+			if (!(i < stageWave[currentStage][currentWave].length)){
+				inAWave = false;
+				if(currentWave < 3){
+					currentWave++;
+				}
+				else{
+					currentWave = 0;
+				}
+				clearInterval(wave); 
+			}
+		}, 2000);
+	}
 }
-	
