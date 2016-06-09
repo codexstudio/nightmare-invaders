@@ -397,7 +397,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.yCoord = yCoord;
 	this.upgraded = false;
 	this.targetIndice = -1;
-	this.isShooting = false;
+	this.isShooting = 0;
 	this.bulletArr = [];
 	this.attackEnemy;
 };
@@ -414,7 +414,7 @@ tower.prototype.attack = function(towerObj, towerName){
 	
 	this.attackEnemy = setInterval (function(){
 		var max = 0;
-		towerObj.isShooting = false;
+		towerObj.isShooting = 0;
 		
 		if (towersOnBoard.length > 0 && towerName == "lamp"){
 			towerObj.lampIO();
@@ -452,7 +452,7 @@ tower.prototype.attack = function(towerObj, towerName){
 					var j = b;
 					if (enemiesOnBoard[j].pathPos == max){
 						//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
-						towerObj.isShooting = true;
+						towerObj.isShooting = 1;
 						towerObj.targetIndice = j;
 						enemiesOnBoard[j].health -= towerObj.damage;
 						if (towerObj instanceof marbleShooter) {
@@ -584,7 +584,7 @@ function createTowerObject(towerType, x, y){
 
 		if (towersOnBoard.length > 0){
 			tempTowerObject.attack(tempTowerObject, towerType);
-			if (!(tempTowerObject instanceof lamp) && !(tempTowerObject instanceof actionFigure)) { tempTowerObject.bullet(); }
+			//if (!(tempTowerObject instanceof lamp) && !(tempTowerObject instanceof actionFigure)) { tempTowerObject.bullet(); }
 		}
 }
 
@@ -776,17 +776,39 @@ function render(){
 			
 			//console.log(ang);
 			
-			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined && (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)))) {
-				towersOnBoard[i].bulletArr[0].distance = distance(towersOnBoard[i].xCoord + towerImg.width/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord + towerImg.height/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
+			if (towersOnBoard[i].isShooting === 1) {
+				towersOnBoard[i].isShooting++;
+				towersOnBoard[i].bullet();
+			}
+			
+			for (var b = 0; b < towersOnBoard[i].bulletArr.length; b++) {
+				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined) && !(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1) && !(towersOnBoard[i] instanceof actionFigure)) {
+					towersOnBoard[i].bulletArr[b].distance = distance(towersOnBoard[i].xCoord + towerImg.width/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord + towerImg.height/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
+				}
+				ctx.save();
+				ctx.translate(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
+				ctx.translate(towerImg.width/2, towerImg.height/2);
+				ctx.rotate(Math.PI / 180 * ang);
+				ctx.fillRect(0, -(towersOnBoard[i].bulletArr[b].trajectory), 5, 5);
+				ctx.restore();
+				towersOnBoard[i].bulletArr[b].trajectory = towersOnBoard[i].bulletArr[b].trajectory + TRAJ_SPEED;
+				console.log(towersOnBoard[i].bulletArr[b].trajectory, towersOnBoard[i].bulletArr[b].distance, towersOnBoard[i].isShooting, b);
+				if (towersOnBoard[i].bulletArr[b].trajectory > 1000) { towersOnBoard[i].bulletArr.splice(b,1); }
+				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined && (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)))) {
+					if (towersOnBoard[i].bulletArr[b].trajectory > towersOnBoard[i].bulletArr[b].distance) {
+						//towersOnBoard[i].bulletArr[b].trajectory = 0;
+						towersOnBoard[i].bulletArr.splice(b,1);
+					}
+				}
 			}
 			ctx.save();
 			ctx.translate(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord);
 			ctx.translate(towerImg.width/2,towerImg.height/2);
 			ctx.rotate(Math.PI / 180 * ang);
-			ctx.fillRect(0,-(towersOnBoard[i].bulletArr[0].trajectory),5,5);
+			//ctx.fillRect(0,-(towersOnBoard[i].bulletArr[0].trajectory),5,5);
 			ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
 			ctx.restore();
-			towersOnBoard[i].bulletArr[0].trajectory = towersOnBoard[i].bulletArr[0].trajectory + TRAJ_SPEED;
+			/*towersOnBoard[i].bulletArr[0].trajectory = towersOnBoard[i].bulletArr[0].trajectory + TRAJ_SPEED;
 			console.log(towersOnBoard[i].bulletArr[0].trajectory,towersOnBoard[i].bulletArr[0].distance);
 			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined && (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)))) {
 					if (towersOnBoard[i].bulletArr[0].trajectory > towersOnBoard[i].bulletArr[0].distance)
@@ -794,7 +816,7 @@ function render(){
 						towersOnBoard[i].bulletArr[0].trajectory = 0;
 					}
 				
-			}
+			}*/
 
 			//above rotates and centres the image
 			/*ctx.fillStyle = "#fefefe";
@@ -899,12 +921,12 @@ function sampleWave (){
 		}
 	}, 4000);
 	
-	var e5 = setInterval(function() {
-		if(i > 8){
+	/*var e5 = setInterval(function() {
+		if(i > 13){
 			spawnEnemy("basicSkeleton");
 			i++;
 		}
-		if(i > 9){
+		if(i > 15){
 			clearInterval(e5);
 		}
 	}, 4000);
@@ -1138,6 +1160,6 @@ function sampleWave (){
 			gameMessage = "End of sample wave.";
 			clearInterval(e28);
 		}
-	}, 20000);	
+	}, 20000);	*/
 }
 	
