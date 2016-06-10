@@ -408,6 +408,62 @@ bigBoss.prototype.constructor = bigBoss;
 bigBoss.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
+
+function blob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+	this.startHealth = 400;
+	this.health = 400;
+	this.damage = 20;
+	this.speed = 100;
+	this.killReward = 10;
+}
+blob.prototype = Object.create(enemy.prototype);
+blob.prototype.constructor = blob;
+
+blob.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+};
+
+function clown(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+	this.startHealth = 750;
+	this.health = 750;
+	this.damage = 5;
+	this.speed = 10;
+	this.killReward = 50;
+}
+clown.prototype = Object.create(enemy.prototype);
+clown.prototype.constructor = clown;
+
+clown.prototype.stealGold = function(){
+	var howManyGold = math.random; 
+	
+	if (howManyGold >= 0 && howManyGold < 0.33) { //Three quarters gold stolen.
+		Gold = (25 / 100) * Gold; 
+	}	
+	else if (howManyGold >= 0.33 && howManyGold < 0.66) { //Half your gold stolen.
+		Gold = (50 / 100) * Gold;
+	}
+	else if (howManyGold >= 0.66 && howManyGold < 1) { // Quarter of gold stolen.
+		Gold = (75 / 100) * Gold; 
+	} 
+	console.log("Gold stolen! :( ");
+};
+
+function bigBoss2(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+	this.startHealth = 5000;
+	this.health = 5000;
+	this.damage = 100;
+	this.speed = 50;
+	this.killReward = 0;
+}
+bigBoss2.prototype = Object.create(enemy.prototype);
+bigBoss2.prototype.constructor = bigBoss2;
+
+bigBoss2.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+};
 // End of enemy bluprint section----------------------------------------------------
 
 
@@ -866,9 +922,8 @@ function update(){
 	outputLevel.innerHTML = "<b>Level: </b>" + (currentStage+1);
 	outputWave.innerHTML = "<b>Wave: </b>" + (waveCounter+1);
 	towerAvailable();
-	
 	if(Hp <= 0){
-		gameMessage = "Game Over. You got rekt by your nightmares and peed your pants";
+		gameMessage = "Game Over. You got rekt by your nightmares and peed your pants.";
 	}
 	
 	if (enemiesOnBoard.length > 0 && !pause){
@@ -1023,7 +1078,7 @@ function stageWin() {
 
 var stageWave = [[],[],[],[]];
 //Stage 1
-stageWave[0][0] = ["blueSkeleton"];
+stageWave[0][0] = ["clown", "blob"];
 stageWave[0][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
