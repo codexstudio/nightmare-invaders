@@ -47,8 +47,8 @@ var stages = [];
 
 stages[0] = "Child's Bedroom";
 stages[1] = "Basement";
-//stages[2] = "";
-//stages[3] = "";
+stages[2] = "Kitchen";
+stages[3] = "Parent's Bedroom";
 
 
 //List of stage images
@@ -56,8 +56,8 @@ var stageImages = [];
 
 stageImages[0] = "Stage1.png";
 stageImages[1] = "Stage2.png";
-//stageImages[2] = "";
-//stageImages[3] = "";
+stageImages[2] = "Stage3.png";
+stageImages[3] = "Stage4.png";
 
 
 //List of stage paths (Paths not to be used for enemy path anymore like in prototype. Purpose is now for tower placement checking.)
@@ -99,16 +99,56 @@ var pathBasement = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid[5][
 			grid[35][9], grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], 
 			grid[35][2], grid[35][1], grid[35][0]];
 			
+var pathKitchen = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid[5][56], grid[5][55], grid[5][54], grid[5][53], 
+			grid[5][52], grid[5][51], grid[5][50], grid[5][49], grid[6][49], grid[7][49], grid[8][49], 
+			grid[9][49], grid[10][49], grid[11][49], grid[12][49], grid[12][48], grid[12][47], grid[12][46], 
+			grid[12][45], grid[12][44], grid[12][43], grid[12][42], grid[12][41], grid[12][40], grid[12][39], 
+			grid[12][38], grid[12][37], grid[12][36], grid[12][35], grid[12][34], grid[12][33], grid[12][32], 
+			grid[12][31], grid[12][30], grid[12][29], grid[12][28], grid[12][27], grid[12][26], grid[12][25], 
+			grid[12][24], grid[13][24], grid[14][24], grid[15][24], grid[16][24], grid[17][24], grid[18][24], 
+			grid[19][24], grid[20][24], grid[21][24], grid[22][24], grid[23][24], grid[24][24], grid[25][24], 
+			grid[25][25], grid[25][26], grid[25][27], grid[25][28], grid[25][29], grid[25][30], grid[25][31], 
+			grid[25][32], grid[25][33], grid[25][34], grid[25][35], grid[25][36], grid[25][37], grid[25][38], 
+			grid[25][39], grid[25][40], grid[26][40], grid[27][40], grid[28][40], grid[29][40], grid[30][40], 
+			grid[31][40], grid[32][40], grid[33][40], grid[34][40], grid[35][40], grid[35][39], grid[35][38], 
+			grid[35][37], grid[35][36], grid[35][35], grid[35][34], grid[35][33], grid[35][32], grid[35][31], 
+			grid[35][30], grid[35][29], grid[35][28], grid[35][27], grid[35][26], grid[35][25], grid[35][24], 
+			grid[35][23], grid[35][22], grid[35][21], grid[35][20], grid[35][19], grid[35][18], grid[35][17], 
+			grid[35][16], grid[35][15], grid[35][14], grid[35][13], grid[35][12], grid[35][11], grid[35][10], 
+			grid[35][9], grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], 
+			grid[35][2], grid[35][1], grid[35][0]];
+			
+var pathParentBedroom = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid[5][56], grid[5][55], grid[5][54], grid[5][53], 
+			grid[5][52], grid[5][51], grid[5][50], grid[5][49], grid[6][49], grid[7][49], grid[8][49], 
+			grid[9][49], grid[10][49], grid[11][49], grid[12][49], grid[12][48], grid[12][47], grid[12][46], 
+			grid[12][45], grid[12][44], grid[12][43], grid[12][42], grid[12][41], grid[12][40], grid[12][39], 
+			grid[12][38], grid[12][37], grid[12][36], grid[12][35], grid[12][34], grid[12][33], grid[12][32], 
+			grid[12][31], grid[12][30], grid[12][29], grid[12][28], grid[12][27], grid[12][26], grid[12][25], 
+			grid[12][24], grid[13][24], grid[14][24], grid[15][24], grid[16][24], grid[17][24], grid[18][24], 
+			grid[19][24], grid[20][24], grid[21][24], grid[22][24], grid[23][24], grid[24][24], grid[25][24], 
+			grid[25][25], grid[25][26], grid[25][27], grid[25][28], grid[25][29], grid[25][30], grid[25][31], 
+			grid[25][32], grid[25][33], grid[25][34], grid[25][35], grid[25][36], grid[25][37], grid[25][38], 
+			grid[25][39], grid[25][40], grid[26][40], grid[27][40], grid[28][40], grid[29][40], grid[30][40], 
+			grid[31][40], grid[32][40], grid[33][40], grid[34][40], grid[35][40], grid[35][39], grid[35][38], 
+			grid[35][37], grid[35][36], grid[35][35], grid[35][34], grid[35][33], grid[35][32], grid[35][31], 
+			grid[35][30], grid[35][29], grid[35][28], grid[35][27], grid[35][26], grid[35][25], grid[35][24], 
+			grid[35][23], grid[35][22], grid[35][21], grid[35][20], grid[35][19], grid[35][18], grid[35][17], 
+			grid[35][16], grid[35][15], grid[35][14], grid[35][13], grid[35][12], grid[35][11], grid[35][10], 
+			grid[35][9], grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], 
+			grid[35][2], grid[35][1], grid[35][0]];
+			
 var stagePaths = [];
 stagePaths[0] = pathChildBedroom;
 stagePaths[1] = pathBasement;
-//stagePaths[2] = ;
+stagePaths[2] = pathKitchen;
+stagePaths[3] = pathParentBedroom;
 
 
 //UI Elements
 var Gold = 100;
 var Hp = 100;
 var currentWave = 0;
+var pause = false;
 var gameMessage = "Welcome to Nightmare Invaders!";
 var outputHp = document.querySelector("#outputHp");
 var outputGold = document.querySelector("#outputGold");
@@ -356,8 +396,8 @@ ghost.prototype.checkGhostVisibility = function(){
 
 function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.startHealth = 20000;
-	this.health = 20;
+	this.startHealth = 2000;
+	this.health = 2000;
 	this.damage = 100;
 	this.speed = 80;
 	this.killReward = 0;
@@ -426,7 +466,7 @@ tower.prototype.attack = function(towerObj, towerName){
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "marbleShooter") {
 			towerObj.marbleBuffShot();
 		}
-		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName != "lamp"){
+		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName != "lamp" && towerName != "calculator" && towerName != "trophy" && towerName != "mouseTrap"){
 			
 			for (var a = 0; a < enemiesOnBoard.length; a++){
 				var i = a;
@@ -568,6 +608,131 @@ marbleShooter.prototype.marbleBuffShot = function() {
 		this.damage = this.damage / 2;
 	}
 }
+
+function calculator(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
+	this.cost = 1;
+	this.damage = 0;
+	this.range = 1;
+	this.attackSpeed = 0;
+}
+calculator.prototype = Object.create(tower.prototype);
+calculator.prototype.constructor = calculator;
+
+calculator.prototype.goldBuff = function(){
+	//var calculatorGold;
+	//var calculatorGold = setInterval(function(){
+		//if (calculatorGold == true){
+			//Gold++;
+		//}
+	//}, 500);
+};
+
+function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr);
+	this.cost = 90;
+	this.damage = 15;
+	this.range = 135;
+	this.attackSpeed = 800;
+}
+nutsAndBolts.prototype = Object.create(tower.prototype);
+nutsAndBolts.prototype.constructor = nutsAndBolts;
+
+nutsAndBolts.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined nutsAndBolts Method.")
+};
+
+function mouseTrap(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
+	this.cost = 80;
+	this.damage = 75;
+	this.range = 135;
+	this.attackSpeed = 2000;
+}
+mouseTrap.prototype = Object.create(tower.prototype);
+mouseTrap.prototype.constructor = mouseTrap;
+
+mouseTrap.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined mouseTrap Method.")
+};
+
+function blenderDefender(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting);
+	this.cost = 50;
+	this.damage = 0.5;
+	this.range = 80;
+	this.attackSpeed = 50;
+}
+blenderDefender.prototype = Object.create(tower.prototype);
+blenderDefender.prototype.constructor = blenderDefender;
+
+blenderDefender.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined blenderDefender Method.")
+};
+
+function waterGun(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr);
+	this.cost = 50;
+	this.damage = 2;
+	this.range = 150;
+	this.attackSpeed = 200;
+}
+waterGun.prototype = Object.create(tower.prototype);
+waterGun.prototype.constructor = waterGun;
+
+waterGun.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined waterGun Method.")
+};
+
+function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr);
+	this.cost = 50;
+	this.damage = 200;
+	this.range = 500;
+	this.attackSpeed = 2000;
+}
+airplaneLauncher.prototype = Object.create(tower.prototype);
+airplaneLauncher.prototype.constructor = airplaneLauncher;
+
+airplaneLauncher.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined airplaneLauncher Method.")
+};
+
+function trophy(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
+	this.cost = 300;
+	this.damage = 0;
+	this.range = 200;
+	this.attackSpeed = 1000;
+}
+trophy.prototype = Object.create(tower.prototype);
+trophy.prototype.constructor = trophy;
+
+trophy.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined trophy Method.")
+};
+
+function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
+	
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr);
+	this.cost = 1000;
+	this.damage = 500;
+	this.range = 500000;
+	this.attackSpeed = 6000; 
+}
+vanquishEvil.prototype = Object.create(tower.prototype);
+vanquishEvil.prototype.constructor = vanquishEvil;
+
+vanquishEvil.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined vanquishEvil Method.")
+};
 //End tower blueprints section----------------------------------------------------
 
 
@@ -588,7 +753,6 @@ function createTowerObject(towerType, x, y){
 
 		if (towersOnBoard.length > 0){
 			tempTowerObject.attack(tempTowerObject, towerType);
-			//if (!(tempTowerObject instanceof lamp) && !(tempTowerObject instanceof actionFigure)) { tempTowerObject.bullet(); }
 		}
 }
 
@@ -628,6 +792,16 @@ function placeTower(towerType){
 				}
 			}
 		}
+		var vanquishEvilCount = 0;
+		for (var i = 0; i < towersOnBoard.length; i++) {
+			if (towersOnBoard[i] instanceof vanquishEvil) {
+				vanquishEvilCount++;
+			}
+		}
+		if (vanquishEvilCount >= 3) {
+			objObstruct = true;
+			gameMessage = "You can have only 3 Vanquish The Evil Towers!";
+		}
 		var towerObjectHolder = new (eval(towerType))();
 		if (!objObstruct && towerxy.x < 870 && towerxy.y < 570){
 			if (Gold >= towerObjectHolder.cost){
@@ -653,37 +827,6 @@ function rotateTower(towerX, towerY, enemyX, enemyY) {
 	var c = Math.atan2(b , a) * 180 / Math.PI;
 	c+=90;
 	
-	//THIS FUNCTION NOW RETURNS THE ANGLE FROM TOWER TO ENEMY
-/*	
-	if (c <= 0){
-		c = 360 - Math.abs(c);
-	}
-	
-	if (c >= 337.5 || c < 22.5) { //North
-		direction = "North";
-	}
- 	else if (c >= 22.5 && c < 67.5) { //Northwest
-		direction = "Northeast";
-	} 
-	else if (c >= 67.5 && c < 112.5) { //East
-		direction = "East"; 
-	}
-	else if (c >= 112.5 && c < 157.5) { //West
-		direction = "Southeast";
-	}
-	else if (c >= 157.5 && c < 202.5) { //South
-		direction = "South"; 
-	}
-	else if (c >= 202.5 && c < 247.5) { //Southwest
-		direction = "Southwest";
-	}
-	else if (c >= 247.5 && c < 292.5) { //West
-		direction = "West"; 
-	}
-	else if (c >= 292.5 && c < 337.5) { //Northwest
-		direction = "Northwest"; 
-	}
-	console.log(direction);*/
 	return c;
 }
 
@@ -722,19 +865,19 @@ function update(){
 	outputStageName.innerHTML = stages[currentStage];	
 	outputLevel.innerHTML = "<b>Level: </b>" + (currentStage+1);
 	outputWave.innerHTML = "<b>Wave: </b>" + (waveCounter+1);
+	towerAvailable();
 	
 	if(Hp <= 0){
 		gameMessage = "Game Over. You got rekt by your nightmares and peed your pants";
 	}
 	
-	if (enemiesOnBoard.length > 0){
+	if (enemiesOnBoard.length > 0 && !pause){
 		awardGoldOverTime = true;
 	}
 	else if (enemiesOnBoard.length == 0){
 		awardGoldOverTime = false;
 	}
 	
-	stageWin();
 }
 
 
@@ -745,6 +888,7 @@ function render(){
 	renderLampCheck();
 	renderEnemyMovement();	
 	renderTowerAndBullet();
+	stageWin();
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------
@@ -766,11 +910,20 @@ function renderLampCheck() {
 function renderEnemyMovement() {
 	for (var i = 0; i < enemiesOnBoard.length; i++) {
 		//draw enemies
-		enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
-		ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
-		//draw health bar
-		ctx.fillStyle = "rgb(0,204,0)";
-		ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		if (!(enemiesOnBoard[i] instanceof bigBoss)){
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
+			//draw health bar
+			ctx.fillStyle = "rgb(0,204,0)";
+			ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else{
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-32, 55, 60);
+			//draw health bar
+			ctx.fillStyle = "rgb(0,204,0)";
+			ctx.fillRect(enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-37, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
 	}
 }
 
@@ -786,7 +939,7 @@ function renderTowerAndBullet() {
 				ang = 0;
 			}	
 
-			if(towersOnBoard[i] instanceof actionFigure){
+			if(towersOnBoard[i] instanceof actionFigure || towersOnBoard[i] instanceof mouseTrap || towersOnBoard[i] instanceof blenderDefender || towersOnBoard[i] instanceof trophy || towersOnBoard[i] instanceof calculator){
 				ang = 0;
 			}
 			//if tower is shooting then push new bullet to towersOnBoard.bulletArr[]
@@ -869,14 +1022,50 @@ function stageWin() {
 
 
 var stageWave = [[],[],[],[]];
+//Stage 1
 stageWave[0][0] = ["blueSkeleton"];
 stageWave[0][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "bigBoss"];
-stageWave[1][0] = ["blueSkeleton", "blueSkeleton"];
-stageWave[1][1] = ["blueSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton"];
-stageWave[1][2] = ["basicSkeleton", "redSkeleton", "blueSkeleton", "blueSkeleton", "ghost"];
-stageWave[1][3] = ["blueSkeleton", "redSkeleton", "basicSkeleton", "ghost", "basicSkeleton", "ghost", "redSkeleton", "bigBoss"];
+stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[0][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
+stageWave[0][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[0][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[0][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
+stageWave[0][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[0][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+//Stage 2
+stageWave[1][0] = ["blueSkeleton"];
+stageWave[1][1] = ["blueSkeleton", "basicSkeleton"];
+stageWave[1][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[1][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[1][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
+stageWave[1][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[1][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[1][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
+stageWave[1][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[1][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+//Stage 3
+stageWave[2][0] = ["blueSkeleton"];
+stageWave[2][1] = ["blueSkeleton", "basicSkeleton"];
+stageWave[2][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[2][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[2][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
+stageWave[2][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[2][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[2][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
+stageWave[2][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[2][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+//Stage 4
+stageWave[3][0] = ["blueSkeleton"];
+stageWave[3][1] = ["blueSkeleton", "basicSkeleton"];
+stageWave[3][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[3][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[3][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
+stageWave[3][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[3][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[3][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
+stageWave[3][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
+stageWave[3][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
 
 var inAWave = false;
 var waveCounter = 0;
@@ -894,7 +1083,7 @@ function nextWave (){
 			temp = currentWave;
 			if (!(i < stageWave[currentStage][currentWave].length)){
 				inAWave = false;
-				if(currentWave < 3){
+				if(currentWave < 9){
 					currentWave++;
 				}
 				else{
@@ -902,6 +1091,102 @@ function nextWave (){
 				}
 				clearInterval(wave); 
 			}
-		}, 2000);
+		}, 1500);
+	}
+}
+
+
+function pauseGame(){
+	if(!pause){
+		for (var i = 0; i < towersOnBoard.length; i++){
+			clearInterval(towersOnBoard[i].attackEnemy);
+		}
+		for (var i = 0; i < enemiesOnBoard.length; i++){
+			clearInterval(enemiesOnBoard[i].enemyNextMove);
+		}
+		awardGoldOverTime = false;
+		cancelAnimationFrame(requestID);
+		requestID = undefined;
+		pause = true;
+	}
+	else{
+		for (var i = 0; i < towersOnBoard.length; i++){
+			towersOnBoard[i].attack(towersOnBoard[i], towersOnBoard[i].constructor.name);
+		}
+		for (var i = 0; i < enemiesOnBoard.length; i++){
+			enemiesOnBoard[i].enemyMovement(enemiesOnBoard[i], enemiesOnBoard[i].constructor.name);
+		}
+		awardGoldOverTime = true;
+		pause = false;
+		render();
+
+	}
+}
+
+
+var disabledTowers = document.getElementsByClassName("disabledTower");
+var allSelected = document.getElementsByClassName("tower");
+function towerAvailable () {
+	//disable towers according to stage
+	
+	if (currentStage == 0) {
+		for (var i = 0; i < disabledTowers.length; i++) {
+			disabledTowers[i].style.opacity = '0.3';
+			disabledTowers[i].style.pointerEvents = 'none';
+		}
+	} if (currentStage == 1) {
+		document.getElementById("lamp").className = "tower";
+		document.getElementById("calculator").className = "tower";
+		document.getElementById("nutsAndBolts").className = "tower";
+		
+		for (var i = 0; i < allSelected.length; i++) {
+			allSelected[i].style.opacity = '1.0';
+			allSelected[i].style.pointerEvents = 'auto';
+		}
+		for (var i = 0; i < disabledTowers.length; i++) {
+			disabledTowers[i].style.opacity = '0.3';
+			disabledTowers[i].style.pointerEvents = 'none';
+		}
+	}
+	if (currentStage == 1) {
+		for (var i = 0; i < disabledTowers.length; i++) {
+			disabledTowers[i].style.opacity = '0.3';
+			disabledTowers[i].style.pointerEvents = 'none';
+		}
+	} 
+	if (currentStage == 2) {
+		document.getElementById("blenderDefender").className = "tower";
+		document.getElementById("mouseTrap").className = "tower";
+		document.getElementById("waterGun").className = "tower";
+		
+		for (var i = 0; i < allSelected.length; i++) {
+			allSelected[i].style.opacity = '1.0';
+			allSelected[i].style.pointerEvents = 'auto';
+		}
+		for (var i = 0; i < disabledTowers.length; i++) {
+			disabledTowers[i].style.opacity = '0.3';
+			disabledTowers[i].style.pointerEvents = 'none';
+		}
+	}
+	
+	if (currentStage == 2) {
+		for (var i = 0; i < disabledTowers.length; i++) {
+			disabledTowers[i].style.opacity = '0.3';
+			disabledTowers[i].style.pointerEvents = 'none';
+		}
+	} 
+	if (currentStage == 3) {
+		document.getElementById("airplaneLauncher").className = "tower";
+		document.getElementById("trophy").className = "tower";
+		document.getElementById("vanquishEvil").className = "tower";
+		
+		for (var i = 0; i < allSelected.length; i++) {
+			allSelected[i].style.opacity = '1.0';
+			allSelected[i].style.pointerEvents = 'auto';
+		}
+		for (var i = 0; i < disabledTowers.length; i++) {
+			disabledTowers[i].style.opacity = '0.3';
+			disabledTowers[i].style.pointerEvents = 'none';
+		}
 	}
 }

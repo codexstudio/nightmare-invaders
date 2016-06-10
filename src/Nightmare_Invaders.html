@@ -14,17 +14,14 @@
 		<!--Temporary display of path, will be removed when path and stage image are the same picture-->
 		<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2">
 		
-		<!-- 
-		<img src="../images/sound_on.png" id=mute onclick="changeImage()">
-		-->
 		<audio id=background_audio src="../audio/StarEater.mp3" loop="true" autoplay="true" controls></audio>
 		
 		<div class="UI">	
 			
 			<div class ="turret">
-				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") onmouseover=getStats("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 30px 30px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
+				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") onmouseover=getStats("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 40px 40px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
 				<div class ="towerStats">
-					Toy-Car Launcher <br>
+					Toy Car Launcher <br>
 					<p id="outputCost-toyCarLauncher"></p>
 					<p id="outputDamage-toyCarLauncher"></p>
 					<p id="outputRange-toyCarLauncher"></p>
@@ -33,7 +30,7 @@
 			</div>
 			
 			<div class ="turret">
-				<img id="lamp" onclick=placeTower("lamp") onmouseover=getStats("lamp") width="45" height="45" style="position:absolute; margin: 80px 30px 30px 30px; border: 2px solid black"src="../images/lamp.png">
+				<img id="lamp" onclick=placeTower("lamp") onmouseover=getStats("lamp") class="disabledTower" width="45" height="45" style="position:absolute; margin: 190px 40px 30px 30px; border: 2px solid black"src="../images/lamp.png">
 				<div class ="towerStats">
 					Lamp <br>
 					<p id="outputCost-lamp"></p>
@@ -45,7 +42,7 @@
 			</div>
 			
 			<div class="turret">
-				<img <img id="actionFigure" onclick=placeTower("actionFigure") onmouseover=getStats("actionFigure") width="45" height="45" style="position:absolute; margin: 130px 30px 30px 30px; border: 2px solid black"src="../images/actionFigure.png">
+				<img <img id="actionFigure" onclick=placeTower("actionFigure") onmouseover=getStats("actionFigure") width="45" height="45" style="position:absolute; margin: 140px 40px 30px 30px; border: 2px solid black"src="../images/actionFigure.png">
 				<div class ="towerStats">
 					Action Figure <br>
 					<p id="outputCost-actionFigure"></p>
@@ -56,14 +53,111 @@
 			</div>
 			
 			<div class="turret">
-				<img <img id="marbleShooter" onclick=placeTower("marbleShooter") onmouseover=getStats("marbleShooter") width="45" height="45" style="position:absolute; margin: 180px 30px 30px 30px; border: 2px solid black"src="../images/marbleShooter.png">
+				<img id="marbleShooter" onclick=placeTower("marbleShooter") onmouseover=getStats("marbleShooter") width="45" height="45" style="position:absolute; margin: 90px 40px 30px 30px; border: 2px solid black"src="../images/marbleShooter.png">
 				<div class ="towerStats">
 					Marble Shooter <br>
 					<p id="outputCost-marbleShooter"></p>
 					<p id="outputDamage-marbleShooter"></p>
 					<p id="outputRange-marbleShooter"></p>
 					<p id="outputAspd-marbleShooter"></p>
-					<p>Ability: Power of this tower's every 5th shot is doubled.</p>
+					<p>Ability: Tower's damage is doubled every fifth shot.</p>
+				</div>
+			</div>
+			
+			<div class="turret">
+				<img id="calculator" onclick=placeTower("calculator") onmouseover=getStats("calculator") class="disabledTower" width="45" height="45" style="position:absolute; margin: 40px 40px 80px 80px; border: 2px solid black"src="../images/calculator.png">
+			<div class ="towerStats">
+					Calculator <br>
+					<p id="outputCost-calculator"></p>
+					<p id="outputDamage-calculator"></p>
+					<p id="outputRange-calculator"></p>
+					<p id="outputAspd-calculator"></p>
+					<p>Increases gold income.</p>
+				</div>
+			</div>
+			
+			<div class="turret">
+				<img id="nutsAndBolts" onclick=placeTower("nutsAndBolts") onmouseover=getStats("nutsAndBolts") class="disabledTower" width="45" height="45" style="position:absolute; margin: 90px 90px 80px 80px; border: 2px solid black"src="../images/nutsAndBolts.png">
+			<div class ="towerStats">
+					Nuts and Bolts Shooter <br>
+					<p id="outputCost-nutsAndBolts"></p>
+					<p id="outputDamage-nutsAndBolts"></p>
+					<p id="outputRange-nutsAndBolts"></p>
+					<p id="outputAspd-nutsAndBolts"></p>
+					<p>Chance to crit on hit. </p>
+				</div>
+			</div>
+			
+			<div class="turret">
+				<img id="mouseTrap" onclick=placeTower("mouseTrap") onmouseover=getStats("mouseTrap") class="disabledTower" width="45" height="45" style="position:absolute; margin: 140px 140px 80px 80px; border: 2px solid black"src="../images/mouseTrap.png">
+			<div class ="towerStats">
+					Mouse Trap <br>
+					<p id="outputCost-mouseTrap"></p>
+					<p id="outputDamage-mouseTrap"></p>
+					<p id="outputRange-mouseTrap"></p>
+					<p id="outputAspd-mouseTrap"></p>
+					<p>Place on path. Stuns enemies. </p>
+				</div>
+			</div>
+			
+			<div class="turret">
+				<img id="blenderDefender" onclick=placeTower("blenderDefender") onmouseover=getStats("blenderDefender") class="disabledTower" width="45" height="45" style="position:absolute; margin: 190px 190px 80px 80px; border: 2px solid black"src="../images/blenderDefender.png">
+			<div class ="towerStats">
+					Blender Defender <br>
+					<p id="outputCost-blenderDefender"></p>
+					<p id="outputDamage-blenderDefender"></p>
+					<p id="outputRange-blenderDefender"></p>
+					<p id="outputAspd-blenderDefender"></p>
+					<p>Mighty defender of the kitchen.</p>
+				</div>
+			</div>
+			
+			<div class="turret">
+				<img id="waterGun" onclick=placeTower("waterGun") onmouseover=getStats("waterGun") class="disabledTower" width="45" height="45" style="position:absolute; margin: 40px 40px 130px 130px; border: 2px solid black"src="../images/waterGun.png">
+			<div class ="towerStats">
+					Nuts and Bolts Shooter <br>
+					<p id="outputCost-waterGun"></p>
+					<p id="outputDamage-waterGun"></p>
+					<p id="outputRange-waterGun"></p>
+					<p id="outputAspd-waterGun"></p>
+					<p>Slows enemies. </p>
+				</div>
+			</div>
+			
+			<div class="turret">
+				<img id="airplaneLauncher" onclick=placeTower("airplaneLauncher") onmouseover=getStats("airplaneLauncher") class="disabledTower" width="45" height="45" style="position:absolute; margin: 90px 90px 130px 130px; border: 2px solid black"src="../images/airplaneLauncher.png">
+			<div class ="towerStats">
+					Airplane Launcher <br>
+					<p id="outputCost-airplaneLauncher"></p>
+					<p id="outputDamage-airplaneLauncher"></p>
+					<p id="outputRange-airplaneLauncher"></p>
+					<p id="outputAspd-airplaneLauncher"></p>
+					<p>BIG RANGE.</p>
+				</div>
+			</div>
+			
+			<div class="turret">
+				<img id="trophy" onclick=placeTower("trophy") onmouseover=getStats("trophy") class="disabledTower" width="45" height="45" style="position:absolute; margin: 140px 140px 130px 130px; border: 2px solid black"src="../images/trophy.png">
+			<div class ="towerStats">
+					Trophy <br>
+					<p id="outputCost-trophy"></p>
+					<p id="outputDamage-trophy"></p>
+					<p id="outputRange-trophy"></p>
+					<p id="outputAspd-trophy"></p>
+					<p>Buff turrets in range.</p>
+				</div>
+			</div>
+			
+			<div class="turret">
+				<img id="vanquishEvil" onclick=placeTower("vanquishEvil") onmouseover=getStats("vanquishEvil") class="disabledTower" width="45" height="45" style="position:absolute; margin: 190px 190px 130px 130px; border: 2px solid black"src="../images/vanquishEvil.png">
+			<div class ="towerStats">
+					Vanquish The Evil <br>
+					<p id="outputCost-vanquishEvil"></p>
+					<p id="outputDamage-vanquishEvil"></p>
+					<p id="outputRange-vanquishEvil"></p>
+					<p id="outputAspd-vanquishEvil"></p>
+					<!--<p id="outputLimit-vanquishEvil"></p>-->
+					<p>Caution! Three per customer for safety reasons.</p>
 				</div>
 			</div>
 			
@@ -79,15 +173,14 @@
 			<div class="navBar">
 			<ul id="menu">
 				<li id="mainMenu"><a href="#" onclick=menu()><img src="../images/return.png" height="32" width="32"><img></a></li>
-				<li id="game_pause"><a href="#" onclick="pauseGame()"><img src="../images/pause.png" onclick="changeAudioImage()" height="32" width="32" id="image_change"></a></li>
-				<li id="toggleAudio"><a href="#"><img src="../images/sound_on.png" id="mute" onclick="changeImage()"></a></li>
+				<li id="game_pause"><a href="#" onclick="pauseGame()"><img src="../images/pause.png" onclick="changePauseImage()" height="32" width="32" id="image_change"></a></li>
+				<li id="toggleAudio"><a href="#"><img src="../images/sound_on.png" id="mute" onclick="changeAudioImage()"></a></li>
 			</ul>
 			</div>
 			
 			<div class="buttons">
 				<button class= "btnDress" id="nextWave" onclick=nextWave()>Next Wave</button>
-				<button class= "btnDress" id="prevStage" onclick=prevStage()>Previous Stage</button><br>
-				<button class= "btnDress" id="nextStage" onclick=nextStage()>Next Stage</button><br>
+				<!-- <button class= "btnDress" id="nextStage" onclick=nextStage()>Next Stage</button><br> -->
 				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
 			</div>
 			
@@ -109,7 +202,7 @@
 		e.preventDefault();
 		}, false);
 		
-		function changeImage() {
+		function changeAudioImage() {
 			var image = document.getElementById('mute');
 			if(image.src.match("sound_on")) 
 			{
@@ -121,37 +214,7 @@
 			}
 		}
 		
-		</script>
-		
-		<!--	Working - Ward
-		<script>
-			var pause = true;
-			function pauseGame(){
-			    if(pause){
-			        for (var i = 0; i < towersOnBoard.length; i++){
-			            clearInterval(towersOnBoard[i].attackEnemy);
-			        }
-			        for (var i = 0; i < enemiesOnBoard.length; i++){
-			            clearInterval(enemiesOnBoard[i].enemyNextMove);
-			        }
-			        cancelAnimationFrame(requestID);
-			        requestID = undefined;
-			        pause = false;
-			    }
-			    else{
-			        for (var i = 0; i < towersOnBoard.length; i++){
-			            towersOnBoard[i].attack(towersOnBoard[i], towersOnBoard[i].constructor.name);
-			        }
-			        for (var i = 0; i < enemiesOnBoard.length; i++){
-			            enemiesOnBoard[i].enemyMovement(enemiesOnBoard[i], enemiesOnBoard[i].constructor.name);
-			        }
-			        pause = true;
-			        render();
-
-			    }
-			}-->
-		<script>
-		function changeAudioImage(){
+		function changePauseImage(){
 			var image = document.getElementById('image_change')
 			if(image.src.match("pause"))
 			{
@@ -163,8 +226,7 @@
 			}
 		}
 		
-		</script> 
-		End 
-		
+		</script>
+
 	</body>
 </html>
