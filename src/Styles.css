@@ -23,12 +23,46 @@ body{
 	display:none;
 }
 
+#stageTransition{
+	z-index:4;
+	display:none;
+	width: 900px;
+	height: 600px;
+}
+#menu{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	margin: 0 auto;
+}
+#menu li{
+	margin: 0;
+	float: left;
+}
+#menu li a{
+	text-indent: -9999px;
+	overflow: hidden;
+	height: 33px;
+}
+#stageName{
+	position: absolute;
+	margin: 10px 10px -50px 30px; 
+	font-size: 22px;
+}
+.navBar{
+	position: relative;
+	margin: 10px 20px 60px 282px;
+}
+
 .info {
 	position: absolute;
+	color: black;
+	background: #669999;
 	top: 50px;
-	margin-left: 140px;
+	margin-left: 285px;
 	border: 3px solid;
 	padding: 2px;
+	opacity: 0.6;
 }
 
 .buttons {
@@ -36,8 +70,8 @@ body{
 	position: absolute;
 	display: block;
 	top: 35px;
-	margin-left: 280px;
-	margin-top: 10px;
+	margin-left: 285px;
+	margin-top: 185px;
 }
 
 .UI{
@@ -73,6 +107,7 @@ body{
 
 .btnDress:hover{
 	background-color: #517A7A;
+	opacity: 0.6;
 }
 
 .btnDress: active {
@@ -88,7 +123,7 @@ body{
 	font-family: "Times New Roman", Times, serif;
 	padding: 20px;
 }
-.towerStats{
+.towerStats {
 	position: absolute;
 	bottom: 0px;
 	width: 100%;
@@ -98,8 +133,4 @@ body{
 	background: #669999;
 	border: 1px solid black;
 	opacity: 0;
-}
-#mute {
-	margin-left: 850px;
-	margin-top: 120px;
 }
