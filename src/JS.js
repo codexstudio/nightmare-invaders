@@ -745,6 +745,9 @@ function createTowerObject(towerType, x, y){
 	if (show == false){
 		togGrid();
 	}
+	if (circleCheck == true){
+		circleCheck = false;
+	}
 	//Temp console log for debugging, can be removed later.
 	//console.log("NEW " + towerType + " MADE!");
 	//console.log("Cost = " + towersOnBoard[towersOnBoard.length-1].cost);
@@ -760,11 +763,54 @@ function createTowerObject(towerType, x, y){
 		}
 }
 
+var tempRange;
+
 function placeTower(towerType){
 	document.body.style.cursor = "url('../images/" + towerType + ".png'),auto";
 	document.getElementById('canvas').addEventListener ("click", handler); 
+	if (circleCheck == false){
+		circleCheck = true;
+	}
 	if (show == true){
 	togGrid();
+	}
+	switch (towerType){
+		case "toyCarLauncher":
+			tempRange = 160;
+			break;
+		case "lamp":
+			tempRange = 180;
+			break;
+		case "actionFigure":
+			tempRange = 90;
+			break;
+		case "marbleShooter":
+			tempRange = 250;
+			break;
+		case "calculator":
+			tempRange = 1;
+			break;
+		case "mouseTrap":
+			tempRange = 135;
+			break;
+		case "nutsAndBolts":
+			tempRange = 135;
+			break;
+		case "blenderDefender":
+			tempRange = 80;
+			break;
+		case waterGun:
+			tempRange = 150;
+			break;
+		case "airplaneLauncher":
+			tempRange = 500;
+			break;
+		case "trophy":
+			tempRange = 200;
+			break;
+		case "vanquishEvil":
+			tempRange = 500000;
+			break;
 	}
 	function handler(e){
 	event = e;
@@ -789,6 +835,7 @@ function placeTower(towerType){
 				gameMessage = "Failed to place. Too close to the path.";
 				if (show == false){
 				togGrid();
+				circleCheck = false;
 				}
 			}
 			
@@ -799,6 +846,7 @@ function placeTower(towerType){
 					objObstruct = true;
 					gameMessage = "Failed to place. Too close to another tower.";
 					togGrid();
+					circleCheck = false;
 				}
 			}
 		}
@@ -811,6 +859,8 @@ function placeTower(towerType){
 		if (vanquishEvilCount >= 3) {
 			objObstruct = true;
 			gameMessage = "You can have only 3 Vanquish The Evil Towers!";
+			togGrid();
+			circleCheck = false;
 		}
 		var towerObjectHolder = new (eval(towerType))();
 		if (!objObstruct && towerxy.x < 870 && towerxy.y < 570){
@@ -821,12 +871,12 @@ function placeTower(towerType){
 			else {
 				gameMessage = "Not enough funds.";
 				togGrid();
+				circleCheck = false;
 			}
 		}
 		objObstruct = false;
 		e.target.removeEventListener(e.type, arguments.callee);
 	}
-	
 }
 
 function rotateTower(towerX, towerY, enemyX, enemyY) {
@@ -857,10 +907,19 @@ function getStats(turret) {
 var cursorX;
 var cursorY;
 var circleCheck = false;
-
+	
 function mouseCoord(e){
 	cursorX = e.clientX;
-	cursorY = e.clientY;;
+	cursorY = e.clientY;
+}
+
+
+function drawRange(){
+	if (circleCheck === true){
+		ctx.beginPath();
+		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
+		ctx.stroke();
+	}
 }
 
 function hoverCheck(){
@@ -921,6 +980,7 @@ function render(){
 	renderLampCheck();
 	renderEnemyMovement();	
 	renderTowerAndBullet();
+	drawRange();
 	hoverCheck();
 	stageWin();
 }
