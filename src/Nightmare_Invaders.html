@@ -19,7 +19,7 @@
 		<div class="UI">	
 			
 			<div class ="turret">
-				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") onmouseover=getStats("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 40px 40px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
+				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") onmouseover=getStats("toyCarLauncher") class="disabledTower" width="45" height="45" style="position:absolute; margin: 40px 40px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
 				<div class ="towerStats">
 					Toy Car Launcher <br>
 					<p id="outputCost-toyCarLauncher"></p>
@@ -32,7 +32,7 @@
 			<div class ="turret">
 				<img id="lamp" onclick=placeTower("lamp") onmouseover=getStats("lamp") class="disabledTower" width="45" height="45" style="position:absolute; margin: 190px 40px 30px 30px; border: 2px solid black"src="../images/lamp.png">
 				<div class ="towerStats">
-					Lamp <br>
+					Lava Lamp <br>
 					<p id="outputCost-lamp"></p>
 					<p id="outputDamage-lamp"></p>
 					<p id="outputRange-lamp"></p>
@@ -42,7 +42,7 @@
 			</div>
 			
 			<div class="turret">
-				<img <img id="actionFigure" onclick=placeTower("actionFigure") onmouseover=getStats("actionFigure") width="45" height="45" style="position:absolute; margin: 140px 40px 30px 30px; border: 2px solid black"src="../images/actionFigure.png">
+				<img <img id="actionFigure" onclick=placeTower("actionFigure") onmouseover=getStats("actionFigure") class="disabledTower" width="45" height="45" style="position:absolute; margin: 140px 40px 30px 30px; border: 2px solid black"src="../images/actionFigure.png">
 				<div class ="towerStats">
 					Action Figure <br>
 					<p id="outputCost-actionFigure"></p>
@@ -53,7 +53,7 @@
 			</div>
 			
 			<div class="turret">
-				<img id="marbleShooter" onclick=placeTower("marbleShooter") onmouseover=getStats("marbleShooter") width="45" height="45" style="position:absolute; margin: 90px 40px 30px 30px; border: 2px solid black"src="../images/marbleShooter.png">
+				<img id="marbleShooter" onclick=placeTower("marbleShooter") onmouseover=getStats("marbleShooter") class="disabledTower" width="45" height="45" style="position:absolute; margin: 90px 40px 30px 30px; border: 2px solid black"src="../images/marbleShooter.png">
 				<div class ="towerStats">
 					Marble Shooter <br>
 					<p id="outputCost-marbleShooter"></p>
@@ -72,7 +72,7 @@
 					<p id="outputDamage-calculator"></p>
 					<p id="outputRange-calculator"></p>
 					<p id="outputAspd-calculator"></p>
-					<p>Increases gold income.</p>
+					<p>Ability: Increases gold income.</p>
 				</div>
 			</div>
 			
@@ -84,7 +84,7 @@
 					<p id="outputDamage-nutsAndBolts"></p>
 					<p id="outputRange-nutsAndBolts"></p>
 					<p id="outputAspd-nutsAndBolts"></p>
-					<p>Chance to crit on hit. </p>
+					<p>Ability: Chance to crit on hit. </p>
 				</div>
 			</div>
 			
@@ -96,7 +96,7 @@
 					<p id="outputDamage-mouseTrap"></p>
 					<p id="outputRange-mouseTrap"></p>
 					<p id="outputAspd-mouseTrap"></p>
-					<p>Place on path. Stuns enemies. </p>
+					<p>Ability: Place on path. Stuns enemies. </p>
 				</div>
 			</div>
 			
@@ -108,19 +108,19 @@
 					<p id="outputDamage-blenderDefender"></p>
 					<p id="outputRange-blenderDefender"></p>
 					<p id="outputAspd-blenderDefender"></p>
-					<p>Mighty defender of the kitchen.</p>
+					<p>Ability: Mighty defender of the kitchen.</p>
 				</div>
 			</div>
 			
 			<div class="turret">
 				<img id="waterGun" onclick=placeTower("waterGun") onmouseover=getStats("waterGun") class="disabledTower" width="45" height="45" style="position:absolute; margin: 40px 40px 130px 130px; border: 2px solid black"src="../images/waterGun.png">
 			<div class ="towerStats">
-					Nuts and Bolts Shooter <br>
+					Water Gun <br>
 					<p id="outputCost-waterGun"></p>
 					<p id="outputDamage-waterGun"></p>
 					<p id="outputRange-waterGun"></p>
 					<p id="outputAspd-waterGun"></p>
-					<p>Slows enemies. </p>
+					<p>Ability: Slows enemies. </p>
 				</div>
 			</div>
 			
@@ -132,7 +132,7 @@
 					<p id="outputDamage-airplaneLauncher"></p>
 					<p id="outputRange-airplaneLauncher"></p>
 					<p id="outputAspd-airplaneLauncher"></p>
-					<p>BIG RANGE.</p>
+					<p>Ability: BIG RANGE.</p>
 				</div>
 			</div>
 			
@@ -144,7 +144,7 @@
 					<p id="outputDamage-trophy"></p>
 					<p id="outputRange-trophy"></p>
 					<p id="outputAspd-trophy"></p>
-					<p>Buff turrets in range.</p>
+					<p>Ability: Buff turrets in range.</p>
 				</div>
 			</div>
 			
@@ -157,7 +157,7 @@
 					<p id="outputRange-vanquishEvil"></p>
 					<p id="outputAspd-vanquishEvil"></p>
 					<!--<p id="outputLimit-vanquishEvil"></p>-->
-					<p>Caution! Three per customer for safety reasons.</p>
+					<p>Caution! Three per customer as per the nightmare safety regulations.</p>
 				</div>
 			</div>
 			
@@ -180,7 +180,7 @@
 			
 			<div class="buttons">
 				<button class= "btnDress" id="nextWave" onclick=nextWave()>Next Wave</button>
-				<!-- <button class= "btnDress" id="nextStage" onclick=nextStage()>Next Stage</button><br> -->
+				<button class= "btnDress" id="nextStage" onclick=nextStage()>Next Stage</button><br>
 				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
 			</div>
 			
