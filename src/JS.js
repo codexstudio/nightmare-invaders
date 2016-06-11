@@ -797,6 +797,10 @@ function createTowerObject(towerType, x, y){
 	towersOnBoard.push(tempTowerObject);
 	
 	Gold -= tempTowerObject.cost;
+	
+	if (show == false){
+		togGrid();
+	}
 	//Temp console log for debugging, can be removed later.
 	//console.log("NEW " + towerType + " MADE!");
 	//console.log("Cost = " + towersOnBoard[towersOnBoard.length-1].cost);
@@ -815,7 +819,9 @@ function createTowerObject(towerType, x, y){
 function placeTower(towerType){
 	document.body.style.cursor = "url('../images/" + towerType + ".png'),auto";
 	document.getElementById('canvas').addEventListener ("click", handler); 
-	
+	if (show == true){
+	togGrid();
+	}
 	function handler(e){
 	event = e;
 		towerxy.x = event.clientX+5;     // Get the horizontal coordinate, 5 pixel offset as a margin of error for the player
@@ -837,6 +843,9 @@ function placeTower(towerType){
 			if ( ((stagePaths[currentStage])[i].x - towerLocationsByPixelPosition[numOfTowers].x > -30) && ((stagePaths[currentStage])[i].x - towerLocationsByPixelPosition[numOfTowers].x < 60) && ((stagePaths[currentStage])[i].y - towerLocationsByPixelPosition[numOfTowers].y > -15) && ((stagePaths[currentStage])[i].y - towerLocationsByPixelPosition[numOfTowers].y < 60) ){
 				objObstruct = true;
 				gameMessage = "Failed to place. Too close to the path.";
+				if (show == false){
+				togGrid();
+				}
 			}
 			
 		}
@@ -845,6 +854,7 @@ function placeTower(towerType){
 				if ( (towerLocationsByPixelPosition[i].x - towerLocationsByPixelPosition[numOfTowers].x > -45) && (towerLocationsByPixelPosition[i].x - towerLocationsByPixelPosition[numOfTowers].x < 45) && (towerLocationsByPixelPosition[i].y - towerLocationsByPixelPosition[numOfTowers].y > -45) && (towerLocationsByPixelPosition[i].y - towerLocationsByPixelPosition[numOfTowers].y < 45) ){
 					objObstruct = true;
 					gameMessage = "Failed to place. Too close to another tower.";
+					togGrid();
 				}
 			}
 		}
@@ -866,6 +876,7 @@ function placeTower(towerType){
 			}
 			else {
 				gameMessage = "Not enough funds.";
+				togGrid();
 			}
 		}
 		objObstruct = false;
@@ -897,6 +908,28 @@ function getStats(turret) {
 	outputDamage.innerHTML = "Damage: " + towerPlaceholder.damage;
 	outputRange.innerHTML = "Range: " + towerPlaceholder.range;
 	outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed + " (Reload Time)";
+}
+
+var cursorX;
+var cursorY;
+var circleCheck = false;
+
+function mouseCoord(e){
+	cursorX = e.clientX;
+	cursorY = e.clientY;;
+}
+
+function hoverCheck(){
+	if (towersOnBoard.length > 0)
+	{
+		for (var i = 0; i <= (towersOnBoard.length-1); i++){
+			if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
+				ctx.beginPath();
+				ctx.arc(towersOnBoard[i].xCoord+22.5, towersOnBoard[i].yCoord+22.5, towersOnBoard[i].range, 0, 2 * Math.PI);
+				ctx.stroke();
+			}
+		}
+	}
 }
 
 //End tower section ---------------------------------------------------------------------------------------------------------------------------
@@ -943,6 +976,7 @@ function render(){
 	renderLampCheck();
 	renderEnemyMovement();	
 	renderTowerAndBullet();
+	hoverCheck();
 	stageWin();
 }
 
