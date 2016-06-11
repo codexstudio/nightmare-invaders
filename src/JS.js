@@ -614,6 +614,27 @@ redDemon.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
+function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+	this.startHealth = 100000;
+	this.health = 100000;
+	this.damage = 100;
+	this.speed = 1000;
+	this.killReward = 0;
+}
+grimReaper.prototype = Object.create(enemy.prototype);
+grimReaper.prototype.constructor = grimReaper;
+
+grimReaper.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+	
+grimReaper.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+	
+grimReaper.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+};
+
 // End of enemy bluprint section----------------------------------------------------
 
 
