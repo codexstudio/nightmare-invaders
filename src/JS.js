@@ -458,7 +458,7 @@ clown.prototype.stealGold = function(){
 	gameMessage = "A clown has stolen " + this.goldTaken + " gold from you! Kill it to get it back!";
 };
 
-function bigBoss2(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
 	this.startHealth = 5000;
 	this.health = 5000;
@@ -466,10 +466,10 @@ function bigBoss2(startHealth, health, damage, speed, killReward, xCoord, yCoord
 	this.speed = 50;
 	this.killReward = 0;
 }
-bigBoss2.prototype = Object.create(enemy.prototype);
-bigBoss2.prototype.constructor = bigBoss2;
+bigBlob.prototype = Object.create(enemy.prototype);
+bigBlob.prototype.constructor = bigBlob;
 
-bigBoss2.prototype.thisChildMethodNeedsAName = function(){
+bigBlob.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
@@ -479,7 +479,7 @@ function bat(startHealth, health, damage, speed, killReward, xCoord, yCoord, pat
 	this.health = 300;
 	this.damage = 15;
 	this.speed = 20;
-	this.killReward = 0;
+	this.killReward = 10;
 	this.isVisible = false;
 }
 bat.prototype = Object.create(enemy.prototype);
@@ -514,7 +514,6 @@ bat.prototype.checkBatVisibility = function(){
 		}
 		this.isVisible = false;
 	}
-	console.log(this.speed);
 };
 
 function witch(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, towerStolen){
@@ -572,10 +571,10 @@ witch.prototype.stealTower = function(){
 
 function blueDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.blueDemon = 5000;
-	this.health = 5000;
-	this.damage = 100;
-	this.speed = 100000;
+	this.startHealth = 500;
+	this.health = 500;
+	this.damage = 0;
+	this.speed = 20;
 	this.killReward = 0;
 }
 blueDemon.prototype = Object.create(enemy.prototype);
@@ -673,11 +672,17 @@ tower.prototype.attack = function(towerObj, towerName){
 		var max = 0;
 		towerObj.isShooting = 0;
 		
+		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "calculator"){
+			towerObj.goldBuff();
+		}
 		if (towersOnBoard.length > 0 && towerName == "lamp"){
 			towerObj.lampIO();
 		}
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "marbleShooter") {
-			towerObj.marbleBuffShot();
+			towerObj.marbleBuffShot();	
+		}
+		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "nutsAndBolts") {
+			towerObj.critChance(); 
 		}
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName != "lamp" && towerName != "calculator" && towerName != "trophy" && towerName != "mouseTrap"){
 			
@@ -699,11 +704,9 @@ tower.prototype.attack = function(towerObj, towerName){
 					}
 				}
 			}
-			
 			if (max == 0){
 				towerObj.targetIndice = -1;
 			}
-			
 			if (max > 0){
 				for (var b = 0; b < enemiesOnBoard.length; b++){
 					var j = b;
@@ -730,6 +733,9 @@ tower.prototype.attack = function(towerObj, towerName){
 				}
 			}
 		}
+		if (towersOnBoard.length > 0 && towerName == "nutsAndBolts") {
+			towerObj.damage = towerObj.baseDamage;
+		} 
 	}, this.attackSpeed);
 };
 
@@ -826,32 +832,31 @@ function calculator(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	this.cost = 1;
 	this.damage = 0;
 	this.range = 1;
-	this.attackSpeed = 0;
+	this.attackSpeed = 5000;
 }
 calculator.prototype = Object.create(tower.prototype);
 calculator.prototype.constructor = calculator;
 
 calculator.prototype.goldBuff = function(){
-	var calculatorGold;
-	var calculatorGold = setInterval(function(){
-		if (calculatorGold == true){
-			Gold++;
-		}
-	}, 1000);
+	Gold += 5;
 };
 
-function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
+function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, baseDamage){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr);
 	this.cost = 90;
 	this.damage = 15;
 	this.range = 135;
 	this.attackSpeed = 800;
+	this.baseDamage = 15;
 }
 nutsAndBolts.prototype = Object.create(tower.prototype);
 nutsAndBolts.prototype.constructor = nutsAndBolts;
 
-nutsAndBolts.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined nutsAndBolts Method.")
+nutsAndBolts.prototype.critChance = function() {
+	crit = Math.random() * 100;
+		if (crit <= 20) {
+			this.damage = this.damage * 4;
+		}
 };
 
 function mouseTrap(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
@@ -1340,7 +1345,7 @@ function stageWin() {
 
 var stageWave = [[],[],[],[]];
 //Stage 1
-stageWave[0][0] = ["bat", "clown", "blob"];
+stageWave[0][0] = ["blueSkeleton", "blueSkeleton", "blueDemon"];
 stageWave[0][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
