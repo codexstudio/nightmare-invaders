@@ -458,7 +458,7 @@ clown.prototype.stealGold = function(){
 	gameMessage = "A clown has stolen " + this.goldTaken + " gold from you! Kill it to get it back!";
 };
 
-function bigBoss2(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
 	this.startHealth = 5000;
 	this.health = 5000;
@@ -466,10 +466,10 @@ function bigBoss2(startHealth, health, damage, speed, killReward, xCoord, yCoord
 	this.speed = 50;
 	this.killReward = 0;
 }
-bigBoss2.prototype = Object.create(enemy.prototype);
-bigBoss2.prototype.constructor = bigBoss2;
+bigBlob.prototype = Object.create(enemy.prototype);
+bigBlob.prototype.constructor = bigBlob;
 
-bigBoss2.prototype.thisChildMethodNeedsAName = function(){
+bigBlob.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
@@ -571,10 +571,10 @@ witch.prototype.stealTower = function(){
 
 function blueDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.blueDemon = 5000;
-	this.health = 5000;
-	this.damage = 100;
-	this.speed = 100000;
+	this.startHealth = 500;
+	this.health = 500;
+	this.damage = 0;
+	this.speed = 20;
 	this.killReward = 0;
 }
 blueDemon.prototype = Object.create(enemy.prototype);
@@ -1280,7 +1280,7 @@ function stageWin() {
 
 var stageWave = [[],[],[],[]];
 //Stage 1
-stageWave[0][0] = ["bat", "clown", "blob"];
+stageWave[0][0] = ["blueSkeleton", "blueSkeleton", "blueDemon"];
 stageWave[0][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
