@@ -1062,10 +1062,13 @@ function placeTower(towerType){
 			}
 		}
 		if (vanquishEvilCount >= 3) {
+<<<<<<< HEAD
 			objObstruct = true;
 			gameMessage = "You can have only 3 Vanquish The Evil Towers!";
 			togGrid();
 			circleCheck = false;
+=======
+>>>>>>> refs/remotes/origin/staging
 			if (towerType instanceof vanquishEvil) {
 				objObstruct = true;
 				gameMessage = "You can have only 3 Vanquish The Evil Towers!";
