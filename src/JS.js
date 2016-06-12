@@ -15,7 +15,18 @@ var images = new Array();
 				'../images/blueSkeleton.png',
 				'../images/basicSkeleton.png',
 				'../images/redSkeleton.png',
-				'../images/bigBoss.png'
+				'../images/bigBoss.png',
+				'../images/bat.png',
+				'../images/vampire.png',
+				'../images/clown.png',
+				'../images/bigBlob.png',
+				'../images/blob.png',
+				'../images/miniBlob.png',
+				'../images/grizzlyBear.png',
+				'../images/witch.png',
+				'../images/blueDemon.png',
+				'../images/redDemon.png',
+				'../images/grimReaper.png'
 			)
 			
 			
@@ -144,7 +155,7 @@ stagePaths[3] = pathParentBedroom;
 
 
 //UI Elements
-var Gold = 100;
+var Gold = 100; 
 var Hp = 100;
 var currentWave = 0;
 var pause = false;
@@ -158,7 +169,7 @@ var outputStageName = document.querySelector("#stageName");
 
 //global variables
 var ang = 0;
-const TRAJ_SPEED = 5;
+const TRAJ_SPEED = 10;
 
 function menu(){
 	window.location="Menu.html";
@@ -253,7 +264,7 @@ function togGrid(){
 var enemiesOnBoard = [];
 
 //Enemies Bluprint Section----------------------------------------------------------
- var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+ var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
 	this.startHealth = startHealth;
 	this.health = health;
 	this.damage = damage;
@@ -262,6 +273,7 @@ var enemiesOnBoard = [];
 	this.xCoord = (stagePaths[currentStage])[0].x;
 	this.yCoord = (stagePaths[currentStage])[0].y;
 	this.pathPos = 0;
+	this.direction;
 	this.enemyNextMove;
  }
  
@@ -274,6 +286,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if((stagePaths[currentStage])[enemyObj.pathPos].x % enemyObj.xCoord == 0){
 				enemyObj.pathPos++;
 			}
+			enemyObj.direction = "west";
 			enemyObj.xCoord--;
 		}
 		
@@ -281,6 +294,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if((stagePaths[currentStage])[enemyObj.pathPos].x % enemyObj.xCoord == 0){
 				enemyObj.pathPos++;
 			}
+			enemyObj.direction = "east";
 			enemyObj.xCoord++;
 		}
 		
@@ -288,6 +302,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if((stagePaths[currentStage])[enemyObj.pathPos].y % enemyObj.xCoord == 0){
 				enemyObj.pathPos++;
 			}
+			enemyObj.direction = "north";
 			enemyObj.yCoord--;
 		}
 		
@@ -295,6 +310,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if((stagePaths[currentStage])[enemyObj.pathPos].y % enemyObj.yCoord == 0){
 				enemyObj.pathPos++;
 			}
+			enemyObj.direction = "south";
 			enemyObj.yCoord++;
 		}
 		if (enemyObj.pathPos > (stagePaths[currentStage]).length-1) {
@@ -302,6 +318,12 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			for (var j = 0; j < enemiesOnBoard.length; j++){
 				if (enemiesOnBoard[j].pathPos > (stagePaths[currentStage]).length-1){
 					enemiesOnBoard.splice(j,1);
+					if (enemiesOnBoard[j] instanceof blueDemon) {
+						enemyObj.blueDemonExit;
+					}
+					if (enemiesOnBoard[j] instanceof redDemon) {
+						enemyObj.redDemonExit;
+					}
 					break;
 				}
 			}
@@ -314,12 +336,15 @@ enemy.prototype.enemyMovement = function(enemyObj){
 		if (enemyObj instanceof bat){
 			enemyObj.checkBatVisibility();
 		}
+		if (enemyObj instanceof grimReaper) {
+			enemyObj.spawnMomDad();
+		}
 	}, this.speed);
 }
 
 
-function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 200;
 	this.health = 200;
 	this.damage = 1;
@@ -333,8 +358,8 @@ basicSkeleton.prototype.thisChildMetohdNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
 
-function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 500;
 	this.health = 500;
 	this.damage = 2;
@@ -348,10 +373,10 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
-	this.startHealth = 500;
-	this.health = 500;
+function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
+	this.startHealth = 100;
+	this.health = 100;
 	this.damage = 1;
 	this.speed = 20;
 	this.killReward = 2;
@@ -362,8 +387,8 @@ blueSkeleton.prototype.constructor = blueSkeleton;
 blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
-function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
+function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
 	this.startHealth = 350;
 	this.health = 350;
 	this.damage = 2;
@@ -396,10 +421,10 @@ ghost.prototype.checkGhostVisibility = function(){
 	}
 };
 
-function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.startHealth = 2000;
-	this.health = 2000;
+function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 200;
+	this.health = 200;
 	this.damage = 100;
 	this.speed = 80;
 	this.killReward = 0;
@@ -411,24 +436,96 @@ bigBoss.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function blob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 400;
 	this.health = 400;
 	this.damage = 20;
-	this.speed = 100;
-	this.killReward = 10;
+	this.speed = 90;
+	this.killReward = 0;
 }
 blob.prototype = Object.create(enemy.prototype);
 blob.prototype.constructor = blob;
 
-blob.prototype.doubleBlob = function(){
-	
-	console.log("Get splitted.");
+blob.prototype.blobSplit = function(){
+	if (this.health <= 0) {
+		var tempObj = new miniBlob;//make first miniblob object
+		tempObj.pathPos = this.pathPos;//make its path position the same as when the blob dies
+		tempObj.xCoord = this.xCoord;//make its x coordinate the same as when the blob dies
+		tempObj.yCoord = this.yCoord;//make its y coordinate the same as when the blob dies
+		enemiesOnBoard.push(tempObj);//add the set up object to the array of enemies on board
+		tempObj.enemyMovement(tempObj);//initialize the object's movement
+		
+		//for blob that spawns ahead
+		var tempObj1 = new miniBlob;
+		tempObj1.pathPos = this.pathPos+1;
+		switch(this.direction){
+			case "north":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord-15;
+				break;
+			case "east":
+				tempObj1.xCoord = this.xCoord+15;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord+15;
+				break;
+			case "west":
+				tempObj1.xCoord = this.xCoord-15;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj1);
+		tempObj1.enemyMovement(tempObj1);
+		
+		//for blob that spawn behind
+		var tempObj2 = new miniBlob;
+		tempObj2.pathPos = this.pathPos-1;
+		switch(this.direction){
+			case "north":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord+15;
+				break;
+			case "east":
+				tempObj2.xCoord = this.xCoord-15;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord-15;
+				break;
+			case "west":
+				tempObj2.xCoord = this.xCoord+15;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj2);
+		tempObj2.enemyMovement(tempObj2);
+		
+	}
 };
 
-function clown(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken);
+function miniBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 150;
+	this.health = 150;
+	console.log(this.health);
+	this.damage = 5;
+	this.speed = 60;
+	this.killReward = 5;
+}
+miniBlob.prototype = Object.create(enemy.prototype);
+miniBlob.prototype.constructor = miniBlob;
+
+miniBlob.prototype.miniBlob = function(){
+};
+
+function clown(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction);
 	this.startHealth = 10;
 	this.health = 10;
 	this.damage = 5;
@@ -440,40 +537,98 @@ clown.prototype = Object.create(enemy.prototype);
 clown.prototype.constructor = clown;
 
 clown.prototype.stealGold = function(){
-	var howManyGold	= Math.random() * 100;
+	var percentageGold	= Math.random() * 100;
 	
-	if (howManyGold >= 0 && howManyGold < 33) { //Three quarters gold stolen.
+	if (percentageGold >= 0 && percentageGold < 33) { //Three quarters gold stolen.
 		this.goldTaken = (25 / 100) * Gold;
-		Gold -= this.goldTaken;
+		Gold -= Math.round(this.goldTaken);
 	}	
-	else if (howManyGold >= 33 && howManyGold < 66) { //Half your gold stolen.
+	else if (percentageGold >= 33 && percentageGold < 66) { //Half your gold stolen.
 		this.goldTaken = (50 / 100) * Gold;
-		Gold -= this.goldTaken;
+		Gold -= Math.round(this.goldTaken);
 	}
-	else if (howManyGold >= 66 && howManyGold < 100) { // Quarter of gold stolen.
+	else if (percentageGold >= 66 && percentageGold < 100) { // Quarter of gold stolen.
 		this.goldTaken = (75 / 100) * Gold;
-		Gold -= this.goldTaken;
+		Gold -= Math.round(this.goldTaken);
 	} 
-	gameMessage = "A clown has stolen " + this.goldTaken + " gold from you! Kill it to get it back!";
+	gameMessage = "A clown has stolen " + Math.round(this.goldTaken) + " gold from you! Kill it to get it back!";
 };
 
-function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.startHealth = 5000;
-	this.health = 5000;
+function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 1000;
+	this.health = 1000;
 	this.damage = 100;
-	this.speed = 50;
+	this.speed = 150;
 	this.killReward = 0;
 }
 bigBlob.prototype = Object.create(enemy.prototype);
 bigBlob.prototype.constructor = bigBlob;
 
-bigBlob.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+bigBlob.prototype.bigBlobSplit = function(){
+	if (this.health <= 0) {
+		var tempObj = new blob;//make first miniblob object
+		tempObj.pathPos = this.pathPos;//make its path position the same as when the blob dies
+		tempObj.xCoord = this.xCoord;//make its x coordinate the same as when the blob dies
+		tempObj.yCoord = this.yCoord;//make its y coordinate the same as when the blob dies
+		enemiesOnBoard.push(tempObj);//add the set up object to the array of enemies on board
+		tempObj.enemyMovement(tempObj);//initialize the object's movement
+		
+		//for blob that spawns ahead
+		var tempObj1 = new blob;
+		tempObj1.pathPos = this.pathPos+2;
+		switch(this.direction){
+			case "north":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord-30;
+				break;
+			case "east":
+				tempObj1.xCoord = this.xCoord+30;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord+30;
+				break;
+			case "west":
+				tempObj1.xCoord = this.xCoord-30;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj1);
+		tempObj1.enemyMovement(tempObj1);
+		
+		//for blob that spawn behind
+		var tempObj2 = new blob;
+		tempObj2.pathPos = this.pathPos-2;
+		switch(this.direction){
+			case "north":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord+30;
+				break;
+			case "east":
+				tempObj2.xCoord = this.xCoord-30;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord-30;
+				break;
+			case "west":
+				tempObj2.xCoord = this.xCoord+30;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj2);
+		tempObj2.enemyMovement(tempObj2);
+		
+	}
 };
 
-function bat(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function bat(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 300;
 	this.health = 300;
 	this.damage = 15;
@@ -515,12 +670,27 @@ bat.prototype.checkBatVisibility = function(){
 	}
 };
 
-function witch(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, towerStolen){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function grizzlyBear(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 1000;
+	this.health = 1000;
+	this.damage = 10;
+	this.speed = 70;
+	this.killReward = 20;
+}
+grizzlyBear.prototype = Object.create(enemy.prototype);
+grizzlyBear.prototype.constructor = grizzlyBear;
+
+grizzlyBear.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+};
+
+function witch(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, towerStolen, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 300;
 	this.health = 300;
-	this.damage = 100;
-	this.speed = 100;
+	this.damage = 1;
+	this.speed = 80;
 	this.killReward = 0;
 	this.towerStolen = 0;
 }
@@ -568,48 +738,91 @@ witch.prototype.stealTower = function(){
 	gameMessage = "A witch has stolen a tower from the store!";
 };
 
-function blueDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function blueDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 500;
 	this.health = 500;
-	this.damage = 0;
+	this.damage = 0; 
 	this.speed = 20;
-	this.killReward = 0;
+	this.killReward = 40;
 }
 blueDemon.prototype = Object.create(enemy.prototype);
 blueDemon.prototype.constructor = blueDemon;
 
-blueDemon.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+blueDemon.prototype.blueDemonExit = function(){
+	Hp = 1; 
 };
 
-function grizzlyBear(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.startHealth = 5000;
-	this.health = 5000;
-	this.damage = 50;
-	this.speed = 400;
-	this.killReward = 0;
-}
-grizzlyBear.prototype = Object.create(enemy.prototype);
-grizzlyBear.prototype.constructor = grizzlyBear;
-
-grizzlyBear.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
-};
-
-function redDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function redDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 10000;
 	this.health = 10000;
-	this.damage = 99;
+	this.damage = 0;
 	this.speed = 1000;
 	this.killReward = 0;
 }
 redDemon.prototype = Object.create(enemy.prototype);
 redDemon.prototype.constructor = redDemon;
 
-redDemon.prototype.thisChildMethodNeedsAName = function(){
+redDemon.prototype.redDemonExit = function(){
+	Hp = 1; 
+};
+
+function zombieMom(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 1000;
+	this.health = 1000;
+	this.damage = 10;
+	this.speed = 80;
+	this.killReward = 20;
+}
+zombieMom.prototype = Object.create(enemy.prototype);
+zombieMom.prototype.constructor = zombieMom;
+
+zombieMom.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+};
+
+function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 1000;
+	this.health = 1000;
+	this.damage = 10;
+	this.speed = 80;
+	this.killReward = 20;
+}
+zombieDad.prototype = Object.create(enemy.prototype);
+zombieDad.prototype.constructor = zombieDad;
+
+zombieDad.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+};
+
+function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 1000;
+	this.health = 1000;
+	this.damage = 100;
+	this.speed = 100;
+	this.killReward = 0;
+	this.phaseOne = this.startHealth * 0.75;
+	this.phaseTwo = this.startHealth / 2;
+	this.phaseThree =  this.startHealth * 0.25;
+}
+grimReaper.prototype = Object.create(enemy.prototype);
+grimReaper.prototype.constructor = grimReaper;
+
+grimReaper.prototype.spawnMomDad = function(){
+	if (this.health < this.phaseOne) {
+		console.log("You rly cool.");
+	}
+};
+	
+grimReaper.prototype.removeRandomTowers = function(){ //MAYBE LOL!
+	console.log("Undefined Child Method.");
+};
+	
+grimReaper.prototype.becomeTowerOffense = function(){ //MAYBE LOL!
 	console.log("Undefined Child Method.");
 };
 
@@ -725,8 +938,15 @@ tower.prototype.attack = function(towerObj, towerName){
 							clearInterval(enemiesOnBoard[j].enemyNextMove);
 							Gold += enemiesOnBoard[j].killReward;
 							if (enemiesOnBoard[j] instanceof clown){
+								Math.round(enemiesOnBoard[j].goldTaken);
 								Gold += enemiesOnBoard[j].goldTaken;
-								gameMessage = "You have killed a clown and stolen back " + enemiesOnBoard[j].goldTaken +" gold!";
+								gameMessage = "You have killed a clown and stolen back " + Math.round(enemiesOnBoard[j].goldTaken) +" gold!";
+							}
+							if (enemiesOnBoard[j] instanceof blob) {
+								enemiesOnBoard[j].blobSplit();
+							}
+							if (enemiesOnBoard[j] instanceof bigBlob) {
+								enemiesOnBoard[j].bigBlobSplit();
 							}
 							enemiesOnBoard.splice(j,1);
 						}
@@ -1186,12 +1406,19 @@ function renderLampCheck() {
 function renderEnemyMovement() {
 	for (var i = 0; i < enemiesOnBoard.length; i++) {
 		//draw enemies
-		if (enemiesOnBoard[i] instanceof bigBoss){
+if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof grimReaper || enemiesOnBoard[i] instanceof redDemon || enemiesOnBoard[i] instanceof blueDemon || enemiesOnBoard[i] instanceof grizzlyBear) {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
-			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-32, 55, 60);
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-30, 55, 60);
 			//draw health bar
 			ctx.fillStyle = "rgb(0,204,0)";
-			ctx.fillRect(enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-37, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+			ctx.fillRect(enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-35, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else if (enemiesOnBoard[i] instanceof miniBlob){
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-9, enemiesOnBoard[i].yCoord-9, 18, 18);
+			//draw health bar
+			ctx.fillStyle = "rgb(0,204,0)";
+			ctx.fillRect(enemiesOnBoard[i].xCoord-9, enemiesOnBoard[i].yCoord-14, (18 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
 		else if (enemiesOnBoard[i] instanceof bat){
 			if (enemiesOnBoard[i].isVisible == true){
@@ -1281,7 +1508,7 @@ var bossSpawned = false; //Checks to see if boss has spawned
 function stageWin() {
 	var bActive = false; //If boss is on map, turns to true
 	for(var i = 0; i < enemiesOnBoard.length; i++) {
-		if (enemiesOnBoard[i] instanceof bigBoss) {
+		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob) {
 			if (bossSpawned == false){
 				gameMessage = "BOSS INCOMING!";
 			}
@@ -1294,7 +1521,7 @@ function stageWin() {
 		bossSpawned = true;
 	}
 	
-	if (bActive == false && bossSpawned == true && Hp > 0) {
+	if (bActive == false && bossSpawned == true && Hp > 0 && enemiesOnBoard.length == 0) {
 		gameMessage = "STAGE COMPLETE!";
 		cancelAnimationFrame(requestID);
 		requestID = undefined;
@@ -1311,8 +1538,9 @@ function stageWin() {
 
 var stageWave = [[],[],[],[]];
 //Stage 1
-stageWave[0][0] = ["blueSkeleton", "blueSkeleton", "blueSkeleton"];
-stageWave[0][1] = ["blueSkeleton", "basicSkeleton"];
+
+stageWave[0][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBoss"];
+stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "blueSkeleton"];
 stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[0][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
@@ -1322,7 +1550,7 @@ stageWave[0][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton
 stageWave[0][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[0][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
 //Stage 2
-stageWave[1][0] = ["bat"];
+stageWave[1][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBlob"];
 stageWave[1][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[1][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[1][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
@@ -1331,9 +1559,9 @@ stageWave[1][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton
 stageWave[1][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[1][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
 stageWave[1][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[1][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+stageWave[1][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBlob"];
 //Stage 3
-stageWave[2][0] = ["blueSkeleton"];
+stageWave[2][0] = ["blueSkeleton", "grizzlyBear", "grizzlyBear"];
 stageWave[2][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[2][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[2][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
@@ -1344,7 +1572,7 @@ stageWave[2][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton
 stageWave[2][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[2][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
 //Stage 4
-stageWave[3][0] = ["witch", "witch", "witch", "witch", "witch", "witch", "witch", "witch", "witch"];
+stageWave[3][0] = ["grimReaper", "blueDemon"];
 stageWave[3][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[3][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[3][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
@@ -1379,7 +1607,7 @@ function nextWave (){
 				}
 				clearInterval(wave); 
 			}
-		}, 1500);
+		}, 2000);
 	}
 }
 
