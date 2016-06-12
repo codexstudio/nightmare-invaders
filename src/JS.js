@@ -91,62 +91,61 @@ var pathChildBedroom = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid
 			grid[35][9], grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], 
 			grid[35][2], grid[35][1], grid[35][0]];
 			
-var pathBasement = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid[5][56], grid[5][55], grid[5][54], grid[5][53], 
-			grid[5][52], grid[5][51], grid[5][50], grid[5][49], grid[6][49], grid[7][49], grid[8][49], 
-			grid[9][49], grid[10][49], grid[11][49], grid[12][49], grid[12][48], grid[12][47], grid[12][46], 
-			grid[12][45], grid[12][44], grid[12][43], grid[12][42], grid[12][41], grid[12][40], grid[12][39], 
-			grid[12][38], grid[12][37], grid[12][36], grid[12][35], grid[12][34], grid[12][33], grid[12][32], 
-			grid[12][31], grid[12][30], grid[12][29], grid[12][28], grid[12][27], grid[12][26], grid[12][25], 
-			grid[12][24], grid[13][24], grid[14][24], grid[15][24], grid[16][24], grid[17][24], grid[18][24], 
-			grid[19][24], grid[20][24], grid[21][24], grid[22][24], grid[23][24], grid[24][24], grid[25][24], 
-			grid[25][25], grid[25][26], grid[25][27], grid[25][28], grid[25][29], grid[25][30], grid[25][31], 
-			grid[25][32], grid[25][33], grid[25][34], grid[25][35], grid[25][36], grid[25][37], grid[25][38], 
-			grid[25][39], grid[25][40], grid[26][40], grid[27][40], grid[28][40], grid[29][40], grid[30][40], 
-			grid[31][40], grid[32][40], grid[33][40], grid[34][40], grid[35][40], grid[35][39], grid[35][38], 
-			grid[35][37], grid[35][36], grid[35][35], grid[35][34], grid[35][33], grid[35][32], grid[35][31], 
-			grid[35][30], grid[35][29], grid[35][28], grid[35][27], grid[35][26], grid[35][25], grid[35][24], 
-			grid[35][23], grid[35][22], grid[35][21], grid[35][20], grid[35][19], grid[35][18], grid[35][17], 
-			grid[35][16], grid[35][15], grid[35][14], grid[35][13], grid[35][12], grid[35][11], grid[35][10], 
-			grid[35][9], grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], 
-			grid[35][2], grid[35][1], grid[35][0]];
+var pathBasement = [grid[20][60], grid[20][59], grid[20][58], grid[20][57], grid[20][56], grid[20][55], grid[20][54], grid[20][53], 
+			grid[21][53], grid[22][53], grid[23][53], grid[24][53], grid[25][53], grid[26][53], grid[27][53], 
+			grid[28][53], grid[29][53], grid[30][53], grid[31][53], grid[32][53], grid[33][53], grid[34][53], 
+			grid[35][53], grid[35][52], grid[35][51], grid[35][50], grid[35][49], grid[35][48], grid[35][47], 
+			grid[35][46], grid[35][45], grid[35][44], grid[35][43], grid[35][42], grid[35][41], grid[35][40], 
+			grid[35][39], grid[35][38], grid[35][37], grid[34][37], grid[33][37], grid[32][37], grid[31][37], 
+			grid[30][37], grid[29][37], grid[28][37], grid[27][37], grid[26][37], grid[25][37], grid[24][37], 
+			grid[23][37], grid[22][37], grid[21][37], grid[20][37], grid[19][37], grid[18][37], grid[17][37], 
+			grid[16][37], grid[15][37], grid[14][37], grid[13][37], grid[12][37], grid[11][37], grid[10][37], 
+			grid[10][36], grid[10][35], grid[10][34], grid[10][33], grid[10][32], 
+			grid[10][31], grid[10][30], grid[10][29], grid[10][28], grid[10][27], grid[10][26], grid[10][25], 
+			grid[10][24], grid[10][23], grid[10][22], grid[11][22], grid[12][22], grid[13][22], grid[14][22], 
+			grid[15][22], grid[16][22], grid[17][22], grid[18][22], grid[19][22], grid[20][22], grid[21][22], 
+			grid[22][22], grid[23][22], grid[24][22], grid[25][22], grid[25][21], grid[25][20], grid[25][19], 
+			grid[25][18], grid[25][17], grid[25][16], grid[25][15], grid[25][14], grid[25][13], grid[25][12], 
+			grid[25][11], grid[25][10], grid[24][10], grid[23][10], grid[22][10], grid[21][10], grid[20][10], 
+			grid[20][9], grid[20][8], grid[20][7], grid[20][6], grid[20][5], grid[20][4], grid[20][3], grid[20][2], 
+			grid[20][1], grid[20][0]];
 			
-var pathKitchen = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid[5][56], grid[5][55], grid[5][54], grid[5][53], 
-			grid[5][52], grid[5][51], grid[5][50], grid[5][49], grid[6][49], grid[7][49], grid[8][49], 
-			grid[9][49], grid[10][49], grid[11][49], grid[12][49], grid[12][48], grid[12][47], grid[12][46], 
-			grid[12][45], grid[12][44], grid[12][43], grid[12][42], grid[12][41], grid[12][40], grid[12][39], 
-			grid[12][38], grid[12][37], grid[12][36], grid[12][35], grid[12][34], grid[12][33], grid[12][32], 
-			grid[12][31], grid[12][30], grid[12][29], grid[12][28], grid[12][27], grid[12][26], grid[12][25], 
-			grid[12][24], grid[13][24], grid[14][24], grid[15][24], grid[16][24], grid[17][24], grid[18][24], 
-			grid[19][24], grid[20][24], grid[21][24], grid[22][24], grid[23][24], grid[24][24], grid[25][24], 
-			grid[25][25], grid[25][26], grid[25][27], grid[25][28], grid[25][29], grid[25][30], grid[25][31], 
-			grid[25][32], grid[25][33], grid[25][34], grid[25][35], grid[25][36], grid[25][37], grid[25][38], 
-			grid[25][39], grid[25][40], grid[26][40], grid[27][40], grid[28][40], grid[29][40], grid[30][40], 
-			grid[31][40], grid[32][40], grid[33][40], grid[34][40], grid[35][40], grid[35][39], grid[35][38], 
-			grid[35][37], grid[35][36], grid[35][35], grid[35][34], grid[35][33], grid[35][32], grid[35][31], 
-			grid[35][30], grid[35][29], grid[35][28], grid[35][27], grid[35][26], grid[35][25], grid[35][24], 
-			grid[35][23], grid[35][22], grid[35][21], grid[35][20], grid[35][19], grid[35][18], grid[35][17], 
-			grid[35][16], grid[35][15], grid[35][14], grid[35][13], grid[35][12], grid[35][11], grid[35][10], 
-			grid[35][9], grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], 
-			grid[35][2], grid[35][1], grid[35][0]];
+var pathKitchen = [grid[25][60], grid[25][59], grid[25][58], grid[25][57], grid[25][56], grid[25][55], grid[25][54], grid[25][53], 
+			grid[25][52], grid[25][51], grid[25][50], grid[25][49], grid[25][48], grid[25][47], grid[25][46], 
+			grid[25][45], grid[26][45], grid[27][45], grid[28][45], grid[29][45], grid[30][45], grid[31][45], 
+			grid[32][45], grid[33][45], grid[34][45], grid[35][45], grid[35][44], grid[35][43], grid[35][42], 
+			grid[35][31], grid[35][30], grid[35][29], grid[35][28], grid[35][27], grid[35][26], grid[35][25], 
+			grid[35][24], grid[35][23], grid[34][23], grid[33][23], grid[32][23], grid[31][23], grid[30][23], 
+			grid[29][23], grid[28][23], grid[27][23], grid[26][23], grid[25][23], grid[24][23], grid[23][23], 
+			grid[22][23], grid[21][23], grid[20][23], grid[19][23], grid[18][23], grid[17][23], grid[16][23], 
+			grid[15][23], grid[15][24], grid[15][25], grid[15][26], grid[15][27], grid[15][28], grid[15][29], 
+			grid[15][30], grid[15][31], grid[15][32], grid[15][33], grid[15][34], grid[15][35], grid[15][36], 
+			grid[15][37], grid[14][37], grid[13][37], grid[12][37], grid[11][37], grid[10][37], grid[10][36], 
+			grid[10][35], grid[10][34], grid[10][33], grid[10][32], grid[10][31], grid[10][30], grid[10][29], 
+			grid[10][28], grid[10][27], grid[10][26], grid[10][25], grid[10][24], grid[10][23], grid[10][22], 
+			grid[10][21], grid[10][20], grid[10][19], grid[10][18], grid[10][17], grid[10][16], grid[10][15], 
+			grid[11][15], grid[12][15], grid[13][15], grid[14][15], grid[15][15], grid[15][14], grid[15][13], 
+			grid[15][12], grid[15][11], grid[15][10], grid[15][9], grid[15][8], grid[15][7], grid[15][6], 
+			grid[15][5], grid[15][4], grid[15][3], grid[15][2], grid[15][1], grid[15][0]];
 			
-var pathParentBedroom = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid[5][56], grid[5][55], grid[5][54], grid[5][53], 
-			grid[5][52], grid[5][51], grid[5][50], grid[5][49], grid[6][49], grid[7][49], grid[8][49], 
-			grid[9][49], grid[10][49], grid[11][49], grid[12][49], grid[12][48], grid[12][47], grid[12][46], 
-			grid[12][45], grid[12][44], grid[12][43], grid[12][42], grid[12][41], grid[12][40], grid[12][39], 
-			grid[12][38], grid[12][37], grid[12][36], grid[12][35], grid[12][34], grid[12][33], grid[12][32], 
-			grid[12][31], grid[12][30], grid[12][29], grid[12][28], grid[12][27], grid[12][26], grid[12][25], 
-			grid[12][24], grid[13][24], grid[14][24], grid[15][24], grid[16][24], grid[17][24], grid[18][24], 
-			grid[19][24], grid[20][24], grid[21][24], grid[22][24], grid[23][24], grid[24][24], grid[25][24], 
-			grid[25][25], grid[25][26], grid[25][27], grid[25][28], grid[25][29], grid[25][30], grid[25][31], 
-			grid[25][32], grid[25][33], grid[25][34], grid[25][35], grid[25][36], grid[25][37], grid[25][38], 
-			grid[25][39], grid[25][40], grid[26][40], grid[27][40], grid[28][40], grid[29][40], grid[30][40], 
-			grid[31][40], grid[32][40], grid[33][40], grid[34][40], grid[35][40], grid[35][39], grid[35][38], 
-			grid[35][37], grid[35][36], grid[35][35], grid[35][34], grid[35][33], grid[35][32], grid[35][31], 
-			grid[35][30], grid[35][29], grid[35][28], grid[35][27], grid[35][26], grid[35][25], grid[35][24], 
-			grid[35][23], grid[35][22], grid[35][21], grid[35][20], grid[35][19], grid[35][18], grid[35][17], 
-			grid[35][16], grid[35][15], grid[35][14], grid[35][13], grid[35][12], grid[35][11], grid[35][10], 
-			grid[35][9], grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], 
-			grid[35][2], grid[35][1], grid[35][0]];
+var pathParentBedroom = [grid[35][60], grid[35][59], grid[35][58], grid[35][57], grid[35][56], grid[35][55], grid[35][54], grid[35][53], 
+			grid[35][52], grid[34][52], grid[33][52], grid[32][52], grid[31][52], grid[30][52], grid[29][52], 
+			grid[28][52], grid[27][52], grid[26][52], grid[25][52], grid[25][51], grid[25][50], grid[25][49], 
+			grid[25][48], grid[25][47], grid[25][46], grid[25][45], grid[24][45], grid[23][45], grid[22][45], 
+			grid[21][45], grid[20][45], grid[20][44], grid[20][43], grid[20][42], grid[20][41], grid[20][40], 
+			grid[20][39], grid[20][38], grid[20][37], grid[19][37], grid[18][37], grid[17][37], grid[16][37], 
+			grid[15][37], grid[14][37], grid[13][37], grid[12][37], grid[11][37], grid[10][37], grid[10][36], 
+			grid[10][35], grid[10][34], grid[10][33], grid[10][32], grid[9][32], grid[8][32], grid[7][32], 
+			grid[6][32], grid[5][32], grid[5][31], grid[5][30], grid[5][29], grid[5][28], grid[6][28], 
+			grid[7][28], grid[8][28], grid[9][28], grid[10][28], grid[10][27], grid[10][26], grid[10][25], 
+			grid[10][24], grid[10][23], grid[11][23], grid[12][23], grid[13][23], grid[14][23], grid[15][23], 
+			grid[16][23], grid[17][23], grid[18][23], grid[19][23], grid[20][23], grid[20][22], grid[20][21], 
+			grid[20][20], grid[20][19], grid[20][18], grid[20][17], grid[20][16], grid[20][15], grid[21][15], 
+			grid[22][15], grid[23][15], grid[24][15], grid[25][15], grid[25][14], grid[25][13], grid[25][12], 
+			grid[25][11], grid[25][10], grid[25][9], grid[25][8], grid[26][8], grid[27][8], grid[28][8], 
+			grid[29][8], grid[30][8], grid[31][8], grid[32][8], grid[33][8], grid[34][8], grid[35][8], 
+			grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], grid[35][2], grid[35][1], 
+			grid[35][0]];
 			
 var stagePaths = [];
 stagePaths[0] = pathChildBedroom;
@@ -299,7 +298,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			enemyObj.xCoord++;
 		}
 		
-		else if (((stagePaths[currentStage])[enemyObj.pathPos].y <= enemyObj.yCoord) && ((stagePaths[currentStage])[enemyObj.pathPos].x == enemyObj.xCoord)){
+		else if (((stagePaths[currentStage])[enemyObj.pathPos].y <= enemyObj.yCoord) && ((stagePaths[currentStage])[enemyObj.pathPos].x == enemyObj.xCoord+1)){
 			if((stagePaths[currentStage])[enemyObj.pathPos].y % enemyObj.xCoord == 0){
 				enemyObj.pathPos++;
 			}
@@ -374,10 +373,17 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
+<<<<<<< HEAD
 function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
 	this.startHealth = 100;
 	this.health = 100;
+=======
+function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
+	this.startHealth = 500;
+	this.health = 500;
+>>>>>>> refs/remotes/origin/staging
 	this.damage = 1;
 	this.speed = 20;
 	this.killReward = 2;
@@ -925,8 +931,11 @@ tower.prototype.attack = function(towerObj, towerName){
 					var j = b;
 					if (enemiesOnBoard[j].pathPos == max){
 						//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
-						towerObj.isShooting = 1;
+						if(!(towersOnBoard[j] instanceof actionFigure || towersOnBoard[j] instanceof mouseTrap || towersOnBoard[j] instanceof blenderDefender || towersOnBoard[j] instanceof trophy || towersOnBoard[j] instanceof calculator)) {
+							towerObj.isShooting = 1;
+						}
 						towerObj.targetIndice = j;
+						
 						enemiesOnBoard[j].health -= towerObj.damage;
 						if (towerObj instanceof marbleShooter) {
 							this.shotCounter++;
@@ -1175,6 +1184,9 @@ function createTowerObject(towerType, x, y){
 	if (show == false){
 		togGrid();
 	}
+	if (circleCheck == true){
+		circleCheck = false;
+	}
 	//Temp console log for debugging, can be removed later.
 	//console.log("NEW " + towerType + " MADE!");
 	//console.log("Cost = " + towersOnBoard[towersOnBoard.length-1].cost);
@@ -1190,12 +1202,20 @@ function createTowerObject(towerType, x, y){
 		}
 }
 
+var tempRange;
+
 function placeTower(towerType){
 	document.body.style.cursor = "url('../images/" + towerType + ".png'),auto";
 	document.getElementById('canvas').addEventListener ("click", handler); 
+	if (circleCheck == false){
+		circleCheck = true;
+	}
 	if (show == true){
 	togGrid();
 	}
+	var towerPlaceholder = new (eval(towerType))();
+	tempRange = towerPlaceholder.range;
+	
 	function handler(e){
 	event = e;
 		towerxy.x = event.clientX+5;     // Get the horizontal coordinate, 5 pixel offset as a margin of error for the player
@@ -1220,8 +1240,10 @@ function placeTower(towerType){
 				if (show == false){
 				togGrid();
 				}
+				if (circleCheck == true){
+				circleCheck = false;
+				}
 			}
-			
 		}
 		if (numOfTowers > 0){
 			for (var i = 0; i < towerLocationsByPixelPosition.length-1; i++){
@@ -1229,6 +1251,7 @@ function placeTower(towerType){
 					objObstruct = true;
 					gameMessage = "Failed to place. Too close to another tower.";
 					togGrid();
+					circleCheck = false;
 				}
 			}
 		}
@@ -1239,6 +1262,10 @@ function placeTower(towerType){
 			}
 		}
 		if (vanquishEvilCount >= 3) {
+			objObstruct = true;
+			gameMessage = "You can have only 3 Vanquish The Evil Towers!";
+			togGrid();
+			circleCheck = false;
 			if (towerType instanceof vanquishEvil) {
 				objObstruct = true;
 				gameMessage = "You can have only 3 Vanquish The Evil Towers!";
@@ -1253,6 +1280,7 @@ function placeTower(towerType){
 			else {
 				gameMessage = "Not enough funds.";
 				togGrid();
+				circleCheck = false;
 			}
 		}
 		objObstruct = false;
@@ -1293,6 +1321,15 @@ var circleCheck = false;
 function mouseCoord(e){
 	cursorX = e.clientX;
 	cursorY = e.clientY;;
+}
+
+
+function drawRange(){
+	if (circleCheck === true){
+		ctx.beginPath();
+		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
+		ctx.stroke();
+	}
 }
 
 function hoverCheck(){
@@ -1352,6 +1389,7 @@ function render(){
 	renderLampCheck();
 	renderEnemyMovement();	
 	renderTowerAndBullet();
+	drawRange();
 	hoverCheck();
 	stageWin();
 }
@@ -1507,8 +1545,13 @@ function stageWin() {
 
 var stageWave = [[],[],[],[]];
 //Stage 1
+<<<<<<< HEAD
 stageWave[0][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBoss"];
 stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "blueSkeleton"];
+=======
+stageWave[0][0] = ["blueSkeleton", "blueSkeleton", "blueSkeleton"];
+stageWave[0][1] = ["blueSkeleton", "basicSkeleton"];
+>>>>>>> refs/remotes/origin/staging
 stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[0][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
@@ -1618,44 +1661,23 @@ function towerAvailable () {
 		document.getElementById("actionFigure").className = "tower";
 		document.getElementById("marbleShooter").className = "tower";
 		
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
+		enableTowers();
+
 	} if (currentStage == 1) {
 		document.getElementById("lamp").className = "tower";
 		document.getElementById("calculator").className = "tower";
 		document.getElementById("nutsAndBolts").className = "tower";
 		
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
-	}
-	if (currentStage == 2) {
+		enableTowers();
+
+	} if (currentStage == 2) {
 		document.getElementById("blenderDefender").className = "tower";
 		document.getElementById("mouseTrap").className = "tower";
 		document.getElementById("waterGun").className = "tower";
 		
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
-	}
-	if (currentStage == 3) {
+		enableTowers();
+
+	} if (currentStage == 3) {
 		document.getElementById("toyCarLauncher").className = "tower";
 		document.getElementById("actionFigure").className = "tower";
 		document.getElementById("marbleShooter").className = "tower";
@@ -1717,13 +1739,18 @@ function towerAvailable () {
 			}
 		}
 		//disabledTowers = document.getElementsByClassName("disabledTower");
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
+		enableTowers();
 	}	
+}
+
+function enableTowers() {
+
+	for (var i = 0; i < allSelected.length; i++) {
+		allSelected[i].style.opacity = '1.0';
+		allSelected[i].style.pointerEvents = 'auto';
+	}
+	for (var i = 0; i < disabledTowers.length; i++) {
+		disabledTowers[i].style.opacity = '0.3';
+		disabledTowers[i].style.pointerEvents = 'none';
+	}
 }
