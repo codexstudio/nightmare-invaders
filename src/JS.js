@@ -984,44 +984,9 @@ function placeTower(towerType){
 	if (show == true){
 	togGrid();
 	}
-	switch (towerType){
-		case "toyCarLauncher":
-			tempRange = 160;
-			break;
-		case "lamp":
-			tempRange = 180;
-			break;
-		case "actionFigure":
-			tempRange = 90;
-			break;
-		case "marbleShooter":
-			tempRange = 250;
-			break;
-		case "calculator":
-			tempRange = 1;
-			break;
-		case "mouseTrap":
-			tempRange = 135;
-			break;
-		case "nutsAndBolts":
-			tempRange = 135;
-			break;
-		case "blenderDefender":
-			tempRange = 80;
-			break;
-		case waterGun:
-			tempRange = 150;
-			break;
-		case "airplaneLauncher":
-			tempRange = 500;
-			break;
-		case "trophy":
-			tempRange = 200;
-			break;
-		case "vanquishEvil":
-			tempRange = 500000;
-			break;
-	}
+	var towerPlaceholder = new (eval(towerType))();
+	tempRange = towerPlaceholder.range;
+	
 	function handler(e){
 	event = e;
 		towerxy.x = event.clientX+5;     // Get the horizontal coordinate, 5 pixel offset as a margin of error for the player
