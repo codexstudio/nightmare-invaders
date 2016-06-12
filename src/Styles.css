@@ -65,12 +65,11 @@ body{
 }
 
 .buttons {
-	width: 100px;
+	width: 100%;
 	position: absolute;
 	display: block;
-	top: 35px;
-	margin-left: 285px;
-	margin-top: 185px;
+	bottom:180px;
+	left:30px;
 }
 
 .UI{
@@ -137,6 +136,7 @@ td {
 	position: absolute;
 	width: 100%;
 	box-sizing: border-box;
-	left:30px;
+	padding-left:30px;
+	padding-right:30px;
 	top:175px;
 }

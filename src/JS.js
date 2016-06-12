@@ -225,6 +225,8 @@ function nextStage(){
 		}
 		numOfTowers = 0;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		towerAvailable();
 	}
 	else {
 		gameMessage = "This is the last stage!";
@@ -763,6 +765,7 @@ function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgrad
 	this.damage = 10;
 	this.range = 160;
 	this.attackSpeed = 900;
+	this.info = "This shoots the dinkie cars at the scary monsters. Not sure what that will do, but use it anyways!";
 }
 toyCarLauncher.prototype = Object.create(tower.prototype);
 toyCarLauncher.prototype.constructor = toyCarLauncher;
@@ -778,6 +781,7 @@ function lamp(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, on){
 	this.range = 180;
 	this.attackSpeed = 1;
 	this.on = false;
+	this.info = "Spots ghosts and changes those pesky bats. You may want to wipe off the dust...";
 }
 lamp.prototype = Object.create(tower.prototype);
 lamp.prototype.constructor = lamp;
@@ -816,6 +820,7 @@ function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded
 	this.damage = 250;
 	this.range = 90;
 	this.attackSpeed = 4000;
+	this.info = "You think this is Superman? It's actually the action figure Dad steps on every night, and it really hurts!";
 }
 actionFigure.prototype = Object.create(tower.prototype);
 actionFigure.prototype.constructor = actionFigure;
@@ -831,6 +836,7 @@ function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgrade
 	this.range = 250;
 	this.attackSpeed = 700;
 	this.shotCounter = 0;
+	this.info = "Shoots marbles at the speed of sound! Every fifth marble may pack a punch!";
 }
 marbleShooter.prototype = Object.create(tower.prototype);
 marbleShooter.prototype.constructor = marbleShooter;
@@ -850,6 +856,7 @@ function calculator(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	this.damage = 0;
 	this.range = 1;
 	this.attackSpeed = 5000;
+	this.info = "Allows for more spending which means more video games, tamagothchis, and pokemon cards.";
 }
 calculator.prototype = Object.create(tower.prototype);
 calculator.prototype.constructor = calculator;
@@ -865,6 +872,7 @@ function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded
 	this.range = 135;
 	this.attackSpeed = 800;
 	this.baseDamage = 15;
+	this.info = "Nuts do basic damage and if this tower shoots a bolt, expect lots of damage.";
 }
 nutsAndBolts.prototype = Object.create(tower.prototype);
 nutsAndBolts.prototype.constructor = nutsAndBolts;
@@ -896,6 +904,7 @@ function blenderDefender(cost, damage, range, attackSpeed, xCoord, yCoord, upgra
 	this.damage = 0.5;
 	this.range = 80;
 	this.attackSpeed = 50;
+	this.info = "May blend enemies into a delicious smoothie.";
 }
 blenderDefender.prototype = Object.create(tower.prototype);
 blenderDefender.prototype.constructor = blenderDefender;
@@ -910,6 +919,7 @@ function waterGun(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, ta
 	this.damage = 2;
 	this.range = 150;
 	this.attackSpeed = 200;
+	this.info = "Enough force to slow enemies as they approach.";
 }
 waterGun.prototype = Object.create(tower.prototype);
 waterGun.prototype.constructor = waterGun;
@@ -924,6 +934,7 @@ function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgr
 	this.damage = 200;
 	this.range = 500;
 	this.attackSpeed = 2000;
+	this.info = "Shoots paper airplanes the kid made. How did they find the time to make all of these?";
 }
 airplaneLauncher.prototype = Object.create(tower.prototype);
 airplaneLauncher.prototype.constructor = airplaneLauncher;
@@ -938,6 +949,7 @@ function trophy(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	this.damage = 0;
 	this.range = 200;
 	this.attackSpeed = 1000;
+	this.info = "Remember when the child won the spelling bee? I certainly don't. This buffs other towers.";
 }
 trophy.prototype = Object.create(tower.prototype);
 trophy.prototype.constructor = trophy;
@@ -953,6 +965,7 @@ function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded
 	this.damage = 500;
 	this.range = 500000;
 	this.attackSpeed = 6000; 
+	this.info = "Caution! Three per customer as per the nightmare safety regulations.";
 }
 vanquishEvil.prototype = Object.create(tower.prototype);
 vanquishEvil.prototype.constructor = vanquishEvil;
@@ -1090,21 +1103,49 @@ function rotateTower(towerX, towerY, enemyX, enemyY) {
 function clearTowerStats () {
 	outputTowerStats.innerHTML = "";
 }
-HTMLID_toyCarLauncher.onmouseout = clearTowerStats();
-HTMLID_actionFigure.onmouseout = clearTowerStats();
-HTMLID_marbleShooter.onmouseout = clearTowerStats();
-HTMLID_lamp.onmouseout = clearTowerStats();
-HTMLID_calculator.onmouseout = clearTowerStats();
-HTMLID_nutsAndBolts = clearTowerStats();
-HTMLID_blenderDefender = clearTowerStats();
-HTMLID_mouseTrap = clearTowerStats();
-HTMLID_waterGun = clearTowerStats();
-HTMLID_airplaneLauncher = clearTowerStats();
-HTMLID_trophy = clearTowerStats();
-HTMLID_vanquishEvil = clearTowerStats();
+
+HTMLID_toyCarLauncher.addEventListener( "mouseout", clearTowerStats ); 
+HTMLID_actionFigure.addEventListener( "mouseout", clearTowerStats );
+HTMLID_marbleShooter.addEventListener( "mouseout", clearTowerStats );
+HTMLID_lamp.addEventListener( "mouseout", clearTowerStats );
+HTMLID_calculator.addEventListener( "mouseout", clearTowerStats );
+HTMLID_nutsAndBolts.addEventListener( "mouseout", clearTowerStats );
+HTMLID_blenderDefender.addEventListener( "mouseout", clearTowerStats );
+HTMLID_mouseTrap.addEventListener( "mouseout", clearTowerStats );
+HTMLID_waterGun.addEventListener( "mouseout", clearTowerStats );
+HTMLID_airplaneLauncher.addEventListener( "mouseout", clearTowerStats );
+HTMLID_trophy.addEventListener( "mouseout", clearTowerStats );
+HTMLID_vanquishEvil.addEventListener( "mouseout", clearTowerStats );
+
+HTMLID_toyCarLauncher.addEventListener( "mouseover", function() { getStats('toyCarLauncher'); });
+HTMLID_actionFigure.addEventListener( "mouseover", function() { getStats('actionFigure'); });
+HTMLID_marbleShooter.addEventListener( "mouseover", function() { getStats('marbleShooter'); });
+HTMLID_lamp.addEventListener( "mouseover", function() { getStats('lamp'); });
+HTMLID_calculator.addEventListener( "mouseover", function() { getStats('calculator'); });
+HTMLID_nutsAndBolts.addEventListener( "mouseover", function() { getStats('nutsAndBolts'); });
+HTMLID_blenderDefender.addEventListener( "mouseover", function() { getStats('blenderDefender'); });
+HTMLID_mouseTrap.addEventListener( "mouseover", function() { getStats('mouseTrap'); });
+HTMLID_waterGun.addEventListener( "mouseover", function() { getStats('waterGun'); });
+HTMLID_airplaneLauncher.addEventListener( "mouseover", function() { getStats('airplaneLauncher'); });
+HTMLID_trophy.addEventListener( "mouseover", function() { getStats('trophy'); });
+HTMLID_vanquishEvil.addEventListener( "mouseover", function() { getStats('vanquishEvil'); });
+
+HTMLID_toyCarLauncher.addEventListener( "click", function() { placeTower('toyCarLauncher'); });
+HTMLID_actionFigure.addEventListener( "click", function() { placeTower('actionFigure'); });
+HTMLID_marbleShooter.addEventListener( "click", function() { placeTower('marbleShooter'); });
+HTMLID_lamp.addEventListener( "click", function() { placeTower('lamp'); });
+HTMLID_calculator.addEventListener( "click", function() { placeTower('calculator'); });
+HTMLID_nutsAndBolts.addEventListener( "click", function() { placeTower('nutsAndBolts'); });
+HTMLID_blenderDefender.addEventListener( "click", function() { placeTower('blenderDefender'); });
+HTMLID_mouseTrap.addEventListener( "click", function() { placeTower('mouseTrap'); });
+HTMLID_waterGun.addEventListener( "click", function() { placeTower('waterGun'); });
+HTMLID_airplaneLauncher.addEventListener( "click", function() { placeTower('airplaneLauncher'); });
+HTMLID_trophy.addEventListener( "click", function() { placeTower('trophy'); });
+HTMLID_vanquishEvil.addEventListener( "click", function() { placeTower('vanquishEvil'); });
+
+canvas.addEventListener( "mousemove", function(e) { cursorX = e.clientX; cursorY = e.clientY; });
 
 function getStats(turret) {
-	console.log('hello');
 	
 	var towerPlaceholder = new (eval(turret))();
 
@@ -1113,23 +1154,45 @@ function getStats(turret) {
 	outputRange.innerHTML = "Range: " + towerPlaceholder.range;
 	outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed + " (Reload Time)";*/
 
-	outputTowerStats.innerHTML = towerPlaceholder.constructor.name;
+	switch (towerPlaceholder.constructor.name) {
+		case "toyCarLauncher":
+			outputTowerStats.innerHTML = "Toy Car Launcher"; break;
+		case "actionFigure":
+			outputTowerStats.innerHTML = "Action Figure"; break;
+		case "marbleShooter":
+			outputTowerStats.innerHTML = "Marble Shooter"; break;
+		case "lamp":
+			outputTowerStats.innerHTML = "Lava Lamp"; break;
+		case "calculator":
+			outputTowerStats.innerHTML = "Calculator"; break;
+		case "nutsAndBolts":
+			outputTowerStats.innerHTML = "Nuts and Bolts Shooter"; break;
+		case "blenderDefender":
+			outputTowerStats.innerHTML = "Blender Defender"; break;
+		case "mouseTrap":
+			outputTowerStats.innerHTML = "Mouse Trap"; break;
+		case "waterGun":
+			outputTowerStats.innerHTML = "Water Gun"; break;
+		case "airPlaneLauncher":
+			outputTowerStats.innerHTML = "Air Plane Launcher"; break;
+		case "trophy":
+			outputTowerStats.innerHTML = "Trophy"; break;
+		case "vanquishEvil":
+			outputTowerStats.innerHTML = "Vanquish Evil"; break;
+	
+	}
 	outputTowerStats.innerHTML += "<br>Cost: " + towerPlaceholder.cost;
 	outputTowerStats.innerHTML += "<br>Damage: " + towerPlaceholder.damage;
 	outputTowerStats.innerHTML += "<br>Range: " + towerPlaceholder.range;
 	outputTowerStats.innerHTML += "<br>Attack Speed: " + towerPlaceholder.attackSpeed + " (Reload Time)";
 	outputTowerStats.innerHTML += "<br>" + towerPlaceholder.info; 
-	console.log(outputTowerStats);
+	//console.log(outputTowerStats);
 }
 
 var cursorX;
 var cursorY;
 var circleCheck = false;
 
-function mouseCoord(e){
-	cursorX = e.clientX;
-	cursorY = e.clientY;;
-}
 
 function hoverCheck(){
 	if (towersOnBoard.length > 0)
@@ -1152,6 +1215,7 @@ initGame();
 function initGame()
 {
 	currentStageImage.src = "../images/" + stageImages[currentStage];
+	towerAvailable();
 	render();
 }
 
@@ -1166,7 +1230,6 @@ function update(){
 	outputGameMessage.innerHTML = gameMessage;
 	outputStageName.innerHTML = stages[currentStage];
 
-	towerAvailable();
 	if(Hp <= 0){
 		gameMessage = "Game Over. You got rekt by your nightmares and peed your pants.";
 	}
@@ -1445,10 +1508,8 @@ function pauseGame(){
 	}
 }
 
-
 function towerAvailable () {
 	//disable towers according to stage
-	
 	if (currentStage == 0) {
 		HTMLID_toyCarLauncher.className = "enabledTower";
 		HTMLID_actionFigure.className = "enabledTower";
