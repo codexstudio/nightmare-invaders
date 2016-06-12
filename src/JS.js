@@ -145,7 +145,7 @@ stagePaths[3] = pathParentBedroom;
 
 
 //UI Elements
-var Gold = 1000;
+var Gold = 100;
 var Hp = 100;
 var currentWave = 0;
 var pause = false;
@@ -1421,44 +1421,23 @@ function towerAvailable () {
 		document.getElementById("actionFigure").className = "tower";
 		document.getElementById("marbleShooter").className = "tower";
 		
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
+		enableTowers();
+
 	} if (currentStage == 1) {
 		document.getElementById("lamp").className = "tower";
 		document.getElementById("calculator").className = "tower";
 		document.getElementById("nutsAndBolts").className = "tower";
 		
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
-	}
-	if (currentStage == 2) {
+		enableTowers();
+
+	} if (currentStage == 2) {
 		document.getElementById("blenderDefender").className = "tower";
 		document.getElementById("mouseTrap").className = "tower";
 		document.getElementById("waterGun").className = "tower";
 		
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
-	}
-	if (currentStage == 3) {
+		enableTowers();
+
+	} if (currentStage == 3) {
 		document.getElementById("toyCarLauncher").className = "tower";
 		document.getElementById("actionFigure").className = "tower";
 		document.getElementById("marbleShooter").className = "tower";
@@ -1520,13 +1499,18 @@ function towerAvailable () {
 			}
 		}
 		//disabledTowers = document.getElementsByClassName("disabledTower");
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
+		enableTowers();
 	}	
+}
+
+function enableTowers() {
+
+	for (var i = 0; i < allSelected.length; i++) {
+		allSelected[i].style.opacity = '1.0';
+		allSelected[i].style.pointerEvents = 'auto';
+	}
+	for (var i = 0; i < disabledTowers.length; i++) {
+		disabledTowers[i].style.opacity = '0.3';
+		disabledTowers[i].style.pointerEvents = 'none';
+	}
 }
