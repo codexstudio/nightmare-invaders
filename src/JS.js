@@ -1237,10 +1237,6 @@ function renderTowerAndBullet() {
 			
 			//iterate through bullets
 			for (var b = 0; b < towersOnBoard[i].bulletArr.length; b++) {
-				console.log("length: " + towersOnBoard[i].bulletArr.length);
-				console.log("isShooting: " + towersOnBoard[i].isShooting);
-				console.log(b < towersOnBoard[i].bulletArr.length);
-				console.log("in");
 				//same check as above approx 20 lines up, but also checks if it's an action figure
 				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined) && !(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1) && !(towersOnBoard[i] instanceof actionFigure)) {
 					towersOnBoard[i].bulletArr[b].distance = distance(towersOnBoard[i].xCoord + towerImg.width/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord + towerImg.height/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
