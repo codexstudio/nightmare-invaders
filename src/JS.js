@@ -373,17 +373,10 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-<<<<<<< HEAD
 function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
 	this.startHealth = 100;
 	this.health = 100;
-=======
-function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
-	this.startHealth = 500;
-	this.health = 500;
->>>>>>> refs/remotes/origin/staging
 	this.damage = 1;
 	this.speed = 20;
 	this.killReward = 2;
@@ -1545,13 +1538,9 @@ function stageWin() {
 
 var stageWave = [[],[],[],[]];
 //Stage 1
-<<<<<<< HEAD
+
 stageWave[0][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBoss"];
 stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "blueSkeleton"];
-=======
-stageWave[0][0] = ["blueSkeleton", "blueSkeleton", "blueSkeleton"];
-stageWave[0][1] = ["blueSkeleton", "basicSkeleton"];
->>>>>>> refs/remotes/origin/staging
 stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[0][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
