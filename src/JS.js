@@ -150,12 +150,25 @@ var Hp = 100;
 var currentWave = 0;
 var pause = false;
 var gameMessage = "Welcome to Nightmare Invaders!";
-var outputHp = document.querySelector("#outputHp");
-var outputGold = document.querySelector("#outputGold");
-var outputLevel = document.querySelector("#outputLevel");
-var outputWave = document.querySelector("#outputWave");
-var outputGameMessage = document.querySelector("#gameMessage");
-var outputStageName = document.querySelector("#stageName");
+var outputTowerStats = document.getElementById("outputTowerStats");
+var outputPlayerStats = document.getElementById("outputPlayerStats");
+var outputGameMessage = document.getElementById("gameMessage");
+var outputStageName = document.getElementById("stageName");
+var disabledTowers = document.getElementsByClassName("disabledTower");
+var allSelected = document.getElementsByClassName("enabledTower");
+var HTMLID_toyCarLauncher = document.getElementById("toyCarLauncher");
+var HTMLID_actionFigure = document.getElementById("actionFigure");
+var HTMLID_marbleShooter = document.getElementById("marbleShooter");
+var HTMLID_lamp = document.getElementById("lamp");
+var HTMLID_calculator = document.getElementById("calculator");
+var HTMLID_nutsAndBolts = document.getElementById("nutsAndBolts");
+var HTMLID_blenderDefender = document.getElementById("blenderDefender");
+var HTMLID_mouseTrap = document.getElementById("mouseTrap");
+var HTMLID_waterGun = document.getElementById("waterGun");
+var HTMLID_airplaneLauncher = document.getElementById("airplaneLauncher");
+var HTMLID_trophy = document.getElementById("trophy");
+var HTMLID_vanquishEvil = document.getElementById("vanquishEvil");
+
 
 //global variables
 var ang = 0;
@@ -238,15 +251,15 @@ var goldOverTime = setInterval(function(){
 
 
 //Temporary grid toggle
-var show = true;
+var showGrid = true;
 function togGrid(){
-	if (show) {
+	if (showGrid) {
 		document.getElementById("grid").style.display = "block";
-		show = false;
+		showGrid = false;
 	} 
 	else {
 		document.getElementById("grid").style.display = "none";
-		show = true;
+		showGrid = true;
 	}
 }
 
@@ -645,7 +658,7 @@ var towerxy = {x:0, y:0};
 var objObstruct = false;
 
 //Tower blueprints section--------------------------------------------------------
-var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
+var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info){
 	this.cost = cost;
 	this.damage = damage;
 	this.range = range;
@@ -656,6 +669,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.targetIndice = -1;
 	this.isShooting = 0;
 	this.bulletArr = [];
+	this.info = info;
 	this.attackEnemy;
 };
 
@@ -955,7 +969,7 @@ function createTowerObject(towerType, x, y){
 	
 	Gold -= tempTowerObject.cost;
 	
-	if (show == false){
+	if (showGrid == false){
 		togGrid();
 	}
 	if (circleCheck == true){
@@ -984,8 +998,8 @@ function placeTower(towerType){
 	if (circleCheck == false){
 		circleCheck = true;
 	}
-	if (show == true){
-	togGrid();
+	if (showGrid == true){
+		togGrid();
 	}
 	var towerPlaceholder = new (eval(towerType))();
 	tempRange = towerPlaceholder.range;
@@ -1011,9 +1025,9 @@ function placeTower(towerType){
 			if ( ((stagePaths[currentStage])[i].x - towerLocationsByPixelPosition[numOfTowers].x > -30) && ((stagePaths[currentStage])[i].x - towerLocationsByPixelPosition[numOfTowers].x < 60) && ((stagePaths[currentStage])[i].y - towerLocationsByPixelPosition[numOfTowers].y > -15) && ((stagePaths[currentStage])[i].y - towerLocationsByPixelPosition[numOfTowers].y < 60) ){
 				objObstruct = true;
 				gameMessage = "Failed to place. Too close to the path.";
-				if (show == false){
-				togGrid();
-				circleCheck = false;
+				if (showGrid == false){
+					togGrid();
+					circleCheck = false;
 				}
 			}
 			
@@ -1073,17 +1087,39 @@ function rotateTower(towerX, towerY, enemyX, enemyY) {
 	return c;
 }
 
+function clearTowerStats () {
+	outputTowerStats.innerHTML = "";
+}
+HTMLID_toyCarLauncher.onmouseout = clearTowerStats();
+HTMLID_actionFigure.onmouseout = clearTowerStats();
+HTMLID_marbleShooter.onmouseout = clearTowerStats();
+HTMLID_lamp.onmouseout = clearTowerStats();
+HTMLID_calculator.onmouseout = clearTowerStats();
+HTMLID_nutsAndBolts = clearTowerStats();
+HTMLID_blenderDefender = clearTowerStats();
+HTMLID_mouseTrap = clearTowerStats();
+HTMLID_waterGun = clearTowerStats();
+HTMLID_airplaneLauncher = clearTowerStats();
+HTMLID_trophy = clearTowerStats();
+HTMLID_vanquishEvil = clearTowerStats();
+
 function getStats(turret) {
-	var outputCost = document.querySelector("#outputCost-" + turret);
-	var outputDamage = document.querySelector("#outputDamage-" + turret);
-	var outputRange = document.querySelector("#outputRange-" + turret);
-	var outputAspd = document.querySelector("#outputAspd-" + turret);
+	console.log('hello');
 	
 	var towerPlaceholder = new (eval(turret))();
-	outputCost.innerHTML = "Cost: " + towerPlaceholder.cost;
+
+	/*outputCost.innerHTML = "Cost: " + towerPlaceholder.cost;
 	outputDamage.innerHTML = "Damage: " + towerPlaceholder.damage;
 	outputRange.innerHTML = "Range: " + towerPlaceholder.range;
-	outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed + " (Reload Time)";
+	outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed + " (Reload Time)";*/
+
+	outputTowerStats.innerHTML = towerPlaceholder.constructor.name;
+	outputTowerStats.innerHTML += "<br>Cost: " + towerPlaceholder.cost;
+	outputTowerStats.innerHTML += "<br>Damage: " + towerPlaceholder.damage;
+	outputTowerStats.innerHTML += "<br>Range: " + towerPlaceholder.range;
+	outputTowerStats.innerHTML += "<br>Attack Speed: " + towerPlaceholder.attackSpeed + " (Reload Time)";
+	outputTowerStats.innerHTML += "<br>" + towerPlaceholder.info; 
+	console.log(outputTowerStats);
 }
 
 var cursorX;
@@ -1093,15 +1129,6 @@ var circleCheck = false;
 function mouseCoord(e){
 	cursorX = e.clientX;
 	cursorY = e.clientY;;
-}
-
-
-function drawRange(){
-	if (circleCheck === true){
-		ctx.beginPath();
-		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
-		ctx.stroke();
-	}
 }
 
 function hoverCheck(){
@@ -1125,20 +1152,20 @@ initGame();
 function initGame()
 {
 	currentStageImage.src = "../images/" + stageImages[currentStage];
-	outputHp.innerHTML = "<b>Health: </b>" + Hp;
-	outputGold.innerHTML = "<b>Gold: </b>" + Gold;
-	outputGameMessage.innerHTML = gameMessage;
 	render();
 }
 
 //Update Game
 function update(){
-	outputHp.innerHTML = "<b>Health: </b>" + Hp;
-	outputGold.innerHTML = "<b>Gold: </b>" + Gold;
+
+	outputPlayerStats.innerHTML = "<b>Health: </b>" + Hp;
+	outputPlayerStats.innerHTML += "<br><b>Gold: </b>" + Gold;
+	outputPlayerStats.innerHTML += "<br><b>Level: </b>" + (currentStage + 1);
+	outputPlayerStats.innerHTML += "<br><b>Wave: </b>" + (waveCounter + 1);
+
 	outputGameMessage.innerHTML = gameMessage;
-	outputStageName.innerHTML = stages[currentStage];	
-	outputLevel.innerHTML = "<b>Level: </b>" + (currentStage+1);
-	outputWave.innerHTML = "<b>Wave: </b>" + (waveCounter+1);
+	outputStageName.innerHTML = stages[currentStage];
+
 	towerAvailable();
 	if(Hp <= 0){
 		gameMessage = "Game Over. You got rekt by your nightmares and peed your pants.";
@@ -1183,16 +1210,19 @@ function renderLampCheck() {
 }
 
 function renderEnemyMovement() {
+	
+	//color health bar
+	ctx.fillStyle = "rgba(0,204,0, 0.9)";
+
 	for (var i = 0; i < enemiesOnBoard.length; i++) {
 		//draw enemies
-		if (enemiesOnBoard[i] instanceof bigBoss){
+		if (enemiesOnBoard[i] instanceof bigBoss) {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-32, 55, 60);
 			//draw health bar
-			ctx.fillStyle = "rgb(0,204,0)";
 			ctx.fillRect(enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-37, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
-		else if (enemiesOnBoard[i] instanceof bat){
+		else if (enemiesOnBoard[i] instanceof bat) {
 			if (enemiesOnBoard[i].isVisible == true){
 				enemyImgToPrint.src = '../images/vampire.png';
 			}
@@ -1201,14 +1231,12 @@ function renderEnemyMovement() {
 			}
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
 			//draw health bar
-			ctx.fillStyle = "rgb(0,204,0)";
 			ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
-		else{
+		else {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
 			//draw health bar
-			ctx.fillStyle = "rgb(0,204,0)";
 			ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
 	}
@@ -1273,6 +1301,13 @@ function renderTowerAndBullet() {
 	}
 }
 
+function drawRange(){
+	if (circleCheck === true) {
+		ctx.beginPath();
+		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
+		ctx.stroke();
+	}
+}
 // end of render section -------------------------------------------------------------------------------
 
 var bossSpawned = false; //Checks to see if boss has spawned 
@@ -1411,45 +1446,52 @@ function pauseGame(){
 }
 
 
-var disabledTowers = document.getElementsByClassName("disabledTower");
-var allSelected = document.getElementsByClassName("tower");
 function towerAvailable () {
 	//disable towers according to stage
 	
 	if (currentStage == 0) {
-		document.getElementById("toyCarLauncher").className = "tower";
-		document.getElementById("actionFigure").className = "tower";
-		document.getElementById("marbleShooter").className = "tower";
+		HTMLID_toyCarLauncher.className = "enabledTower";
+		HTMLID_actionFigure.className = "enabledTower";
+		HTMLID_marbleShooter.className = "enabledTower";
+		HTMLID_lamp.className = "disabledTower";
+		HTMLID_calculator.className = "disabledTower";
+		HTMLID_nutsAndBolts.className = "disabledTower";
+		HTMLID_blenderDefender.className = "disabledTower";
+		HTMLID_mouseTrap.className = "disabledTower";
+		HTMLID_waterGun.className = "disabledTower";
+		HTMLID_airplaneLauncher.className = "disabledTower";
+		HTMLID_trophy.className = "disabledTower";
+		HTMLID_vanquishEvil.className = "disabledTower";
 		
 		enableTowers();
 
 	} if (currentStage == 1) {
-		document.getElementById("lamp").className = "tower";
-		document.getElementById("calculator").className = "tower";
-		document.getElementById("nutsAndBolts").className = "tower";
+		HTMLID_lamp.className = "enabledTower";
+		HTMLID_calculator.className = "enabledTower";
+		HTMLID_nutsAndBolts.className = "enabledTower";
 		
 		enableTowers();
 
 	} if (currentStage == 2) {
-		document.getElementById("blenderDefender").className = "tower";
-		document.getElementById("mouseTrap").className = "tower";
-		document.getElementById("waterGun").className = "tower";
+		HTMLID_blenderDefender.className = "enabledTower";
+		HTMLID_mouseTrap.className = "enabledTower";
+		HTMLID_waterGun.className = "enabledTower";
 		
 		enableTowers();
 
 	} if (currentStage == 3) {
-		document.getElementById("toyCarLauncher").className = "tower";
-		document.getElementById("actionFigure").className = "tower";
-		document.getElementById("marbleShooter").className = "tower";
-		document.getElementById("lamp").className = "tower";
-		document.getElementById("calculator").className = "tower";
-		document.getElementById("nutsAndBolts").className = "tower";
-		document.getElementById("blenderDefender").className = "tower";
-		document.getElementById("mouseTrap").className = "tower";
-		document.getElementById("waterGun").className = "tower";
-		document.getElementById("airplaneLauncher").className = "tower";
-		document.getElementById("trophy").className = "tower";
-		document.getElementById("vanquishEvil").className = "tower";
+		HTMLID_toyCarLauncher.className = "enabledTower";
+		HTMLID_actionFigure.className = "enabledTower";
+		HTMLID_marbleShooter.className = "enabledTower";
+		HTMLID_lamp.className = "enabledTower";
+		HTMLID_calculator.className = "enabledTower";
+		HTMLID_nutsAndBolts.className = "enabledTower";
+		HTMLID_blenderDefender.className = "enabledTower";
+		HTMLID_mouseTrap.className = "enabledTower";
+		HTMLID_waterGun.className = "enabledTower";
+		HTMLID_airplaneLauncher.className = "enabledTower";
+		HTMLID_trophy.className = "enabledTower";
+		HTMLID_vanquishEvil.className = "enabledTower";
 		
 		//selects which tower to disable from witch
 		if (enemiesOnBoard.length > 0) {
@@ -1457,40 +1499,40 @@ function towerAvailable () {
 				if (enemiesOnBoard[i] instanceof witch) {
 					switch (enemiesOnBoard[i].towerStolen){
 						case 1:
-							document.getElementById("toyCarLauncher").className = "disabledTower";
+							HTMLID_toyCarLauncher.className = "disabledTower";
 							break;
 						case 2:
-							document.getElementById("actionFigure").className = "disabledTower";
+							HTMLID_actionFigure.className = "disabledTower";
 							break;
 						case 3:
-							document.getElementById("marbleShooter").className = "disabledTower";
+							HTMLID_marbleShooter.className = "disabledTower";
 							break;
 						case 4:
-							document.getElementById("lamp").className = "disabledTower";
+							HTMLID_lamp.className = "disabledTower";
 							break;
 						case 5:
-							document.getElementById("calculator").className = "disabledTower";
+							HTMLID_calculator.className = "disabledTower";
 							break;
 						case 6:
-							document.getElementById("nutsAndBolts").className = "disabledTower";
+							HTMLID_nutsAndBolts.className = "disabledTower";
 							break;
 						case 7:
-							document.getElementById("mouseTrap").className = "disabledTower";
+							HTMLID_mouseTrap.className = "disabledTower";
 							break;
 						case 8:
-							document.getElementById("blenderDefender").className = "disabledTower";
+							HTMLID_blenderDefender.className = "disabledTower";
 							break;
 						case 9:
-							document.getElementById("waterGun").className = "disabledTower";
+							HTMLID_waterGun.className = "disabledTower";
 							break;
 						case 10:
-							document.getElementById("airplaneLauncher").className = "disabledTower";
+							HTMLID_airplaneLauncher.className = "disabledTower";
 							break;
 						case 11:
-							document.getElementById("trophy").className = "disabledTower";
+							HTMLID_trophy.className = "disabledTower";
 							break;
 						case 12:
-							document.getElementById("vanquishEvil").className = "disabledTower";
+							HTMLID_vanquishEvil.className = "disabledTower";
 							break;
 						default:
 						
