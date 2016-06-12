@@ -145,7 +145,7 @@ stagePaths[3] = pathParentBedroom;
 
 
 //UI Elements
-var Gold = 100;
+var Gold = 1000;
 var Hp = 100;
 var currentWave = 0;
 var pause = false;
@@ -351,8 +351,8 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 
 function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
-	this.startHealth = 100;
-	this.health = 100;
+	this.startHealth = 500;
+	this.health = 500;
 	this.damage = 1;
 	this.speed = 20;
 	this.killReward = 2;
@@ -712,8 +712,11 @@ tower.prototype.attack = function(towerObj, towerName){
 					var j = b;
 					if (enemiesOnBoard[j].pathPos == max){
 						//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
-						towerObj.isShooting = 1;
+						if(!(towersOnBoard[j] instanceof actionFigure || towersOnBoard[j] instanceof mouseTrap || towersOnBoard[j] instanceof blenderDefender || towersOnBoard[j] instanceof trophy || towersOnBoard[j] instanceof calculator)) {
+							towerObj.isShooting = 1;
+						}
 						towerObj.targetIndice = j;
+						
 						enemiesOnBoard[j].health -= towerObj.damage;
 						if (towerObj instanceof marbleShooter) {
 							this.shotCounter++;
@@ -1234,6 +1237,10 @@ function renderTowerAndBullet() {
 			
 			//iterate through bullets
 			for (var b = 0; b < towersOnBoard[i].bulletArr.length; b++) {
+				console.log("length: " + towersOnBoard[i].bulletArr.length);
+				console.log("isShooting: " + towersOnBoard[i].isShooting);
+				console.log(b < towersOnBoard[i].bulletArr.length);
+				console.log("in");
 				//same check as above approx 20 lines up, but also checks if it's an action figure
 				if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined) && !(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1) && !(towersOnBoard[i] instanceof actionFigure)) {
 					towersOnBoard[i].bulletArr[b].distance = distance(towersOnBoard[i].xCoord + towerImg.width/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, towersOnBoard[i].yCoord + towerImg.height/2, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
@@ -1307,7 +1314,7 @@ function stageWin() {
 
 var stageWave = [[],[],[],[]];
 //Stage 1
-stageWave[0][0] = ["blueSkeleton", "blueSkeleton", "blueDemon"];
+stageWave[0][0] = ["blueSkeleton", "blueSkeleton", "blueSkeleton"];
 stageWave[0][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
