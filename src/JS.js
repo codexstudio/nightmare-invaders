@@ -26,6 +26,8 @@ var images = new Array();
 				'../images/witch.png',
 				'../images/blueDemon.png',
 				'../images/redDemon.png',
+				'../images/zombieDad.png',
+				'../images/zombieMom.png',
 				'../images/grimReaper.png'
 			)
 			
@@ -276,7 +278,6 @@ var enemiesOnBoard = [];
 	this.direction;
 	this.enemyNextMove;
  }
- 
 enemy.prototype.enemyMovement = function(enemyObj){
 	
 	this.enemyNextMove = setInterval(function() {
@@ -336,7 +337,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 		if (enemyObj instanceof bat){
 			enemyObj.checkBatVisibility();
 		}
-		if (enemyObj instanceof grimReaper) {
+		if (enemyObj instanceof grimReaper) { 
 			enemyObj.spawnMomDad();
 		}
 	}, this.speed);
@@ -798,23 +799,85 @@ zombieDad.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, direction){
+function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, direction, isVisible){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 1000;
 	this.health = 1000;
 	this.damage = 100;
 	this.speed = 100;
 	this.killReward = 0;
-	this.phaseOne = this.startHealth * 0.75;
-	this.phaseTwo = this.startHealth / 2;
-	this.phaseThree =  this.startHealth * 0.25;
+	this.phaseOne = this.startHealth * 0.75; //initiates boss phase one
+	this.phaseTwo = this.startHealth / 2; //initates boss phase two
+	this.phaseThree =  this.startHealth * 0.25; //initiates boss phase three 
+	this.isVisible = true;
 }
 grimReaper.prototype = Object.create(enemy.prototype);
 grimReaper.prototype.constructor = grimReaper;
-
+var hasSpawnedGrim = false;
 grimReaper.prototype.spawnMomDad = function(){
-	if (this.health < this.phaseOne) {
-		console.log("You rly cool.");
+	if (this.health < this.phaseOne && hasSpawnedGrim == false) {
+		hasSpawnedGrim = true;
+		this.isVisible = false; 
+		/*var tempObj = new ;//make first zombie parent object
+		tempObj.pathPos = this.pathPos;//make its path position the same as when the grim reaper reaches phase one
+		tempObj.xCoord = this.xCoord;//make its x coordinate the same as when the grim reaper reaches phase one
+		tempObj.yCoord = this.yCoord;//make its y coordinate the same as when the grim reaper reaches phase one
+		enemiesOnBoard.push(tempObj);//add the set up object to the array of enemies on board
+		tempObj.enemyMovement(tempObj);*/   //initialize the object's movement
+		
+		//for blob that spawns ahead
+		var tempObj1 = new zombieDad;
+		tempObj1.pathPos = this.pathPos+2;
+		switch(this.direction){
+			case "north":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord-30;
+				break;
+			case "east":
+				tempObj1.xCoord = this.xCoord+30;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord+30;
+				break;
+			case "west":
+				tempObj1.xCoord = this.xCoord-30;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj1);
+		tempObj1.enemyMovement(tempObj1);
+		
+		//for blob that spawn behind
+		var tempObj2 = new zombieMom
+		tempObj2.pathPos = this.pathPos-2;
+		switch(this.direction){
+			case "north":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord+30;
+				break;
+			case "east":
+				tempObj2.xCoord = this.xCoord-30;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord-30;
+				break;
+			case "west":
+				tempObj2.xCoord = this.xCoord+30;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj2);
+		tempObj2.enemyMovement(tempObj2);
+		
+		clearInterval(this.enemyNextMove);
+		this.speed = 20000;
+		this.enemyMovement(this);
 	}
 };
 	
@@ -885,7 +948,7 @@ tower.prototype.attack = function(towerObj, towerName){
 		towerObj.isShooting = 0;
 		
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "calculator"){
-			towerObj.goldBuff();
+			towerObj.goldBuff(); 
 		}
 		if (towersOnBoard.length > 0 && towerName == "lamp"){
 			towerObj.lampIO();
@@ -902,6 +965,9 @@ tower.prototype.attack = function(towerObj, towerName){
 				var i = a;
 				if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0){
 					if (enemiesOnBoard[i] instanceof ghost && enemiesOnBoard[i].isVisible == false){
+						continue;
+					}
+					if (enemiesOnBoard[i] instanceof grimReaper && enemiesOnBoard[i].isVisible == false){
 						continue;
 					}
 					
@@ -948,6 +1014,7 @@ tower.prototype.attack = function(towerObj, towerName){
 							if (enemiesOnBoard[j] instanceof bigBlob) {
 								enemiesOnBoard[j].bigBlobSplit();
 							}
+							
 							enemiesOnBoard.splice(j,1);
 						}
 						break;
@@ -1406,7 +1473,7 @@ function renderLampCheck() {
 function renderEnemyMovement() {
 	for (var i = 0; i < enemiesOnBoard.length; i++) {
 		//draw enemies
-if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof grimReaper || enemiesOnBoard[i] instanceof redDemon || enemiesOnBoard[i] instanceof blueDemon || enemiesOnBoard[i] instanceof grizzlyBear) {
+		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof grimReaper || enemiesOnBoard[i] instanceof redDemon || enemiesOnBoard[i] instanceof blueDemon || enemiesOnBoard[i] instanceof grizzlyBear) {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-30, 55, 60);
 			//draw health bar
@@ -1427,10 +1494,27 @@ if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob
 			else{
 				enemyImgToPrint.src = '../images/bat.png';
 			}
+		
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
 			//draw health bar
 			ctx.fillStyle = "rgb(0,204,0)";
 			ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		if (enemiesOnBoard[i] instanceof grimReaper) {
+			enemyImgToPrint.src = '../images/grimReaper.png';
+			if (enemiesOnBoard[i].isVisible == false) {
+				console.log('hi');
+				ctx.save();
+				ctx.globalAlpha = '0.3';
+				ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
+				ctx.restore();
+				ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+			}
+			else{
+				ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
+				//draw health bar
+				ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+			}
 		}
 		else{
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
