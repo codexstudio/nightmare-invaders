@@ -172,6 +172,7 @@ var HTMLID_vanquishEvil = document.getElementById("vanquishEvil");
 
 //global variables
 var ang = 0;
+var oldAng = 0;
 const TRAJ_SPEED = 5;
 
 function menu(){
@@ -1308,17 +1309,20 @@ function renderEnemyMovement() {
 function renderTowerAndBullet() {
 	//iterate through towers
 	for (var i = 0; i < towersOnBoard.length; i++){
+		if ( ang != 720 ) {
+			oldAng = ang;
+		}
 		if (!(towersOnBoard[i] instanceof lamp)) {
 			towerImg.src = '../images/' + towersOnBoard[i].constructor.name + '.png';
 			//when there are no enemies on board, undefined parameters will be passed in to rotateTower. this if is to check and prevent it from passing through
 			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined) && !(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
 				ang = rotateTower(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
 			} else {
-				ang = 0;
+				ang = 720;
 			}	
 
 			if(towersOnBoard[i] instanceof actionFigure || towersOnBoard[i] instanceof mouseTrap || towersOnBoard[i] instanceof blenderDefender || towersOnBoard[i] instanceof trophy || towersOnBoard[i] instanceof calculator){
-				ang = 0;
+				ang = 720;
 			}
 			//if tower is shooting then push new bullet to towersOnBoard.bulletArr[]
 			if (towersOnBoard[i].isShooting === 1) {
@@ -1337,10 +1341,12 @@ function renderTowerAndBullet() {
 				//origin to centre of tower
 				ctx.translate(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
 				ctx.translate(towerImg.width/2, towerImg.height/2);
-				//angle tower to target
-				ctx.rotate(Math.PI / 180 * ang);
-				//draw bullet with respect to trajectory parameter
-				ctx.fillRect(0, -(towersOnBoard[i].bulletArr[b].trajectory), 5, 5);
+				//angle bullet to target
+				if ( ang != 720 ) {
+					ctx.rotate(Math.PI / 180 * ang);
+					//draw bullet with respect to trajectory parameter
+					ctx.fillRect(0, -(towersOnBoard[i].bulletArr[b].trajectory), 5, 5);
+				}
 				//restore canvas state
 				ctx.restore();
 				//increment trajectory
@@ -1357,7 +1363,11 @@ function renderTowerAndBullet() {
 			ctx.save();
 			ctx.translate(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord);
 			ctx.translate(towerImg.width/2,towerImg.height/2);
-			ctx.rotate(Math.PI / 180 * ang);
+			if ( ang != 720 ) {
+				ctx.rotate(Math.PI / 180 * ang);
+			} else if ( ang == 720 ) {
+				ctx.rotate( Math.PI / 180 * oldAng );
+			}
 			ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
 			ctx.restore();
 		}
