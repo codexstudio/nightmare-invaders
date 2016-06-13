@@ -1512,7 +1512,6 @@ var circleCheck = false;
 document.getElementById("canvas").onmousemove = function(){mouseCoord(event)};
 document.getElementById("canvas").onmouseout = function(){resetCoord()};
 
-<<<<<<< HEAD
 function mouseCoord(e){
 	cursorX = e.clientX;
 	cursorY = e.clientY;
@@ -1528,7 +1527,9 @@ function drawRange(){
 		ctx.beginPath();
 		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
 		ctx.stroke();
-=======
+	}
+}
+		
 var tempArray = [];
 
 function storeTowerCoord(){
@@ -1547,14 +1548,13 @@ function storeTowerCoord(){
 			tempArray.push([towersOnBoard[0].xCoord, towersOnBoard[0].yCoord,true]);
 			console.log(tempArray);
 		}
->>>>>>> refs/remotes/origin/Neil-Is-New
 	}
 }
+
 var tempx;
 var tempy;
 var testing = false;
 
-<<<<<<< HEAD
 function change(){
 	if (testing == false){
 		testing = true;
@@ -1563,6 +1563,7 @@ function change(){
 		testing = false;
 	}
 }
+
 function drawBox(){
 	if (testing == true){
 		ctx.beginPath();
@@ -1572,7 +1573,9 @@ function drawBox(){
 		ctx.lineTo(tempx+45,tempy);
 		ctx.lineTo(tempx,tempy);
 		ctx.stroke();
-=======
+	}
+}
+
 function drawBox(){
 	if (tempArray.length > 0){
 		for (i = 0; i <= tempArray.length-1;i++){
@@ -1586,9 +1589,9 @@ function drawBox(){
 				ctx.stroke();
 			}
 		}
->>>>>>> refs/remotes/origin/Neil-Is-New
 	}
 }
+
 function hoverCheck(){
 	document.getElementById('canvas').addEventListener ("click", storeTowerCoord);
 	if (towersOnBoard.length > 0)
@@ -1646,20 +1649,6 @@ function update(){
 	
 }
 
-function pathtest(){
-	ctx.beginPath();
-	ctx.moveTo(900,300);
-	ctx.lineTo(795,300);
-	ctx.lineTo(795,525);
-	ctx.lineTo(570,525);
-	ctx.lineTo(570,75);
-	ctx.lineTo(345,75);
-	ctx.lineTo(345,450);
-	ctx.lineTo(110,450);
-	ctx.lineTo(110,300);
-	ctx.lineTo(0,300);
-	ctx.stroke();
-}
 function render(){
 	requestID = requestAnimationFrame(render);
 	ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -1671,10 +1660,8 @@ function render(){
 	hoverCheck();
 	stageWin();
 	drawBox();
-<<<<<<< HEAD
+
 	//pathtest();
-=======
->>>>>>> refs/remotes/origin/Neil-Is-New
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------
@@ -1968,7 +1955,6 @@ function pauseGame(){
 		awardGoldOverTime = true;
 		pause = false;
 		render();
-
 	}
 }
 
@@ -2091,10 +2077,3 @@ function sellTower() {
 		}
 	}		
 }
-
-function sellButton() {
-	Gold += 50;
-	towersOnBoard.splice(i, j);
-}
-
-
