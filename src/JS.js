@@ -115,6 +115,10 @@ var outputLevel = document.querySelector("#outputLevel");
 var outputGameMessage = document.querySelector("#gameMessage");
 var outputStageName = document.querySelector("#stageName");
 
+//Global Variables (MISC)
+var ang = 0;
+var requestID;
+
 
 function menu(){
 	window.location="Menu.html";
@@ -204,8 +208,6 @@ function togGrid(){
 //Enemy related section-----------------------------------------------------------------------------------------------------------
 var enemiesOnBoard = [];
 
-//Angle variable
-var ang = 0;
 
 //Enemies Bluprint Section----------------------------------------------------------
  var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
@@ -779,7 +781,6 @@ function render(){
 }
 
 
-
 var bossSpawned = false; //Checks to see if boss has spawned 
 //Checks if player has beat the current stage
 function stageWin() {
@@ -798,12 +799,16 @@ function stageWin() {
 		bossSpawned = true;
 	}
 	
-	if (bActive == false && bossSpawned == true) {
+	if (bActive == false && bossSpawned == true && Hp > 0) {
 		gameMessage = "STAGE COMPLETE!";
+		cancelAnimationFrame(requestID);
+		requestID = undefined;
+		ctx.drawImage(stageTransition, 0, 0);
 		setTimeout(function(){ 
 			bossSpawned = false;
 			bActive = false;
 			nextStage();
+			render();
 		}, 4000);
 	}
 }
