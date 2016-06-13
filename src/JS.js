@@ -1087,13 +1087,19 @@ function getStats(turret) {
 var cursorX;
 var cursorY;
 var circleCheck = false;
+document.getElementById("canvas").onmousemove = function(){mouseCoord(event)};
+document.getElementById("canvas").onmouseout = function(){resetCoord()};
 
 function mouseCoord(e){
 	cursorX = e.clientX;
-	cursorY = e.clientY;;
+	cursorY = e.clientY;
 }
 
-
+function resetCoord(){
+	cursorX = undefined;
+	cursorY = undefined
+	console.log("test");
+}
 function drawRange(){
 	if (circleCheck === true){
 		ctx.beginPath();
@@ -1101,15 +1107,43 @@ function drawRange(){
 		ctx.stroke();
 	}
 }
+var tempx;
+var tempy;
+var testing = false;
 
+function change(){
+	if (testing == false){
+		testing = true;
+	}
+	else if (testing == true){
+		testing = false;
+	}
+}
+function drawBox(){
+	if (testing == true){
+		ctx.beginPath();
+		ctx.moveTo(tempx,tempy);
+		ctx.lineTo(tempx,tempy+45);
+		ctx.lineTo(tempx+45,tempy+45);
+		ctx.lineTo(tempx+45,tempy);
+		ctx.lineTo(tempx,tempy);
+		ctx.stroke();
+	}
+}
 function hoverCheck(){
 	if (towersOnBoard.length > 0)
 	{
 		for (var i = 0; i <= (towersOnBoard.length-1); i++){
 			if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
+				tempx = towersOnBoard[i].xCoord;
+				tempy = towersOnBoard[i].yCoord;
 				ctx.beginPath();
 				ctx.arc(towersOnBoard[i].xCoord+22.5, towersOnBoard[i].yCoord+22.5, towersOnBoard[i].range, 0, 2 * Math.PI);
 				ctx.stroke();
+				console.log(tempx,tempy);
+				document.addEventListener("click",function(){
+					change();
+				});
 			}
 		}
 	}
@@ -1151,7 +1185,20 @@ function update(){
 	
 }
 
-
+function pathtest(){
+	ctx.beginPath();
+	ctx.moveTo(900,300);
+	ctx.lineTo(795,300);
+	ctx.lineTo(795,525);
+	ctx.lineTo(570,525);
+	ctx.lineTo(570,75);
+	ctx.lineTo(345,75);
+	ctx.lineTo(345,450);
+	ctx.lineTo(110,450);
+	ctx.lineTo(110,300);
+	ctx.lineTo(0,300);
+	ctx.stroke();
+}
 function render(){
 	requestID = requestAnimationFrame(render);
 	ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -1162,6 +1209,8 @@ function render(){
 	drawRange();
 	hoverCheck();
 	stageWin();
+	drawBox();
+	//pathtest();
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------

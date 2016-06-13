@@ -9,14 +9,14 @@
 		<img id="currentStageImage" width="900" height="600">
 		<img id="grid" src="../images/grid.png" width="900" height="600"> <!--Temp grid for easier development-->
 		<img id="stageTransition" src="../images/StageCleared.png" width="900px" height="600px">
-		<canvas id="canvas" width="900" height="600" onmousemove="mouseCoord(event)"></canvas>
+		<canvas id="canvas" width="900" height="600" ></canvas>
 		
 		<!--Temporary display of path, will be removed when path and stage image are the same picture-->
 		<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2">
 		
 		<audio id=background_audio src="../audio/StarEater.mp3" loop="true" autoplay="true" controls></audio>
 		
-		<div class="UI">	
+		<div class="UI" >	
 			
 			<div class ="turret">
 				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") onmouseover=getStats("toyCarLauncher") class="disabledTower" width="45" height="45" style="position:absolute; margin: 40px 40px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
