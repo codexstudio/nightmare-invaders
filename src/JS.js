@@ -355,6 +355,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 		}
 		if (enemyObj instanceof grimReaper) { 
 			enemyObj.spawnMomDad();
+			enemyObj.normalSpeed();
 		}
 	}, this.speed);
 }
@@ -796,8 +797,8 @@ function zombieMom(startHealth, health, damage, speed, killReward, xCoord, yCoor
 zombieMom.prototype = Object.create(enemy.prototype);
 zombieMom.prototype.constructor = zombieMom;
 
-zombieMom.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+zombieMom.prototype.deaderThanCheddar = function(){
+	
 };
 
 function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
@@ -811,8 +812,7 @@ function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoor
 zombieDad.prototype = Object.create(enemy.prototype);
 zombieDad.prototype.constructor = zombieDad;
 
-zombieDad.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+zombieDad.prototype.afterDeaderThanCheddar = function(){
 };
 
 function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, direction, isVisible){
@@ -894,6 +894,8 @@ grimReaper.prototype.spawnMomDad = function(){
 		clearInterval(this.enemyNextMove);
 		this.speed = 20000;
 		this.enemyMovement(this);
+		
+
 	}
 };
 	
@@ -901,8 +903,11 @@ grimReaper.prototype.removeRandomTowers = function(){ //MAYBE LOL!
 	console.log("Undefined Child Method.");
 };
 	
-grimReaper.prototype.becomeTowerOffense = function(){ //MAYBE LOL!
-	console.log("Undefined Child Method.");
+grimReaper.prototype.normalSpeed = function(){ //MAYBE LOL!	
+		clearInterval(this.enemyNextMove);
+		this.speed = 100;
+		this.enemyMovement(this);
+		console.log("Works.");
 };
 
 // End of enemy bluprint section----------------------------------------------------
@@ -1031,8 +1036,8 @@ tower.prototype.attack = function(towerObj, towerName){
 							if (enemiesOnBoard[j] instanceof bigBlob) {
 								enemiesOnBoard[j].bigBlobSplit();
 							}
-							
 							enemiesOnBoard.splice(j,1);
+							
 						}
 						break;
 					}
@@ -1482,8 +1487,44 @@ var cursorX;
 var cursorY;
 var circleCheck = false;
 
+var tempArray = [];
 
+function storeTowerCoord(){
+	if (towersOnBoard.length > 0){
+		if (tempArray.length > 0){
+			for (var i = 0; i <= towersOnBoard.length-1; i++){
+				for (var j = 0; j <= tempArray.length-1; j++){
+					if ((towersOnBoard[i].xCoord != tempArray[j][0]) && (towersOnBoard[i].yCoord != tempArray[j][1])){
+						tempArray.push([towersOnBoard[i].xCoord, towersOnBoard[i].yCoord,true]);
+						console.log("pls");
+					}
+				}
+			}
+		}
+		else{
+			tempArray.push([towersOnBoard[0].xCoord, towersOnBoard[0].yCoord,true]);
+			console.log(tempArray);
+		}
+	}
+}
+
+function drawBox(){
+	if (tempArray.length > 0){
+		for (i = 0; i <= tempArray.length-1;i++){
+			if (tempArray[i][2] == true){
+				ctx.beginPath();
+				ctx.moveTo(tempArray[i][0],tempArray[i][1]);
+				ctx.lineTo(tempArray[i][0],tempArray[i][1]+45);
+				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]+45);
+				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]);
+				ctx.lineTo(tempArray[i][0],tempArray[i][1]);
+				ctx.stroke();
+			}
+		}
+	}
+}
 function hoverCheck(){
+	document.getElementById('canvas').addEventListener ("click", storeTowerCoord);
 	if (towersOnBoard.length > 0)
 	{
 		for (var i = 0; i <= (towersOnBoard.length-1); i++){
@@ -1543,6 +1584,7 @@ function render(){
 	drawRange();
 	hoverCheck();
 	stageWin();
+	drawBox();
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------
@@ -1593,19 +1635,11 @@ function renderEnemyMovement() {
 			ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
 		if (enemiesOnBoard[i] instanceof grimReaper) {
-			enemyImgToPrint.src = '../images/grimReaper.png';
 			if (enemiesOnBoard[i].isVisible == false) {
-				console.log('hi');
-				ctx.save();
-				ctx.globalAlpha = '0.3';
-				ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
-				ctx.restore();
-				ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+				enemyImgToPrint.src = '../images/grimReaper.png';
 			}
 			else{
-				ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
-				//draw health bar
-				ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+				enemyImgToPrint.src = '../images/grimReaper.png';
 			}
 		}
 		else{
@@ -1939,3 +1973,20 @@ function enableTowers() {
 		disabledTowers[i].style.pointerEvents = 'none';
 	}
 }
+
+function sellTower() {
+	if (tempArray > 0) {
+		for (var i  = 0; i <= tempArray.length-1; i++) {
+			if (((cursorX >= tempArray[i][0]) && (cursorX <= (tempArray[i][0]+45))) && ((cursorY >= tempArray[i][1]) && (cursorY <= tempArray[i][1]+45))) {
+				
+			}
+		}
+	}		
+}
+
+function sellButton() {
+	Gold += 50;
+	towersOnBoard.splice(i, j);
+}
+
+
