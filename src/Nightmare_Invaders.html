@@ -9,189 +9,66 @@
 		<img id="currentStageImage" width="900" height="600">
 		<img id="grid" src="../images/grid.png" width="900" height="600"> <!--Temp grid for easier development-->
 		<img id="stageTransition" src="../images/StageCleared.png" width="900px" height="600px">
+<<<<<<< HEAD
 		<canvas id="canvas" width="900" height="600" ></canvas>
+=======
+		<canvas id="canvas" width="900" height="600"></canvas>
+>>>>>>> refs/remotes/origin/Neil-Is-New
 		
 		<!--Temporary display of path, will be removed when path and stage image are the same picture-->
 		<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2">
 		
-		<audio id=background_audio src="../audio/StarEater.mp3" loop="true" autoplay="true" controls></audio>
+		<audio id=background_audio src="../audio/StarEater.mp3" loop="true" autoplay="true"></audio>
 		
 		<div class="UI" >	
 			
-			<div class ="turret">
-				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") onmouseover=getStats("toyCarLauncher") class="disabledTower" width="45" height="45" style="position:absolute; margin: 40px 40px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
-				<div class ="towerStats">
-					Toy Car Launcher <br>
-					<p id="outputCost-toyCarLauncher"></p>
-					<p id="outputDamage-toyCarLauncher"></p>
-					<p id="outputRange-toyCarLauncher"></p>
-					<p id="outputAspd-toyCarLauncher"></p>
-				</div>
+			<p id="stageName"></p>
+
+			<table class="turretWrapper">
+				<tr>
+					<td><img class="turret" id="toyCarLauncher" width="45" height="45" src="../images/toyCarLauncher.png"></td>
+					<td><img class="turret" id="marbleShooter" width="45" height="45" src="../images/marbleShooter.png"></td>
+					<td><img class="turret" id="actionFigure" width="45" height="45" src="../images/actionFigure.png"></td>
+					<td><img class="turret" id="calculator" width="45" height="45" src="../images/calculator.png"></td>
+					<td><img class="turret" id="waterGun" width="45" height="45" src="../images/waterGun.png"></td>
+					<td><img class="turret" id="nutsAndBolts" width="45" height="45" src="../images/nutsAndBolts.png"></td>
+				</tr>
+				<tr>
+					<td><img class="turret" id="airplaneLauncher" width="45" height="45" src="../images/airplaneLauncher.png"></td>
+					<td><img class="turret" id="mouseTrap" width="45" height="45" src="../images/mouseTrap.png"></td>
+					<td><img class="turret" id="trophy" width="45" height="45" src="../images/trophy.png"></td>
+					<td><img class="turret" id="lamp" width="45" height="45" src="../images/lamp.png"></td>
+					<td><img class="turret" id="blenderDefender" width="45" height="45" src="../images/blenderDefender.png"></td>
+					<td><img class="turret" id="vanquishEvil" width="45" height="45" src="../images/vanquishEvil.png"></td>
+				</tr>
+			</table>
+			
+			<div class="towerStats">
+				<p id="outputTowerStats"></p>
 			</div>
-			
-			<div class ="turret">
-				<img id="lamp" onclick=placeTower("lamp") onmouseover=getStats("lamp") class="disabledTower" width="45" height="45" style="position:absolute; margin: 190px 40px 30px 30px; border: 2px solid black"src="../images/lamp.png">
-				<div class ="towerStats">
-					Lava Lamp <br>
-					<p id="outputCost-lamp"></p>
-					<p id="outputDamage-lamp"></p>
-					<p id="outputRange-lamp"></p>
-					<p id="outputAspd-lamp"></p>
-					<p>Ability: Alows ghosts in range of lamps to be seen by other towers.</p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img <img id="actionFigure" onclick=placeTower("actionFigure") onmouseover=getStats("actionFigure") class="disabledTower" width="45" height="45" style="position:absolute; margin: 140px 40px 30px 30px; border: 2px solid black"src="../images/actionFigure.png">
-				<div class ="towerStats">
-					Action Figure <br>
-					<p id="outputCost-actionFigure"></p>
-					<p id="outputDamage-actionFigure"></p>
-					<p id="outputRange-actionFigure"></p>
-					<p id="outputAspd-actionFigure"></p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img id="marbleShooter" onclick=placeTower("marbleShooter") onmouseover=getStats("marbleShooter") class="disabledTower" width="45" height="45" style="position:absolute; margin: 90px 40px 30px 30px; border: 2px solid black"src="../images/marbleShooter.png">
-				<div class ="towerStats">
-					Marble Shooter <br>
-					<p id="outputCost-marbleShooter"></p>
-					<p id="outputDamage-marbleShooter"></p>
-					<p id="outputRange-marbleShooter"></p>
-					<p id="outputAspd-marbleShooter"></p>
-					<p>Ability: Tower's damage is doubled every fifth shot.</p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img id="calculator" onclick=placeTower("calculator") onmouseover=getStats("calculator") class="disabledTower" width="45" height="45" style="position:absolute; margin: 40px 40px 80px 80px; border: 2px solid black"src="../images/calculator.png">
-			<div class ="towerStats">
-					Calculator <br>
-					<p id="outputCost-calculator"></p>
-					<p id="outputDamage-calculator"></p>
-					<p id="outputRange-calculator"></p>
-					<p id="outputAspd-calculator"></p>
-					<p>Ability: Provides additional income.</p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img id="nutsAndBolts" onclick=placeTower("nutsAndBolts") onmouseover=getStats("nutsAndBolts") class="disabledTower" width="45" height="45" style="position:absolute; margin: 90px 90px 80px 80px; border: 2px solid black"src="../images/nutsAndBolts.png">
-			<div class ="towerStats">
-					Nuts and Bolts Shooter <br>
-					<p id="outputCost-nutsAndBolts"></p>
-					<p id="outputDamage-nutsAndBolts"></p>
-					<p id="outputRange-nutsAndBolts"></p>
-					<p id="outputAspd-nutsAndBolts"></p>
-					<p>Ability: Chance to crit on hit. </p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img id="mouseTrap" onclick=placeTower("mouseTrap") onmouseover=getStats("mouseTrap") class="disabledTower" width="45" height="45" style="position:absolute; margin: 140px 140px 80px 80px; border: 2px solid black"src="../images/mouseTrap.png">
-			<div class ="towerStats">
-					Mouse Trap <br>
-					<p id="outputCost-mouseTrap"></p>
-					<p id="outputDamage-mouseTrap"></p>
-					<p id="outputRange-mouseTrap"></p>
-					<p id="outputAspd-mouseTrap"></p>
-					<p>Ability: Place on path. Stuns enemies. </p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img id="blenderDefender" onclick=placeTower("blenderDefender") onmouseover=getStats("blenderDefender") class="disabledTower" width="45" height="45" style="position:absolute; margin: 190px 190px 80px 80px; border: 2px solid black"src="../images/blenderDefender.png">
-			<div class ="towerStats">
-					Blender Defender <br>
-					<p id="outputCost-blenderDefender"></p>
-					<p id="outputDamage-blenderDefender"></p>
-					<p id="outputRange-blenderDefender"></p>
-					<p id="outputAspd-blenderDefender"></p>
-					<p>Ability: Mighty defender of the kitchen.</p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img id="waterGun" onclick=placeTower("waterGun") onmouseover=getStats("waterGun") class="disabledTower" width="45" height="45" style="position:absolute; margin: 40px 40px 130px 130px; border: 2px solid black"src="../images/waterGun.png">
-			<div class ="towerStats">
-					Water Gun <br>
-					<p id="outputCost-waterGun"></p>
-					<p id="outputDamage-waterGun"></p>
-					<p id="outputRange-waterGun"></p>
-					<p id="outputAspd-waterGun"></p>
-					<p>Ability: Slows enemies. </p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img id="airplaneLauncher" onclick=placeTower("airplaneLauncher") onmouseover=getStats("airplaneLauncher") class="disabledTower" width="45" height="45" style="position:absolute; margin: 90px 90px 130px 130px; border: 2px solid black"src="../images/airplaneLauncher.png">
-			<div class ="towerStats">
-					Airplane Launcher <br>
-					<p id="outputCost-airplaneLauncher"></p>
-					<p id="outputDamage-airplaneLauncher"></p>
-					<p id="outputRange-airplaneLauncher"></p>
-					<p id="outputAspd-airplaneLauncher"></p>
-					<p>Ability: BIG RANGE.</p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img id="trophy" onclick=placeTower("trophy") onmouseover=getStats("trophy") class="disabledTower" width="45" height="45" style="position:absolute; margin: 140px 140px 130px 130px; border: 2px solid black"src="../images/trophy.png">
-			<div class ="towerStats">
-					Trophy <br>
-					<p id="outputCost-trophy"></p>
-					<p id="outputDamage-trophy"></p>
-					<p id="outputRange-trophy"></p>
-					<p id="outputAspd-trophy"></p>
-					<p>Ability: Buff turrets in range.</p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img id="vanquishEvil" onclick=placeTower("vanquishEvil") onmouseover=getStats("vanquishEvil") class="disabledTower" width="45" height="45" style="position:absolute; margin: 190px 190px 130px 130px; border: 2px solid black"src="../images/vanquishEvil.png">
-			<div class ="towerStats">
-					Vanquish The Evil <br>
-					<p id="outputCost-vanquishEvil"></p>
-					<p id="outputDamage-vanquishEvil"></p>
-					<p id="outputRange-vanquishEvil"></p>
-					<p id="outputAspd-vanquishEvil"></p>
-					<!--<p id="outputLimit-vanquishEvil"></p>-->
-					<p>Caution! Three per customer as per the nightmare safety regulations.</p>
-				</div>
-			</div>
-			
-			<p id = "stageName"></p>
-			
-			<div class ="info">
-				<p id="outputHp"></p>
-				<p id="outputGold"></p>
-				<p id="outputLevel"></p>
-				<p id="outputWave"></p>
+			<div class="playerInfo">
+				<p id="outputPlayerStats"></p>
 			</div>
 			
 			<div class="navBar">
-			<ul id="menu">
-				<li id="mainMenu"><a href="#" onclick=menu()><img src="../images/return.png" height="32" width="32"><img></a></li>
-				<li id="game_pause"><a href="#" onclick="pauseGame()"><img src="../images/pause.png" onclick="changePauseImage()" height="32" width="32" id="image_change"></a></li>
-				<li id="toggleAudio"><a href="#"><img src="../images/sound_on.png" id="mute" onclick="changeAudioImage()"></a></li>
-			</ul>
+				<ul id="menu">
+					<li id="mainMenu"><a href="#" onclick=menu()><img src="../images/return.png" height="32" width="32"><img></a></li>
+					<li id="game_pause"><a href="#" onclick="pauseGame()"><img src="../images/pause.png" onclick="changePauseImage()" height="32" width="32" id="image_change"></a></li>
+					<li id="toggleAudio"><a href="#"><img src="../images/sound_on.png" id="mute" onclick="changeAudioImage()"></a></li>
+				</ul>
 			</div>
 			
 			<div class="buttons">
 				<button class= "btnDress" id="nextWave" onclick=nextWave()>Next Wave</button>
-				<button class= "btnDress" id="nextStage" onclick=nextStage()>Next Stage</button><br>
+				<button class= "btnDress" id="nextStage" onclick=nextStage()>Next Stage</button>
 				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
 			</div>
 			
 			<div class="message">
-				<p id = "gameMessage" style="margin:10px 50px -50px 30px; font-size: 18px;"></p>
+				<p id="gameMessage"></p>
 			</div>
 			
-			<div class="hidden">
-			</div>
 		</div>
-		<script src="JS.js"></script>
 		
 		<script>
 		var audio = document.getElementById('background_audio')
@@ -206,7 +83,7 @@
 			var image = document.getElementById('mute');
 			if(image.src.match("sound_on")) 
 			{
-			image.src = "../images/sound_off.png";
+				image.src = "../images/sound_off.png";
 			}
 			else 
 			{
@@ -218,7 +95,7 @@
 			var image = document.getElementById('image_change')
 			if(image.src.match("pause"))
 			{
-			image.src = "../images/play.png";
+				image.src = "../images/play.png";
 			}
 			else 
 			{
@@ -228,5 +105,6 @@
 		
 		</script>
 
+		<script src="JS.js"></script>
 	</body>
 </html>

@@ -15,7 +15,20 @@ var images = new Array();
 				'../images/blueSkeleton.png',
 				'../images/basicSkeleton.png',
 				'../images/redSkeleton.png',
-				'../images/bigBoss.png'
+				'../images/bigBoss.png',
+				'../images/bat.png',
+				'../images/vampire.png',
+				'../images/clown.png',
+				'../images/bigBlob.png',
+				'../images/blob.png',
+				'../images/miniBlob.png',
+				'../images/grizzlyBear.png',
+				'../images/witch.png',
+				'../images/blueDemon.png',
+				'../images/redDemon.png',
+				'../images/zombieDad.png',
+				'../images/zombieMom.png',
+				'../images/grimReaper.png'
 			)
 			
 			
@@ -144,24 +157,41 @@ stagePaths[3] = pathParentBedroom;
 
 
 //UI Elements
-var Gold = 100;
+var Gold = 100; 
 var Hp = 100;
 var currentWave = 0;
 var pause = false;
 var gameMessage = "Welcome to Nightmare Invaders!";
-var outputHp = document.querySelector("#outputHp");
-var outputGold = document.querySelector("#outputGold");
-var outputLevel = document.querySelector("#outputLevel");
-var outputWave = document.querySelector("#outputWave");
-var outputGameMessage = document.querySelector("#gameMessage");
-var outputStageName = document.querySelector("#stageName");
+var outputTowerStats = document.getElementById("outputTowerStats");
+var outputPlayerStats = document.getElementById("outputPlayerStats");
+var outputGameMessage = document.getElementById("gameMessage");
+var outputStageName = document.getElementById("stageName");
+var disabledTowers = document.getElementsByClassName("disabledTower");
+var allSelected = document.getElementsByClassName("enabledTower");
+var HTMLID_toyCarLauncher = document.getElementById("toyCarLauncher");
+var HTMLID_actionFigure = document.getElementById("actionFigure");
+var HTMLID_marbleShooter = document.getElementById("marbleShooter");
+var HTMLID_lamp = document.getElementById("lamp");
+var HTMLID_calculator = document.getElementById("calculator");
+var HTMLID_nutsAndBolts = document.getElementById("nutsAndBolts");
+var HTMLID_blenderDefender = document.getElementById("blenderDefender");
+var HTMLID_mouseTrap = document.getElementById("mouseTrap");
+var HTMLID_waterGun = document.getElementById("waterGun");
+var HTMLID_airplaneLauncher = document.getElementById("airplaneLauncher");
+var HTMLID_trophy = document.getElementById("trophy");
+var HTMLID_vanquishEvil = document.getElementById("vanquishEvil");
+
 
 //global variables
 var ang = 0;
-const TRAJ_SPEED = 5;
+var oldAng = 0;
+const TRAJ_SPEED = 10;
 
 function menu(){
 	window.location="Menu.html";
+}
+function gameOver(){
+	window.location = "Game_Over.html";
 }
 
 function prevStage(){
@@ -211,6 +241,8 @@ function nextStage(){
 		}
 		numOfTowers = 0;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		towerAvailable();
 	}
 	else {
 		gameMessage = "This is the last stage!";
@@ -237,15 +269,15 @@ var goldOverTime = setInterval(function(){
 
 
 //Temporary grid toggle
-var show = true;
+var showGrid = true;
 function togGrid(){
-	if (show) {
+	if (showGrid) {
 		document.getElementById("grid").style.display = "block";
-		show = false;
+		showGrid = false;
 	} 
 	else {
 		document.getElementById("grid").style.display = "none";
-		show = true;
+		showGrid = true;
 	}
 }
 
@@ -253,7 +285,7 @@ function togGrid(){
 var enemiesOnBoard = [];
 
 //Enemies Bluprint Section----------------------------------------------------------
- var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
+ var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
 	this.startHealth = startHealth;
 	this.health = health;
 	this.damage = damage;
@@ -262,9 +294,9 @@ var enemiesOnBoard = [];
 	this.xCoord = (stagePaths[currentStage])[0].x;
 	this.yCoord = (stagePaths[currentStage])[0].y;
 	this.pathPos = 0;
+	this.direction;
 	this.enemyNextMove;
  }
- 
 enemy.prototype.enemyMovement = function(enemyObj){
 	
 	this.enemyNextMove = setInterval(function() {
@@ -274,6 +306,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if((stagePaths[currentStage])[enemyObj.pathPos].x % enemyObj.xCoord == 0){
 				enemyObj.pathPos++;
 			}
+			enemyObj.direction = "west";
 			enemyObj.xCoord--;
 		}
 		
@@ -281,6 +314,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if((stagePaths[currentStage])[enemyObj.pathPos].x % enemyObj.xCoord == 0){
 				enemyObj.pathPos++;
 			}
+			enemyObj.direction = "east";
 			enemyObj.xCoord++;
 		}
 		
@@ -288,6 +322,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if((stagePaths[currentStage])[enemyObj.pathPos].y % enemyObj.xCoord == 0){
 				enemyObj.pathPos++;
 			}
+			enemyObj.direction = "north";
 			enemyObj.yCoord--;
 		}
 		
@@ -295,6 +330,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if((stagePaths[currentStage])[enemyObj.pathPos].y % enemyObj.yCoord == 0){
 				enemyObj.pathPos++;
 			}
+			enemyObj.direction = "south";
 			enemyObj.yCoord++;
 		}
 		if (enemyObj.pathPos > (stagePaths[currentStage]).length-1) {
@@ -302,6 +338,12 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			for (var j = 0; j < enemiesOnBoard.length; j++){
 				if (enemiesOnBoard[j].pathPos > (stagePaths[currentStage]).length-1){
 					enemiesOnBoard.splice(j,1);
+					if (enemiesOnBoard[j] instanceof blueDemon) {
+						enemyObj.blueDemonExit;
+					}
+					if (enemiesOnBoard[j] instanceof redDemon) {
+						enemyObj.redDemonExit;
+					}
 					break;
 				}
 			}
@@ -314,12 +356,23 @@ enemy.prototype.enemyMovement = function(enemyObj){
 		if (enemyObj instanceof bat){
 			enemyObj.checkBatVisibility();
 		}
+		if (enemyObj instanceof grimReaper) { 
+			if (enemyObj.phaseOneComplete == false){
+				enemyObj.spawnMomDad();
+			}
+			//else if () {
+			//	enemyObj.removeRandomTowers();
+			//}
+			//else if () {
+			//	enemyObj.becomeTowerOffense();
+			//}
+		}
 	}, this.speed);
 }
 
 
-function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 200;
 	this.health = 200;
 	this.damage = 1;
@@ -333,8 +386,8 @@ basicSkeleton.prototype.thisChildMetohdNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
 
-function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 500;
 	this.health = 500;
 	this.damage = 2;
@@ -348,8 +401,8 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
+function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
 	this.startHealth = 100;
 	this.health = 100;
 	this.damage = 1;
@@ -362,8 +415,8 @@ blueSkeleton.prototype.constructor = blueSkeleton;
 blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
-function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos)
+function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
 	this.startHealth = 350;
 	this.health = 350;
 	this.damage = 2;
@@ -396,10 +449,10 @@ ghost.prototype.checkGhostVisibility = function(){
 	}
 };
 
-function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.startHealth = 2000;
-	this.health = 2000;
+function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 200;
+	this.health = 200;
 	this.damage = 100;
 	this.speed = 80;
 	this.killReward = 0;
@@ -411,24 +464,96 @@ bigBoss.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function blob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 400;
 	this.health = 400;
 	this.damage = 20;
-	this.speed = 100;
-	this.killReward = 10;
+	this.speed = 90;
+	this.killReward = 0;
 }
 blob.prototype = Object.create(enemy.prototype);
 blob.prototype.constructor = blob;
 
-blob.prototype.doubleBlob = function(){
-	
-	console.log("Get splitted.");
+blob.prototype.blobSplit = function(){
+	if (this.health <= 0) {
+		var tempObj = new miniBlob;//make first miniblob object
+		tempObj.pathPos = this.pathPos;//make its path position the same as when the blob dies
+		tempObj.xCoord = this.xCoord;//make its x coordinate the same as when the blob dies
+		tempObj.yCoord = this.yCoord;//make its y coordinate the same as when the blob dies
+		enemiesOnBoard.push(tempObj);//add the set up object to the array of enemies on board
+		tempObj.enemyMovement(tempObj);//initialize the object's movement
+		
+		//for blob that spawns ahead
+		var tempObj1 = new miniBlob;
+		tempObj1.pathPos = this.pathPos+1;
+		switch(this.direction){
+			case "north":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord-15;
+				break;
+			case "east":
+				tempObj1.xCoord = this.xCoord+15;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord+15;
+				break;
+			case "west":
+				tempObj1.xCoord = this.xCoord-15;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj1);
+		tempObj1.enemyMovement(tempObj1);
+		
+		//for blob that spawn behind
+		var tempObj2 = new miniBlob;
+		tempObj2.pathPos = this.pathPos-1;
+		switch(this.direction){
+			case "north":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord+15;
+				break;
+			case "east":
+				tempObj2.xCoord = this.xCoord-15;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord-15;
+				break;
+			case "west":
+				tempObj2.xCoord = this.xCoord+15;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj2);
+		tempObj2.enemyMovement(tempObj2);
+		
+	}
 };
 
-function clown(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken);
+function miniBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 150;
+	this.health = 150;
+	console.log(this.health);
+	this.damage = 5;
+	this.speed = 60;
+	this.killReward = 5;
+}
+miniBlob.prototype = Object.create(enemy.prototype);
+miniBlob.prototype.constructor = miniBlob;
+
+miniBlob.prototype.miniBlob = function(){
+};
+
+function clown(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction);
 	this.startHealth = 10;
 	this.health = 10;
 	this.damage = 5;
@@ -440,40 +565,98 @@ clown.prototype = Object.create(enemy.prototype);
 clown.prototype.constructor = clown;
 
 clown.prototype.stealGold = function(){
-	var howManyGold	= Math.random() * 100;
+	var percentageGold	= Math.random() * 100;
 	
-	if (howManyGold >= 0 && howManyGold < 33) { //Three quarters gold stolen.
+	if (percentageGold >= 0 && percentageGold < 33) { //Three quarters gold stolen.
 		this.goldTaken = (25 / 100) * Gold;
-		Gold -= this.goldTaken;
+		Gold -= Math.round(this.goldTaken);
 	}	
-	else if (howManyGold >= 33 && howManyGold < 66) { //Half your gold stolen.
+	else if (percentageGold >= 33 && percentageGold < 66) { //Half your gold stolen.
 		this.goldTaken = (50 / 100) * Gold;
-		Gold -= this.goldTaken;
+		Gold -= Math.round(this.goldTaken);
 	}
-	else if (howManyGold >= 66 && howManyGold < 100) { // Quarter of gold stolen.
+	else if (percentageGold >= 66 && percentageGold < 100) { // Quarter of gold stolen.
 		this.goldTaken = (75 / 100) * Gold;
-		Gold -= this.goldTaken;
+		Gold -= Math.round(this.goldTaken);
 	} 
-	gameMessage = "A clown has stolen " + this.goldTaken + " gold from you! Kill it to get it back!";
+	gameMessage = "A clown has stolen " + Math.round(this.goldTaken) + " gold from you! Kill it to get it back!";
 };
 
-function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.startHealth = 5000;
-	this.health = 5000;
+function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 1000;
+	this.health = 1000;
 	this.damage = 100;
-	this.speed = 50;
+	this.speed = 150;
 	this.killReward = 0;
 }
 bigBlob.prototype = Object.create(enemy.prototype);
 bigBlob.prototype.constructor = bigBlob;
 
-bigBlob.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+bigBlob.prototype.bigBlobSplit = function(){
+	if (this.health <= 0) {
+		var tempObj = new blob;//make first miniblob object
+		tempObj.pathPos = this.pathPos;//make its path position the same as when the blob dies
+		tempObj.xCoord = this.xCoord;//make its x coordinate the same as when the blob dies
+		tempObj.yCoord = this.yCoord;//make its y coordinate the same as when the blob dies
+		enemiesOnBoard.push(tempObj);//add the set up object to the array of enemies on board
+		tempObj.enemyMovement(tempObj);//initialize the object's movement
+		
+		//for blob that spawns ahead
+		var tempObj1 = new blob;
+		tempObj1.pathPos = this.pathPos+2;
+		switch(this.direction){
+			case "north":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord-30;
+				break;
+			case "east":
+				tempObj1.xCoord = this.xCoord+30;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord+30;
+				break;
+			case "west":
+				tempObj1.xCoord = this.xCoord-30;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj1);
+		tempObj1.enemyMovement(tempObj1);
+		
+		//for blob that spawn behind
+		var tempObj2 = new blob;
+		tempObj2.pathPos = this.pathPos-2;
+		switch(this.direction){
+			case "north":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord+30;
+				break;
+			case "east":
+				tempObj2.xCoord = this.xCoord-30;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord-30;
+				break;
+			case "west":
+				tempObj2.xCoord = this.xCoord+30;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj2);
+		tempObj2.enemyMovement(tempObj2);
+		
+	}
 };
 
-function bat(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function bat(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 300;
 	this.health = 300;
 	this.damage = 15;
@@ -515,12 +698,27 @@ bat.prototype.checkBatVisibility = function(){
 	}
 };
 
-function witch(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, towerStolen){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function grizzlyBear(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 1000;
+	this.health = 1000;
+	this.damage = 10;
+	this.speed = 70;
+	this.killReward = 20;
+}
+grizzlyBear.prototype = Object.create(enemy.prototype);
+grizzlyBear.prototype.constructor = grizzlyBear;
+
+grizzlyBear.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+};
+
+function witch(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, towerStolen, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 300;
 	this.health = 300;
-	this.damage = 100;
-	this.speed = 100;
+	this.damage = 1;
+	this.speed = 80;
 	this.killReward = 0;
 	this.towerStolen = 0;
 }
@@ -568,70 +766,171 @@ witch.prototype.stealTower = function(){
 	gameMessage = "A witch has stolen a tower from the store!";
 };
 
-function blueDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function blueDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 500;
 	this.health = 500;
-	this.damage = 0;
+	this.damage = 0; 
 	this.speed = 20;
-	this.killReward = 0;
+	this.killReward = 40;
 }
 blueDemon.prototype = Object.create(enemy.prototype);
 blueDemon.prototype.constructor = blueDemon;
 
-blueDemon.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+blueDemon.prototype.blueDemonExit = function(){
+	Hp = 1; 
 };
 
-function grizzlyBear(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.startHealth = 5000;
-	this.health = 5000;
-	this.damage = 50;
-	this.speed = 400;
-	this.killReward = 0;
-}
-grizzlyBear.prototype = Object.create(enemy.prototype);
-grizzlyBear.prototype.constructor = grizzlyBear;
-
-grizzlyBear.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
-};
-
-function redDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
+function redDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
 	this.startHealth = 10000;
 	this.health = 10000;
-	this.damage = 99;
+	this.damage = 0;
 	this.speed = 1000;
 	this.killReward = 0;
 }
 redDemon.prototype = Object.create(enemy.prototype);
 redDemon.prototype.constructor = redDemon;
 
-redDemon.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+redDemon.prototype.redDemonExit = function(){
+	Hp = 1; 
 };
 
-function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.startHealth = 100000;
-	this.health = 100000;
+function zombieMom(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 1000;
+	this.health = 1000;
+	this.damage = 10;
+	this.speed = 80;
+	this.killReward = 20;
+}
+zombieMom.prototype = Object.create(enemy.prototype);
+zombieMom.prototype.constructor = zombieMom;
+
+zombieMom.prototype.deaderThanCheddar = function(){
+	
+};
+
+function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 1000;
+	this.health = 1000;
+	this.damage = 10;
+	this.speed = 80;
+	this.killReward = 20;
+}
+zombieDad.prototype = Object.create(enemy.prototype);
+zombieDad.prototype.constructor = zombieDad;
+
+zombieDad.prototype.afterDeaderThanCheddar = function(){
+};
+
+function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, direction, isVisible, hasPhaseOned, phaseOneComplete, hasPhaseTwoed, hasPhaseThreed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = 1000;
+	this.health = 1000;
 	this.damage = 100;
-	this.speed = 1000;
+	this.speed = 100;
 	this.killReward = 0;
+	this.phaseOne = this.startHealth * 0.75; //initiates boss phase one
+	this.phaseTwo = this.startHealth * 0.5; //initates boss phase two
+	this.phaseThree =  this.startHealth * 0.25; //initiates boss phase three 
+	this.hasPhaseOned = false;
+	this.phaseOneComplete = false;
+	this.hasPhaseTwoed = false;
+	this.hasPhaseThreed = false;
+	this.isVisible = true;
 }
 grimReaper.prototype = Object.create(enemy.prototype);
 grimReaper.prototype.constructor = grimReaper;
 
-grimReaper.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+grimReaper.prototype.spawnMomDad = function(){
+	if (this.health < this.phaseOne && this.hasPhaseOned == false) {
+		this.hasPhaseOned = true;
+		this.isVisible = false; 
+		
+		//for dad that spawns ahead
+		var tempObj1 = new zombieDad;
+		tempObj1.pathPos = this.pathPos+2;
+		switch(this.direction){
+			case "north":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord-30;
+				break;
+			case "east":
+				tempObj1.xCoord = this.xCoord+30;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj1.xCoord = this.xCoord;
+				tempObj1.yCoord = this.yCoord+30;
+				break;
+			case "west":
+				tempObj1.xCoord = this.xCoord-30;
+				tempObj1.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj1);
+		tempObj1.enemyMovement(tempObj1);
+		
+		//for mom that spawn behind
+		var tempObj2 = new zombieMom;
+		tempObj2.pathPos = this.pathPos-2;
+		switch(this.direction){
+			case "north":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord+30;
+				break;
+			case "east":
+				tempObj2.xCoord = this.xCoord-30;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			case "south":
+				tempObj2.xCoord = this.xCoord;
+				tempObj2.yCoord = this.yCoord-30;
+				break;
+			case "west":
+				tempObj2.xCoord = this.xCoord+30;
+				tempObj2.yCoord = this.yCoord;
+				break;
+			default:
+		}
+		enemiesOnBoard.push(tempObj2);
+		tempObj2.enemyMovement(tempObj2);
+		
+		clearInterval(this.enemyNextMove);
+		this.speed *= 10;
+		this.enemyMovement(this);
+		
+
+	}
+	if (this.health < this.phaseOne){
+		var momDadActive = false;
+		for (var i = 0; i < enemiesOnBoard.length; i++){
+			if(enemiesOnBoard[i] instanceof zombieDad || enemiesOnBoard[i] instanceof zombieMom){
+				momDadActive = true;
+			}
+		}
+		if (!momDadActive){
+			this.isVisible = true;
+			this.phaseOneComplete = true;
+			clearInterval(this.enemyNextMove);
+			this.speed /= 10;
+			this.enemyMovement(this);
+		}
+	}
+};
 	
-grimReaper.prototype.thisChildMethodNeedsAName = function(){
+grimReaper.prototype.removeRandomTowers = function(){ //MAYBE LOL!
 	console.log("Undefined Child Method.");
+};
 	
-grimReaper.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+grimReaper.prototype.normalSpeed = function(){ //MAYBE LOL!	
+		clearInterval(this.enemyNextMove);
+		this.speed = 100;
+		this.enemyMovement(this);
+		console.log("Works.");
 };
 
 // End of enemy bluprint section----------------------------------------------------
@@ -665,7 +964,7 @@ var towerxy = {x:0, y:0};
 var objObstruct = false;
 
 //Tower blueprints section--------------------------------------------------------
-var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
+var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info){
 	this.cost = cost;
 	this.damage = damage;
 	this.range = range;
@@ -676,6 +975,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.targetIndice = -1;
 	this.isShooting = 0;
 	this.bulletArr = [];
+	this.info = info;
 	this.attackEnemy;
 };
 
@@ -693,7 +993,7 @@ tower.prototype.attack = function(towerObj, towerName){
 		towerObj.isShooting = 0;
 		
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "calculator"){
-			towerObj.goldBuff();
+			towerObj.goldBuff(); 
 		}
 		if (towersOnBoard.length > 0 && towerName == "lamp"){
 			towerObj.lampIO();
@@ -710,6 +1010,9 @@ tower.prototype.attack = function(towerObj, towerName){
 				var i = a;
 				if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0){
 					if (enemiesOnBoard[i] instanceof ghost && enemiesOnBoard[i].isVisible == false){
+						continue;
+					}
+					if (enemiesOnBoard[i] instanceof grimReaper && enemiesOnBoard[i].isVisible == false){
 						continue;
 					}
 					
@@ -732,8 +1035,11 @@ tower.prototype.attack = function(towerObj, towerName){
 					var j = b;
 					if (enemiesOnBoard[j].pathPos == max){
 						//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
-						towerObj.isShooting = 1;
+						if(!(towersOnBoard[j] instanceof actionFigure || towersOnBoard[j] instanceof mouseTrap || towersOnBoard[j] instanceof blenderDefender || towersOnBoard[j] instanceof trophy || towersOnBoard[j] instanceof calculator)) {
+							towerObj.isShooting = 1;
+						}
 						towerObj.targetIndice = j;
+						
 						enemiesOnBoard[j].health -= towerObj.damage;
 						if (towerObj instanceof marbleShooter) {
 							this.shotCounter++;
@@ -743,10 +1049,18 @@ tower.prototype.attack = function(towerObj, towerName){
 							clearInterval(enemiesOnBoard[j].enemyNextMove);
 							Gold += enemiesOnBoard[j].killReward;
 							if (enemiesOnBoard[j] instanceof clown){
+								Math.round(enemiesOnBoard[j].goldTaken);
 								Gold += enemiesOnBoard[j].goldTaken;
-								gameMessage = "You have killed a clown and stolen back " + enemiesOnBoard[j].goldTaken +" gold!";
+								gameMessage = "You have killed a clown and stolen back " + Math.round(enemiesOnBoard[j].goldTaken) +" gold!";
+							}
+							if (enemiesOnBoard[j] instanceof blob) {
+								enemiesOnBoard[j].blobSplit();
+							}
+							if (enemiesOnBoard[j] instanceof bigBlob) {
+								enemiesOnBoard[j].bigBlobSplit();
 							}
 							enemiesOnBoard.splice(j,1);
+							
 						}
 						break;
 					}
@@ -766,6 +1080,7 @@ function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgrad
 	this.damage = 10;
 	this.range = 160;
 	this.attackSpeed = 900;
+	this.info = "This shoots the dinkie cars at the scary monsters. Not sure what that will do, but use it anyways!";
 }
 toyCarLauncher.prototype = Object.create(tower.prototype);
 toyCarLauncher.prototype.constructor = toyCarLauncher;
@@ -781,6 +1096,7 @@ function lamp(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, on){
 	this.range = 180;
 	this.attackSpeed = 1;
 	this.on = false;
+	this.info = "Spots ghosts and changes those pesky bats. You may want to wipe off the dust...";
 }
 lamp.prototype = Object.create(tower.prototype);
 lamp.prototype.constructor = lamp;
@@ -819,6 +1135,7 @@ function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded
 	this.damage = 250;
 	this.range = 90;
 	this.attackSpeed = 4000;
+	this.info = "You think this is Superman? It's actually the action figure Dad steps on every night, and it really hurts!";
 }
 actionFigure.prototype = Object.create(tower.prototype);
 actionFigure.prototype.constructor = actionFigure;
@@ -834,6 +1151,7 @@ function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgrade
 	this.range = 250;
 	this.attackSpeed = 700;
 	this.shotCounter = 0;
+	this.info = "Shoots marbles at the speed of sound! Every fifth marble may pack a punch!";
 }
 marbleShooter.prototype = Object.create(tower.prototype);
 marbleShooter.prototype.constructor = marbleShooter;
@@ -853,6 +1171,7 @@ function calculator(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	this.damage = 0;
 	this.range = 1;
 	this.attackSpeed = 5000;
+	this.info = "Allows for more spending which means more video games, tamagothchis, and pokemon cards.";
 }
 calculator.prototype = Object.create(tower.prototype);
 calculator.prototype.constructor = calculator;
@@ -868,6 +1187,7 @@ function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded
 	this.range = 135;
 	this.attackSpeed = 800;
 	this.baseDamage = 15;
+	this.info = "Nuts do basic damage and if this tower shoots a bolt, expect lots of damage.";
 }
 nutsAndBolts.prototype = Object.create(tower.prototype);
 nutsAndBolts.prototype.constructor = nutsAndBolts;
@@ -899,6 +1219,7 @@ function blenderDefender(cost, damage, range, attackSpeed, xCoord, yCoord, upgra
 	this.damage = 0.5;
 	this.range = 80;
 	this.attackSpeed = 50;
+	this.info = "May blend enemies into a delicious smoothie.";
 }
 blenderDefender.prototype = Object.create(tower.prototype);
 blenderDefender.prototype.constructor = blenderDefender;
@@ -913,6 +1234,7 @@ function waterGun(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, ta
 	this.damage = 2;
 	this.range = 150;
 	this.attackSpeed = 200;
+	this.info = "Enough force to slow enemies as they approach.";
 }
 waterGun.prototype = Object.create(tower.prototype);
 waterGun.prototype.constructor = waterGun;
@@ -927,6 +1249,7 @@ function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgr
 	this.damage = 200;
 	this.range = 500;
 	this.attackSpeed = 2000;
+	this.info = "Shoots paper airplanes the kid made. How did they find the time to make all of these?";
 }
 airplaneLauncher.prototype = Object.create(tower.prototype);
 airplaneLauncher.prototype.constructor = airplaneLauncher;
@@ -941,6 +1264,7 @@ function trophy(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	this.damage = 0;
 	this.range = 200;
 	this.attackSpeed = 1000;
+	this.info = "Remember when the child won the spelling bee? I certainly don't. This buffs other towers.";
 }
 trophy.prototype = Object.create(tower.prototype);
 trophy.prototype.constructor = trophy;
@@ -956,6 +1280,7 @@ function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded
 	this.damage = 500;
 	this.range = 500000;
 	this.attackSpeed = 6000; 
+	this.info = "Caution! Three per customer as per the nightmare safety regulations.";
 }
 vanquishEvil.prototype = Object.create(tower.prototype);
 vanquishEvil.prototype.constructor = vanquishEvil;
@@ -972,7 +1297,7 @@ function createTowerObject(towerType, x, y){
 	
 	Gold -= tempTowerObject.cost;
 	
-	if (show == false){
+	if (showGrid == false){
 		togGrid();
 	}
 	if (circleCheck == true){
@@ -1001,8 +1326,8 @@ function placeTower(towerType){
 	if (circleCheck == false){
 		circleCheck = true;
 	}
-	if (show == true){
-	togGrid();
+	if (showGrid == true){
+		togGrid();
 	}
 	var towerPlaceholder = new (eval(towerType))();
 	tempRange = towerPlaceholder.range;
@@ -1028,12 +1353,12 @@ function placeTower(towerType){
 			if ( ((stagePaths[currentStage])[i].x - towerLocationsByPixelPosition[numOfTowers].x > -30) && ((stagePaths[currentStage])[i].x - towerLocationsByPixelPosition[numOfTowers].x < 60) && ((stagePaths[currentStage])[i].y - towerLocationsByPixelPosition[numOfTowers].y > -15) && ((stagePaths[currentStage])[i].y - towerLocationsByPixelPosition[numOfTowers].y < 60) ){
 				objObstruct = true;
 				gameMessage = "Failed to place. Too close to the path.";
-				if (show == false){
-				togGrid();
+				if (showGrid == false){
+					togGrid();
 				}
-				if (circleCheck == true){
-				circleCheck = false;
-				}
+				if ( circleCheck == true ) {
+					circleCheck = false;
+				}	
 			}
 		}
 		if (numOfTowers > 0){
@@ -1092,17 +1417,93 @@ function rotateTower(towerX, towerY, enemyX, enemyY) {
 	return c;
 }
 
+function clearTowerStats () {
+	outputTowerStats.innerHTML = "";
+}
+
+HTMLID_toyCarLauncher.addEventListener( "mouseout", clearTowerStats ); 
+HTMLID_actionFigure.addEventListener( "mouseout", clearTowerStats );
+HTMLID_marbleShooter.addEventListener( "mouseout", clearTowerStats );
+HTMLID_lamp.addEventListener( "mouseout", clearTowerStats );
+HTMLID_calculator.addEventListener( "mouseout", clearTowerStats );
+HTMLID_nutsAndBolts.addEventListener( "mouseout", clearTowerStats );
+HTMLID_blenderDefender.addEventListener( "mouseout", clearTowerStats );
+HTMLID_mouseTrap.addEventListener( "mouseout", clearTowerStats );
+HTMLID_waterGun.addEventListener( "mouseout", clearTowerStats );
+HTMLID_airplaneLauncher.addEventListener( "mouseout", clearTowerStats );
+HTMLID_trophy.addEventListener( "mouseout", clearTowerStats );
+HTMLID_vanquishEvil.addEventListener( "mouseout", clearTowerStats );
+
+HTMLID_toyCarLauncher.addEventListener( "mouseover", function() { getStats('toyCarLauncher'); });
+HTMLID_actionFigure.addEventListener( "mouseover", function() { getStats('actionFigure'); });
+HTMLID_marbleShooter.addEventListener( "mouseover", function() { getStats('marbleShooter'); });
+HTMLID_lamp.addEventListener( "mouseover", function() { getStats('lamp'); });
+HTMLID_calculator.addEventListener( "mouseover", function() { getStats('calculator'); });
+HTMLID_nutsAndBolts.addEventListener( "mouseover", function() { getStats('nutsAndBolts'); });
+HTMLID_blenderDefender.addEventListener( "mouseover", function() { getStats('blenderDefender'); });
+HTMLID_mouseTrap.addEventListener( "mouseover", function() { getStats('mouseTrap'); });
+HTMLID_waterGun.addEventListener( "mouseover", function() { getStats('waterGun'); });
+HTMLID_airplaneLauncher.addEventListener( "mouseover", function() { getStats('airplaneLauncher'); });
+HTMLID_trophy.addEventListener( "mouseover", function() { getStats('trophy'); });
+HTMLID_vanquishEvil.addEventListener( "mouseover", function() { getStats('vanquishEvil'); });
+
+HTMLID_toyCarLauncher.addEventListener( "click", function() { placeTower('toyCarLauncher'); });
+HTMLID_actionFigure.addEventListener( "click", function() { placeTower('actionFigure'); });
+HTMLID_marbleShooter.addEventListener( "click", function() { placeTower('marbleShooter'); });
+HTMLID_lamp.addEventListener( "click", function() { placeTower('lamp'); });
+HTMLID_calculator.addEventListener( "click", function() { placeTower('calculator'); });
+HTMLID_nutsAndBolts.addEventListener( "click", function() { placeTower('nutsAndBolts'); });
+HTMLID_blenderDefender.addEventListener( "click", function() { placeTower('blenderDefender'); });
+HTMLID_mouseTrap.addEventListener( "click", function() { placeTower('mouseTrap'); });
+HTMLID_waterGun.addEventListener( "click", function() { placeTower('waterGun'); });
+HTMLID_airplaneLauncher.addEventListener( "click", function() { placeTower('airplaneLauncher'); });
+HTMLID_trophy.addEventListener( "click", function() { placeTower('trophy'); });
+HTMLID_vanquishEvil.addEventListener( "click", function() { placeTower('vanquishEvil'); });
+
+canvas.addEventListener( "mousemove", function(e) { cursorX = e.clientX; cursorY = e.clientY; });
+
 function getStats(turret) {
-	var outputCost = document.querySelector("#outputCost-" + turret);
-	var outputDamage = document.querySelector("#outputDamage-" + turret);
-	var outputRange = document.querySelector("#outputRange-" + turret);
-	var outputAspd = document.querySelector("#outputAspd-" + turret);
 	
 	var towerPlaceholder = new (eval(turret))();
-	outputCost.innerHTML = "Cost: " + towerPlaceholder.cost;
+
+	/*outputCost.innerHTML = "Cost: " + towerPlaceholder.cost;
 	outputDamage.innerHTML = "Damage: " + towerPlaceholder.damage;
 	outputRange.innerHTML = "Range: " + towerPlaceholder.range;
-	outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed + " (Reload Time)";
+	outputAspd.innerHTML = "Attack Speed: " + towerPlaceholder.attackSpeed + " (Reload Time)";*/
+
+	switch (towerPlaceholder.constructor.name) {
+		case "toyCarLauncher":
+			outputTowerStats.innerHTML = "Toy Car Launcher"; break;
+		case "actionFigure":
+			outputTowerStats.innerHTML = "Action Figure"; break;
+		case "marbleShooter":
+			outputTowerStats.innerHTML = "Marble Shooter"; break;
+		case "lamp":
+			outputTowerStats.innerHTML = "Lava Lamp"; break;
+		case "calculator":
+			outputTowerStats.innerHTML = "Calculator"; break;
+		case "nutsAndBolts":
+			outputTowerStats.innerHTML = "Nuts and Bolts Shooter"; break;
+		case "blenderDefender":
+			outputTowerStats.innerHTML = "Blender Defender"; break;
+		case "mouseTrap":
+			outputTowerStats.innerHTML = "Mouse Trap"; break;
+		case "waterGun":
+			outputTowerStats.innerHTML = "Water Gun"; break;
+		case "airPlaneLauncher":
+			outputTowerStats.innerHTML = "Air Plane Launcher"; break;
+		case "trophy":
+			outputTowerStats.innerHTML = "Trophy"; break;
+		case "vanquishEvil":
+			outputTowerStats.innerHTML = "Vanquish Evil"; break;
+	
+	}
+	outputTowerStats.innerHTML += "<br>Cost: " + towerPlaceholder.cost;
+	outputTowerStats.innerHTML += "<br>Damage: " + towerPlaceholder.damage;
+	outputTowerStats.innerHTML += "<br>Range: " + towerPlaceholder.range;
+	outputTowerStats.innerHTML += "<br>Attack Speed: " + towerPlaceholder.attackSpeed + " (Reload Time)";
+	outputTowerStats.innerHTML += "<br>" + towerPlaceholder.info; 
+	//console.log(outputTowerStats);
 }
 
 var cursorX;
@@ -1111,6 +1512,7 @@ var circleCheck = false;
 document.getElementById("canvas").onmousemove = function(){mouseCoord(event)};
 document.getElementById("canvas").onmouseout = function(){resetCoord()};
 
+<<<<<<< HEAD
 function mouseCoord(e){
 	cursorX = e.clientX;
 	cursorY = e.clientY;
@@ -1126,12 +1528,33 @@ function drawRange(){
 		ctx.beginPath();
 		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
 		ctx.stroke();
+=======
+var tempArray = [];
+
+function storeTowerCoord(){
+	if (towersOnBoard.length > 0){
+		if (tempArray.length > 0){
+			for (var i = 0; i <= towersOnBoard.length-1; i++){
+				for (var j = 0; j <= tempArray.length-1; j++){
+					if ((towersOnBoard[i].xCoord != tempArray[j][0]) && (towersOnBoard[i].yCoord != tempArray[j][1])){
+						tempArray.push([towersOnBoard[i].xCoord, towersOnBoard[i].yCoord,true]);
+						console.log("pls");
+					}
+				}
+			}
+		}
+		else{
+			tempArray.push([towersOnBoard[0].xCoord, towersOnBoard[0].yCoord,true]);
+			console.log(tempArray);
+		}
+>>>>>>> refs/remotes/origin/Neil-Is-New
 	}
 }
 var tempx;
 var tempy;
 var testing = false;
 
+<<<<<<< HEAD
 function change(){
 	if (testing == false){
 		testing = true;
@@ -1149,9 +1572,25 @@ function drawBox(){
 		ctx.lineTo(tempx+45,tempy);
 		ctx.lineTo(tempx,tempy);
 		ctx.stroke();
+=======
+function drawBox(){
+	if (tempArray.length > 0){
+		for (i = 0; i <= tempArray.length-1;i++){
+			if (tempArray[i][2] == true){
+				ctx.beginPath();
+				ctx.moveTo(tempArray[i][0],tempArray[i][1]);
+				ctx.lineTo(tempArray[i][0],tempArray[i][1]+45);
+				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]+45);
+				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]);
+				ctx.lineTo(tempArray[i][0],tempArray[i][1]);
+				ctx.stroke();
+			}
+		}
+>>>>>>> refs/remotes/origin/Neil-Is-New
 	}
 }
 function hoverCheck(){
+	document.getElementById('canvas').addEventListener ("click", storeTowerCoord);
 	if (towersOnBoard.length > 0)
 	{
 		for (var i = 0; i <= (towersOnBoard.length-1); i++){
@@ -1178,23 +1617,24 @@ initGame();
 function initGame()
 {
 	currentStageImage.src = "../images/" + stageImages[currentStage];
-	outputHp.innerHTML = "<b>Health: </b>" + Hp;
-	outputGold.innerHTML = "<b>Gold: </b>" + Gold;
-	outputGameMessage.innerHTML = gameMessage;
+	towerAvailable();
 	render();
 }
 
 //Update Game
 function update(){
-	outputHp.innerHTML = "<b>Health: </b>" + Hp;
-	outputGold.innerHTML = "<b>Gold: </b>" + Gold;
+
+	outputPlayerStats.innerHTML = "<b>Health: </b>" + Hp;
+	outputPlayerStats.innerHTML += "<br><b>Gold: </b>" + Gold;
+	outputPlayerStats.innerHTML += "<br><b>Level: </b>" + (currentStage + 1);
+	outputPlayerStats.innerHTML += "<br><b>Wave: </b>" + (waveCounter + 1);
+
 	outputGameMessage.innerHTML = gameMessage;
-	outputStageName.innerHTML = stages[currentStage];	
-	outputLevel.innerHTML = "<b>Level: </b>" + (currentStage+1);
-	outputWave.innerHTML = "<b>Wave: </b>" + (waveCounter+1);
-	towerAvailable();
+	outputStageName.innerHTML = stages[currentStage];
+
 	if(Hp <= 0){
 		gameMessage = "Game Over. You got rekt by your nightmares and peed your pants.";
+		gameOver();
 	}
 	
 	if (enemiesOnBoard.length > 0 && !pause){
@@ -1231,7 +1671,10 @@ function render(){
 	hoverCheck();
 	stageWin();
 	drawBox();
+<<<<<<< HEAD
 	//pathtest();
+=======
+>>>>>>> refs/remotes/origin/Neil-Is-New
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------
@@ -1251,32 +1694,57 @@ function renderLampCheck() {
 }
 
 function renderEnemyMovement() {
+	
+	//color health bar
+	ctx.fillStyle = "rgba(0,204,0, 0.9)";
+
 	for (var i = 0; i < enemiesOnBoard.length; i++) {
 		//draw enemies
-		if (enemiesOnBoard[i] instanceof bigBoss){
+		
+		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof redDemon || enemiesOnBoard[i] instanceof blueDemon || enemiesOnBoard[i] instanceof grizzlyBear) {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
-			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-32, 55, 60);
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-30, 55, 60);
 			//draw health bar
-			ctx.fillStyle = "rgb(0,204,0)";
-			ctx.fillRect(enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-37, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+			ctx.fillRect(enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-35, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
-		else if (enemiesOnBoard[i] instanceof bat){
+		else if (enemiesOnBoard[i] instanceof grimReaper) {
+			enemyImgToPrint.src = '../images/grimReaper.png';
+			if (enemiesOnBoard[i].isVisible == false) {
+				ctx.save();
+				ctx.globalAlpha = '0.3';
+				ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-30, 55, 60);
+				ctx.restore();
+				ctx.fillRect(enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-35, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+			}
+			else{
+				ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-30, 55, 60);
+				//draw health bar
+				ctx.fillRect(enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-35, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+			}
+		}
+		else if (enemiesOnBoard[i] instanceof miniBlob){
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-9, enemiesOnBoard[i].yCoord-9, 18, 18);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-9, enemiesOnBoard[i].yCoord-14, (18 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else if (enemiesOnBoard[i] instanceof bat) {
 			if (enemiesOnBoard[i].isVisible == true){
 				enemyImgToPrint.src = '../images/vampire.png';
 			}
 			else{
 				enemyImgToPrint.src = '../images/bat.png';
 			}
+		
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
 			//draw health bar
-			ctx.fillStyle = "rgb(0,204,0)";
 			ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
-		else{
+
+		else {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
 			//draw health bar
-			ctx.fillStyle = "rgb(0,204,0)";
 			ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
 	}
@@ -1285,17 +1753,20 @@ function renderEnemyMovement() {
 function renderTowerAndBullet() {
 	//iterate through towers
 	for (var i = 0; i < towersOnBoard.length; i++){
+		if ( ang != 720 ) {
+			oldAng = ang;
+		}
 		if (!(towersOnBoard[i] instanceof lamp)) {
 			towerImg.src = '../images/' + towersOnBoard[i].constructor.name + '.png';
 			//when there are no enemies on board, undefined parameters will be passed in to rotateTower. this if is to check and prevent it from passing through
 			if (!(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === undefined) && !(enemiesOnBoard[(towersOnBoard[i].targetIndice)] === -1)) {
 				ang = rotateTower(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].xCoord, enemiesOnBoard[(towersOnBoard[i].targetIndice)].yCoord);
 			} else {
-				ang = 0;
+				ang = 720;
 			}	
 
 			if(towersOnBoard[i] instanceof actionFigure || towersOnBoard[i] instanceof mouseTrap || towersOnBoard[i] instanceof blenderDefender || towersOnBoard[i] instanceof trophy || towersOnBoard[i] instanceof calculator){
-				ang = 0;
+				ang = 720;
 			}
 			//if tower is shooting then push new bullet to towersOnBoard.bulletArr[]
 			if (towersOnBoard[i].isShooting === 1) {
@@ -1314,10 +1785,12 @@ function renderTowerAndBullet() {
 				//origin to centre of tower
 				ctx.translate(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
 				ctx.translate(towerImg.width/2, towerImg.height/2);
-				//angle tower to target
-				ctx.rotate(Math.PI / 180 * ang);
-				//draw bullet with respect to trajectory parameter
-				ctx.fillRect(0, -(towersOnBoard[i].bulletArr[b].trajectory), 5, 5);
+				//angle bullet to target
+				if ( ang != 720 ) {
+					ctx.rotate(Math.PI / 180 * ang);
+					//draw bullet with respect to trajectory parameter
+					ctx.fillRect(0, -(towersOnBoard[i].bulletArr[b].trajectory), 5, 5);
+				}
 				//restore canvas state
 				ctx.restore();
 				//increment trajectory
@@ -1334,13 +1807,24 @@ function renderTowerAndBullet() {
 			ctx.save();
 			ctx.translate(towersOnBoard[i].xCoord,towersOnBoard[i].yCoord);
 			ctx.translate(towerImg.width/2,towerImg.height/2);
-			ctx.rotate(Math.PI / 180 * ang);
+			if ( ang != 720 ) {
+				ctx.rotate(Math.PI / 180 * ang);
+			} else if ( ang == 720 ) {
+				ctx.rotate( Math.PI / 180 * oldAng );
+			}
 			ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
 			ctx.restore();
 		}
 	}
 }
 
+function drawRange(){
+	if (circleCheck === true) {
+		ctx.beginPath();
+		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
+		ctx.stroke();
+	}
+}
 // end of render section -------------------------------------------------------------------------------
 
 var bossSpawned = false; //Checks to see if boss has spawned 
@@ -1348,7 +1832,7 @@ var bossSpawned = false; //Checks to see if boss has spawned
 function stageWin() {
 	var bActive = false; //If boss is on map, turns to true
 	for(var i = 0; i < enemiesOnBoard.length; i++) {
-		if (enemiesOnBoard[i] instanceof bigBoss) {
+		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof grimReaper) {
 			if (bossSpawned == false){
 				gameMessage = "BOSS INCOMING!";
 			}
@@ -1361,7 +1845,16 @@ function stageWin() {
 		bossSpawned = true;
 	}
 	
-	if (bActive == false && bossSpawned == true && Hp > 0) {
+	if (bActive == false && bossSpawned == true && Hp > 0 && enemiesOnBoard.length == 0 && currentStage == 3) {
+		gameMessage = "STAGE COMPLETE!";
+		cancelAnimationFrame(requestID);
+		requestID = undefined;
+		ctx.drawImage(stageTransition, 0, 0);
+		setTimeout(function(){ 
+			gameOver();
+		}, 4000);
+	}
+	else if (bActive == false && bossSpawned == true && Hp > 0 && enemiesOnBoard.length == 0) {
 		gameMessage = "STAGE COMPLETE!";
 		cancelAnimationFrame(requestID);
 		requestID = undefined;
@@ -1378,8 +1871,9 @@ function stageWin() {
 
 var stageWave = [[],[],[],[]];
 //Stage 1
-stageWave[0][0] = ["blueSkeleton", "blueSkeleton", "blueDemon"];
-stageWave[0][1] = ["blueSkeleton", "basicSkeleton"];
+
+stageWave[0][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBoss"];
+stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "blueSkeleton"];
 stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[0][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
@@ -1389,7 +1883,7 @@ stageWave[0][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton
 stageWave[0][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[0][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
 //Stage 2
-stageWave[1][0] = ["bat"];
+stageWave[1][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBlob"];
 stageWave[1][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[1][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[1][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
@@ -1398,9 +1892,9 @@ stageWave[1][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton
 stageWave[1][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[1][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
 stageWave[1][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[1][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+stageWave[1][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBlob"];
 //Stage 3
-stageWave[2][0] = ["blueSkeleton"];
+stageWave[2][0] = ["blueSkeleton", "grizzlyBear", "grizzlyBear"];
 stageWave[2][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[2][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[2][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
@@ -1411,7 +1905,7 @@ stageWave[2][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton
 stageWave[2][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[2][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
 //Stage 4
-stageWave[3][0] = ["witch", "witch", "witch", "witch", "witch", "witch", "witch", "witch", "witch"];
+stageWave[3][0] = ["grimReaper", "blueDemon"];
 stageWave[3][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[3][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[3][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
@@ -1446,7 +1940,7 @@ function nextWave (){
 				}
 				clearInterval(wave); 
 			}
-		}, 1500);
+		}, 2000);
 	}
 }
 
@@ -1478,67 +1972,51 @@ function pauseGame(){
 	}
 }
 
-
-var disabledTowers = document.getElementsByClassName("disabledTower");
-var allSelected = document.getElementsByClassName("tower");
 function towerAvailable () {
 	//disable towers according to stage
-	
 	if (currentStage == 0) {
-		document.getElementById("toyCarLauncher").className = "tower";
-		document.getElementById("actionFigure").className = "tower";
-		document.getElementById("marbleShooter").className = "tower";
+		HTMLID_toyCarLauncher.className = "enabledTower";
+		HTMLID_actionFigure.className = "enabledTower";
+		HTMLID_marbleShooter.className = "enabledTower";
+		HTMLID_lamp.className = "disabledTower";
+		HTMLID_calculator.className = "disabledTower";
+		HTMLID_nutsAndBolts.className = "disabledTower";
+		HTMLID_blenderDefender.className = "disabledTower";
+		HTMLID_mouseTrap.className = "disabledTower";
+		HTMLID_waterGun.className = "disabledTower";
+		HTMLID_airplaneLauncher.className = "disabledTower";
+		HTMLID_trophy.className = "disabledTower";
+		HTMLID_vanquishEvil.className = "disabledTower";
 		
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
+		enableTowers();
+
 	} if (currentStage == 1) {
-		document.getElementById("lamp").className = "tower";
-		document.getElementById("calculator").className = "tower";
-		document.getElementById("nutsAndBolts").className = "tower";
+		HTMLID_lamp.className = "enabledTower";
+		HTMLID_calculator.className = "enabledTower";
+		HTMLID_nutsAndBolts.className = "enabledTower";
 		
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
-	}
-	if (currentStage == 2) {
-		document.getElementById("blenderDefender").className = "tower";
-		document.getElementById("mouseTrap").className = "tower";
-		document.getElementById("waterGun").className = "tower";
+		enableTowers();
+
+	} if (currentStage == 2) {
+		HTMLID_blenderDefender.className = "enabledTower";
+		HTMLID_mouseTrap.className = "enabledTower";
+		HTMLID_waterGun.className = "enabledTower";
 		
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
-	}
-	if (currentStage == 3) {
-		document.getElementById("toyCarLauncher").className = "tower";
-		document.getElementById("actionFigure").className = "tower";
-		document.getElementById("marbleShooter").className = "tower";
-		document.getElementById("lamp").className = "tower";
-		document.getElementById("calculator").className = "tower";
-		document.getElementById("nutsAndBolts").className = "tower";
-		document.getElementById("blenderDefender").className = "tower";
-		document.getElementById("mouseTrap").className = "tower";
-		document.getElementById("waterGun").className = "tower";
-		document.getElementById("airplaneLauncher").className = "tower";
-		document.getElementById("trophy").className = "tower";
-		document.getElementById("vanquishEvil").className = "tower";
+		enableTowers();
+
+	} if (currentStage == 3) {
+		HTMLID_toyCarLauncher.className = "enabledTower";
+		HTMLID_actionFigure.className = "enabledTower";
+		HTMLID_marbleShooter.className = "enabledTower";
+		HTMLID_lamp.className = "enabledTower";
+		HTMLID_calculator.className = "enabledTower";
+		HTMLID_nutsAndBolts.className = "enabledTower";
+		HTMLID_blenderDefender.className = "enabledTower";
+		HTMLID_mouseTrap.className = "enabledTower";
+		HTMLID_waterGun.className = "enabledTower";
+		HTMLID_airplaneLauncher.className = "enabledTower";
+		HTMLID_trophy.className = "enabledTower";
+		HTMLID_vanquishEvil.className = "enabledTower";
 		
 		//selects which tower to disable from witch
 		if (enemiesOnBoard.length > 0) {
@@ -1546,40 +2024,40 @@ function towerAvailable () {
 				if (enemiesOnBoard[i] instanceof witch) {
 					switch (enemiesOnBoard[i].towerStolen){
 						case 1:
-							document.getElementById("toyCarLauncher").className = "disabledTower";
+							HTMLID_toyCarLauncher.className = "disabledTower";
 							break;
 						case 2:
-							document.getElementById("actionFigure").className = "disabledTower";
+							HTMLID_actionFigure.className = "disabledTower";
 							break;
 						case 3:
-							document.getElementById("marbleShooter").className = "disabledTower";
+							HTMLID_marbleShooter.className = "disabledTower";
 							break;
 						case 4:
-							document.getElementById("lamp").className = "disabledTower";
+							HTMLID_lamp.className = "disabledTower";
 							break;
 						case 5:
-							document.getElementById("calculator").className = "disabledTower";
+							HTMLID_calculator.className = "disabledTower";
 							break;
 						case 6:
-							document.getElementById("nutsAndBolts").className = "disabledTower";
+							HTMLID_nutsAndBolts.className = "disabledTower";
 							break;
 						case 7:
-							document.getElementById("mouseTrap").className = "disabledTower";
+							HTMLID_mouseTrap.className = "disabledTower";
 							break;
 						case 8:
-							document.getElementById("blenderDefender").className = "disabledTower";
+							HTMLID_blenderDefender.className = "disabledTower";
 							break;
 						case 9:
-							document.getElementById("waterGun").className = "disabledTower";
+							HTMLID_waterGun.className = "disabledTower";
 							break;
 						case 10:
-							document.getElementById("airplaneLauncher").className = "disabledTower";
+							HTMLID_airplaneLauncher.className = "disabledTower";
 							break;
 						case 11:
-							document.getElementById("trophy").className = "disabledTower";
+							HTMLID_trophy.className = "disabledTower";
 							break;
 						case 12:
-							document.getElementById("vanquishEvil").className = "disabledTower";
+							HTMLID_vanquishEvil.className = "disabledTower";
 							break;
 						default:
 						
@@ -1588,13 +2066,35 @@ function towerAvailable () {
 			}
 		}
 		//disabledTowers = document.getElementsByClassName("disabledTower");
-		for (var i = 0; i < allSelected.length; i++) {
-			allSelected[i].style.opacity = '1.0';
-			allSelected[i].style.pointerEvents = 'auto';
-		}
-		for (var i = 0; i < disabledTowers.length; i++) {
-			disabledTowers[i].style.opacity = '0.3';
-			disabledTowers[i].style.pointerEvents = 'none';
-		}
+		enableTowers();
 	}	
 }
+
+function enableTowers() {
+
+	for (var i = 0; i < allSelected.length; i++) {
+		allSelected[i].style.opacity = '1.0';
+		allSelected[i].style.pointerEvents = 'auto';
+	}
+	for (var i = 0; i < disabledTowers.length; i++) {
+		disabledTowers[i].style.opacity = '0.3';
+		disabledTowers[i].style.pointerEvents = 'none';
+	}
+}
+
+function sellTower() {
+	if (tempArray > 0) {
+		for (var i  = 0; i <= tempArray.length-1; i++) {
+			if (((cursorX >= tempArray[i][0]) && (cursorX <= (tempArray[i][0]+45))) && ((cursorY >= tempArray[i][1]) && (cursorY <= tempArray[i][1]+45))) {
+				
+			}
+		}
+	}		
+}
+
+function sellButton() {
+	Gold += 50;
+	towersOnBoard.splice(i, j);
+}
+
+
