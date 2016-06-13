@@ -1310,7 +1310,7 @@ function createTowerObject(towerType, x, y){
 	}
 	//Temp console log for debugging, can be removed later.
 	//console.log("NEW " + towerType + " MADE!");
-	//console.log("Cost = " + towersOnBoard[towersOnBoard.length-1].cost);
+	console.log("Cost = " + towersOnBoard[towersOnBoard.length-1].cost);
 	//console.log("Damage = " + towersOnBoard[towersOnBoard.length-1].damage);
 	//console.log("Range = " + towersOnBoard[towersOnBoard.length-1].range);
 	//console.log("Attack Speed = " + towersOnBoard[towersOnBoard.length-1].attackSpeed);
@@ -1336,7 +1336,7 @@ function placeTower(towerType){
 	}
 	var towerPlaceholder = new (eval(towerType))();
 	tempRange = towerPlaceholder.range;
-	
+	console.log("test");
 	function handler(e){
 	event = e;
 		towerxy.x = event.clientX+5;     // Get the horizontal coordinate, 5 pixel offset as a margin of error for the player
@@ -1592,6 +1592,7 @@ function drawBox(){
 				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]);
 				ctx.lineTo(tempArray[i][0],tempArray[i][1]);
 				ctx.stroke();
+				//tempArray[i][2] = false;
 			}
 		}
 	}
@@ -2072,7 +2073,6 @@ function enableTowers() {
 		disabledTowers[i].style.opacity = '0.3';
 		disabledTowers[i].style.pointerEvents = 'none';
 	}
-<<<<<<< HEAD
 }
 
 function sellTower() {
@@ -2083,6 +2083,4 @@ function sellTower() {
 			}
 		}
 	}		
-=======
->>>>>>> refs/remotes/origin/staging
 }
