@@ -14,86 +14,57 @@
 		<!--Temporary display of path, will be removed when path and stage image are the same picture-->
 		<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2">
 		
-		<!-- 
-		<img src="../images/sound_on.png" id=mute onclick="changeImage()">
-		-->
-		<audio id=background_audio src="../audio/They're Here.mp3" loop="true" autoplay="true" controls></audio>
+		<audio id=background_audio src="../audio/StarEater.mp3" loop="true" autoplay="true"></audio>
 		
 		<div class="UI">	
 			
-			<div class ="turret">
-				<img id="toyCarLauncher" onclick=placeTower("toyCarLauncher") onmouseover=getStats("toyCarLauncher") width="45" height="45" style="position:absolute; margin: 30px 30px 30px 30px; border: 2px solid black"src="../images/toyCarLauncher.png">
-				<div class ="towerStats">
-					Toy-Car Launcher <br>
-					<p id="outputCost-toyCarLauncher"></p>
-					<p id="outputDamage-toyCarLauncher"></p>
-					<p id="outputRange-toyCarLauncher"></p>
-					<p id="outputAspd-toyCarLauncher"></p>
-				</div>
+			<p id="stageName"></p>
+
+			<table class="turretWrapper">
+				<tr>
+					<td><img class="turret" id="toyCarLauncher" width="45" height="45" src="../images/toyCarLauncher.png"></td>
+					<td><img class="turret" id="marbleShooter" width="45" height="45" src="../images/marbleShooter.png"></td>
+					<td><img class="turret" id="actionFigure" width="45" height="45" src="../images/actionFigure.png"></td>
+					<td><img class="turret" id="calculator" width="45" height="45" src="../images/calculator.png"></td>
+					<td><img class="turret" id="waterGun" width="45" height="45" src="../images/waterGun.png"></td>
+					<td><img class="turret" id="nutsAndBolts" width="45" height="45" src="../images/nutsAndBolts.png"></td>
+				</tr>
+				<tr>
+					<td><img class="turret" id="airplaneLauncher" width="45" height="45" src="../images/airplaneLauncher.png"></td>
+					<td><img class="turret" id="mouseTrap" width="45" height="45" src="../images/mouseTrap.png"></td>
+					<td><img class="turret" id="trophy" width="45" height="45" src="../images/trophy.png"></td>
+					<td><img class="turret" id="lamp" width="45" height="45" src="../images/lamp.png"></td>
+					<td><img class="turret" id="blenderDefender" width="45" height="45" src="../images/blenderDefender.png"></td>
+					<td><img class="turret" id="vanquishEvil" width="45" height="45" src="../images/vanquishEvil.png"></td>
+				</tr>
+			</table>
+			
+			<div class="towerStats">
+				<p id="outputTowerStats"></p>
+			</div>
+			<div class="playerInfo">
+				<p id="outputPlayerStats"></p>
 			</div>
 			
-			<div class ="turret">
-				<img id="lamp" onclick=placeTower("lamp") onmouseover=getStats("lamp") width="45" height="45" style="position:absolute; margin: 80px 30px 30px 30px; border: 2px solid black"src="../images/lamp.png">
-				<div class ="towerStats">
-					Lamp <br>
-					<p id="outputCost-lamp"></p>
-					<p id="outputDamage-lamp"></p>
-					<p id="outputRange-lamp"></p>
-					<p id="outputAspd-lamp"></p>
-					<p>Ability: Alows ghosts in range of lamps to be seen by other towers.</p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img <img id="actionFigure" onclick=placeTower("actionFigure") onmouseover=getStats("actionFigure") width="45" height="45" style="position:absolute; margin: 130px 30px 30px 30px; border: 2px solid black"src="../images/actionFigure.png">
-				<div class ="towerStats">
-					Action Figure <br>
-					<p id="outputCost-actionFigure"></p>
-					<p id="outputDamage-actionFigure"></p>
-					<p id="outputRange-actionFigure"></p>
-					<p id="outputAspd-actionFigure"></p>
-				</div>
-			</div>
-			
-			<div class="turret">
-				<img <img id="marbleShooter" onclick=placeTower("marbleShooter") onmouseover=getStats("marbleShooter") width="45" height="45" style="position:absolute; margin: 180px 30px 30px 30px; border: 2px solid black"src="../images/marbleShooter.png">
-				<div class ="towerStats">
-					Marble Shooter <br>
-					<p id="outputCost-marbleShooter"></p>
-					<p id="outputDamage-marbleShooter"></p>
-					<p id="outputRange-marbleShooter"></p>
-					<p id="outputAspd-marbleShooter"></p>
-					<p>Ability: Power of this tower's every 5th shot is doubled.</p>
-				</div>
-			</div>
-			
-			<p id = "stageName" style="margin:10px 10px -50px 140px; font-size: 22px;"></p>
-			
-			<div class ="info">
-				<p id="outputHp"></p>
-				<p id="outputGold"></p>
-				<p id="outputLevel"></p>
-				<p>Wave: 1</p>
+			<div class="navBar">
+				<ul id="menu">
+					<li id="mainMenu"><a href="#" onclick=menu()><img src="../images/return.png" height="32" width="32"><img></a></li>
+					<li id="game_pause"><a href="#" onclick="pauseGame()"><img src="../images/pause.png" onclick="changePauseImage()" height="32" width="32" id="image_change"></a></li>
+					<li id="toggleAudio"><a href="#"><img src="../images/sound_on.png" id="mute" onclick="changeAudioImage()"></a></li>
+				</ul>
 			</div>
 			
 			<div class="buttons">
-				<button class= "btnDress" id="sampleWave" onclick=sampleWave()>Sample Wave</button>
-				<button class= "btnDress" id="menu" onclick=menu()>Main Menu</button>
-				<button class= "btnDress" id="prevStage" onclick=prevStage()>Previous Stage</button><br>
-				<button class= "btnDress" id="nextStage" onclick=nextStage()>Next Stage</button><br>
+				<button class= "btnDress" id="nextWave" onclick=nextWave()>Next Wave</button>
+				<button class= "btnDress" id="nextStage" onclick=nextStage()>Next Stage</button>
 				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
 			</div>
 			
 			<div class="message">
-				<p id = "gameMessage" style="margin:10px 50px -50px 30px; font-size: 18px;"></p>
+				<p id="gameMessage"></p>
 			</div>
 			
-			<img src="../images/sound_on.png" id=mute onclick="changeImage()" style="margin: 20px 10px 10px 350px;">
-			
-			<div class="hidden">
-			</div>
 		</div>
-		<script src="JS.js"></script>
 		
 		<script>
 		var audio = document.getElementById('background_audio')
@@ -104,11 +75,11 @@
 		e.preventDefault();
 		}, false);
 		
-		function changeImage() {
+		function changeAudioImage() {
 			var image = document.getElementById('mute');
 			if(image.src.match("sound_on")) 
 			{
-			image.src = "../images/sound_off.png";
+				image.src = "../images/sound_off.png";
 			}
 			else 
 			{
@@ -116,7 +87,20 @@
 			}
 		}
 		
-		</script>
+		function changePauseImage(){
+			var image = document.getElementById('image_change')
+			if(image.src.match("pause"))
+			{
+				image.src = "../images/play.png";
+			}
+			else 
+			{
+				image.src = "../images/pause.png";
+			}
+		}
 		
+		</script>
+
+		<script src="JS.js"></script>
 	</body>
 </html>

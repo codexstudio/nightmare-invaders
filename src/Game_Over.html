@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+<title>Nightmare Invaders</title>
+<style>
+
+@font-face
+{
+	font-family: BoneText; 
+	src: url(SketchBones.ttf);
+}
+body
+{
+	font-family: BoneText;
+	background-image: url("../images/menu-background.png");
+	background-size: 900px 600px;
+	background-repeat: no-repeat;
+}
+#gameOver
+{
+	color: black;
+	margin-left: 275px;
+	font-size: 60px;
+	font-weight: bold;
+	font-stretch: ultra-condensed;
+	text-decoration: none;
+}
+audio
+{
+	opacity: 0; 
+}
+#mute
+{
+	margin-left: 850px;
+	margin-top: 120px;
+}
+</style>
+</head>
+<body>
+
+<audio id=background_audio src="../audio/They're Here.mp3" loop="true" autoplay="true " controls></audio>
+<br><br><br><br><br><br><br><br><br><br><br>
+<a id=gameOver>Game Over</a>
+<br><br><br><br><br><br>
+<img src="../images/sound_on.png" id=mute onclick="changeImage()">
+</body>        
+</html>
+
+<script>
+var audio = document.getElementById('background_audio')
+document.getElementById('mute').addEventListener('click', function (e)
+{
+	e = e || window.event;
+	audio.muted = !audio.muted;
+	e.preventDefault();
+}, false);
+function changeImage()
+	{
+		var image = document.getElementById('mute');
+		if(image.src.match("sound_on")) 
+		{
+		image.src = "../images/sound_off.png";
+		}
+		else 
+		{
+			image.src = "../images/sound_on.png";
+		}
+	}
+ setTimeout(function(){
+	window.location="Menu.html";
+}, 2000);
+</script>
