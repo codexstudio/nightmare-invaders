@@ -31,6 +31,14 @@ body{
 	width: 900px;
 	height: 600px;
 }
+
+#gameCleared{
+	z-index: 5;
+	display:none;
+	width: 900px;
+	height: 600px;
+}
+
 #menu{
 	list-style-type: none;
 	margin: 0;

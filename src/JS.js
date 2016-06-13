@@ -190,8 +190,13 @@ const TRAJ_SPEED = 10;
 function menu(){
 	window.location="Menu.html";
 }
+
 function gameOver(){
 	window.location = "Game_Over.html";
+}
+
+function gameWin() {
+	ctx.drawImage(gameCleared, 0, 0);
 }
 
 function prevStage(){
@@ -1815,6 +1820,7 @@ function drawRange(){
 // end of render section -------------------------------------------------------------------------------
 
 var bossSpawned = false; //Checks to see if boss has spawned 
+
 //Checks if player has beat the current stage
 function stageWin() {
 	var bActive = false; //If boss is on map, turns to true
@@ -1838,7 +1844,7 @@ function stageWin() {
 		requestID = undefined;
 		ctx.drawImage(stageTransition, 0, 0);
 		setTimeout(function(){ 
-			gameOver();
+			gameWin();
 		}, 4000);
 	}
 	else if (bActive == false && bossSpawned == true && Hp > 0 && enemiesOnBoard.length == 0) {
@@ -2066,6 +2072,7 @@ function enableTowers() {
 		disabledTowers[i].style.opacity = '0.3';
 		disabledTowers[i].style.pointerEvents = 'none';
 	}
+<<<<<<< HEAD
 }
 
 function sellTower() {
@@ -2076,4 +2083,6 @@ function sellTower() {
 			}
 		}
 	}		
+=======
+>>>>>>> refs/remotes/origin/staging
 }
