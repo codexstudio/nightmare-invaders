@@ -1210,7 +1210,7 @@ function toaster(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isB
 	this.damage = 75;
 	this.range = 135;
 	this.attackSpeed = 2000;
-	this.info = "Don't be fooled by it's cute design, it will fire hot toast to burn your enemies to cinders.";
+	this.info = "Don't be fooled by it's cute toasty design, it will fire hot toast to toast your enemies to toasty bits. Toast those enemies! TOOAAAST!!";
 }
 toaster.prototype = Object.create(tower.prototype);
 toaster.prototype.constructor = toaster;
