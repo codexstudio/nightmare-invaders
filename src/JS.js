@@ -175,7 +175,7 @@ var HTMLID_lamp = document.getElementById("lamp");
 var HTMLID_calculator = document.getElementById("calculator");
 var HTMLID_nutsAndBolts = document.getElementById("nutsAndBolts");
 var HTMLID_blenderDefender = document.getElementById("blenderDefender");
-var HTMLID_mouseTrap = document.getElementById("mouseTrap");
+var HTMLID_toaster = document.getElementById("toaster");
 var HTMLID_waterGun = document.getElementById("waterGun");
 var HTMLID_airplaneLauncher = document.getElementById("airplaneLauncher");
 var HTMLID_trophy = document.getElementById("trophy");
@@ -1009,7 +1009,7 @@ tower.prototype.attack = function(towerObj, towerName){
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "nutsAndBolts") {
 			towerObj.critChance(); 
 		}
-		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName != "lamp" && towerName != "calculator" && towerName != "trophy" && towerName != "mouseTrap"){
+		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName != "lamp" && towerName != "calculator" && towerName != "trophy"){
 			
 			for (var a = 0; a < enemiesOnBoard.length; a++){
 				var i = a;
@@ -1040,7 +1040,6 @@ tower.prototype.attack = function(towerObj, towerName){
 					var j = b;
 					if (enemiesOnBoard[j].pathPos == max){
 						//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
-						if(!(towersOnBoard[j] instanceof actionFigure || towersOnBoard[j] instanceof mouseTrap || towersOnBoard[j] instanceof blenderDefender || towersOnBoard[j] instanceof trophy || towersOnBoard[j] instanceof calculator)) {
 							towerObj.isShooting = 1;
 						}
 						towerObj.targetIndice = j;
@@ -1204,18 +1203,19 @@ nutsAndBolts.prototype.critChance = function() {
 		}
 };
 
-function mouseTrap(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed){
+function toaster(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed);
 	this.cost = 80;
 	this.damage = 75;
 	this.range = 135;
 	this.attackSpeed = 2000;
+	this.info = "Don't be fooled by it's cute design, it will fire hot toast to burn your enemies to cinders.";
 }
-mouseTrap.prototype = Object.create(tower.prototype);
-mouseTrap.prototype.constructor = mouseTrap;
+toaster.prototype = Object.create(tower.prototype);
+toaster.prototype.constructor = toaster;
 
-mouseTrap.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined mouseTrap Method.")
+toaster.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined toaster Method.")
 };
 
 function blenderDefender(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, isBuffed){
@@ -1440,7 +1440,7 @@ HTMLID_lamp.addEventListener( "mouseout", clearTowerStats );
 HTMLID_calculator.addEventListener( "mouseout", clearTowerStats );
 HTMLID_nutsAndBolts.addEventListener( "mouseout", clearTowerStats );
 HTMLID_blenderDefender.addEventListener( "mouseout", clearTowerStats );
-HTMLID_mouseTrap.addEventListener( "mouseout", clearTowerStats );
+HTMLID_toaster.addEventListener( "mouseout", clearTowerStats );
 HTMLID_waterGun.addEventListener( "mouseout", clearTowerStats );
 HTMLID_airplaneLauncher.addEventListener( "mouseout", clearTowerStats );
 HTMLID_trophy.addEventListener( "mouseout", clearTowerStats );
@@ -1453,7 +1453,7 @@ HTMLID_lamp.addEventListener( "mouseover", function() { getStats('lamp'); });
 HTMLID_calculator.addEventListener( "mouseover", function() { getStats('calculator'); });
 HTMLID_nutsAndBolts.addEventListener( "mouseover", function() { getStats('nutsAndBolts'); });
 HTMLID_blenderDefender.addEventListener( "mouseover", function() { getStats('blenderDefender'); });
-HTMLID_mouseTrap.addEventListener( "mouseover", function() { getStats('mouseTrap'); });
+HTMLID_toaster.addEventListener( "mouseover", function() { getStats('toaster'); });
 HTMLID_waterGun.addEventListener( "mouseover", function() { getStats('waterGun'); });
 HTMLID_airplaneLauncher.addEventListener( "mouseover", function() { getStats('airplaneLauncher'); });
 HTMLID_trophy.addEventListener( "mouseover", function() { getStats('trophy'); });
@@ -1466,7 +1466,7 @@ HTMLID_lamp.addEventListener( "click", function() { placeTower('lamp'); });
 HTMLID_calculator.addEventListener( "click", function() { placeTower('calculator'); });
 HTMLID_nutsAndBolts.addEventListener( "click", function() { placeTower('nutsAndBolts'); });
 HTMLID_blenderDefender.addEventListener( "click", function() { placeTower('blenderDefender'); });
-HTMLID_mouseTrap.addEventListener( "click", function() { placeTower('mouseTrap'); });
+HTMLID_toaster.addEventListener( "click", function() { placeTower('toaster'); });
 HTMLID_waterGun.addEventListener( "click", function() { placeTower('waterGun'); });
 HTMLID_airplaneLauncher.addEventListener( "click", function() { placeTower('airplaneLauncher'); });
 HTMLID_trophy.addEventListener( "click", function() { placeTower('trophy'); });
@@ -1498,8 +1498,8 @@ function getStats(turret) {
 			outputTowerStats.innerHTML = "Nuts and Bolts Shooter"; break;
 		case "blenderDefender":
 			outputTowerStats.innerHTML = "Blender Defender"; break;
-		case "mouseTrap":
-			outputTowerStats.innerHTML = "Mouse Trap"; break;
+		case "toaster":
+			outputTowerStats.innerHTML = "Toaster"; break;
 		case "waterGun":
 			outputTowerStats.innerHTML = "Water Gun"; break;
 		case "airplaneLauncher":
@@ -1671,7 +1671,6 @@ function renderTowerAndBullet() {
 				ang = 720;
 			}	
 
-			if(towersOnBoard[i] instanceof actionFigure || towersOnBoard[i] instanceof mouseTrap || towersOnBoard[i] instanceof blenderDefender || towersOnBoard[i] instanceof trophy || towersOnBoard[i] instanceof calculator){
 				ang = 720;
 			}
 			//if tower is shooting then push new bullet to towersOnBoard.bulletArr[]
@@ -1889,7 +1888,7 @@ function towerAvailable () {
 		HTMLID_calculator.className = "disabledTower";
 		HTMLID_nutsAndBolts.className = "disabledTower";
 		HTMLID_blenderDefender.className = "disabledTower";
-		HTMLID_mouseTrap.className = "disabledTower";
+		HTMLID_toaster.className = "disabledTower";
 		HTMLID_waterGun.className = "disabledTower";
 		HTMLID_airplaneLauncher.className = "disabledTower";
 		HTMLID_trophy.className = "disabledTower";
@@ -1906,7 +1905,7 @@ function towerAvailable () {
 
 	} if (currentStage == 2) {
 		HTMLID_blenderDefender.className = "enabledTower";
-		HTMLID_mouseTrap.className = "enabledTower";
+		HTMLID_toaster.className = "enabledTower";
 		HTMLID_waterGun.className = "enabledTower";
 		
 		enableTowers();
@@ -1919,7 +1918,7 @@ function towerAvailable () {
 		HTMLID_calculator.className = "enabledTower";
 		HTMLID_nutsAndBolts.className = "enabledTower";
 		HTMLID_blenderDefender.className = "enabledTower";
-		HTMLID_mouseTrap.className = "enabledTower";
+		HTMLID_toaster.className = "enabledTower";
 		HTMLID_waterGun.className = "enabledTower";
 		HTMLID_airplaneLauncher.className = "enabledTower";
 		HTMLID_trophy.className = "enabledTower";
@@ -1949,7 +1948,7 @@ function towerAvailable () {
 							HTMLID_nutsAndBolts.className = "disabledTower";
 							break;
 						case 7:
-							HTMLID_mouseTrap.className = "disabledTower";
+							HTMLID_toaster.className = "disabledTower";
 							break;
 						case 8:
 							HTMLID_blenderDefender.className = "disabledTower";
