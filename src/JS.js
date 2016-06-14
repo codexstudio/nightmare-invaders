@@ -2,35 +2,35 @@
 const fps = setInterval(update, 33.34); // 30fps
 
 var images = new Array();
-			function preload() {
-				for (i = 0; i < preload.arguments.length; i++) {
-					images[i] = new Image();
-					images[i].src = preload.arguments[i];
-				}
-			}
-			preload(
-				'../images/lamp.png',
-				'../images/lampOn.png',
-				'../images/ghost.png',
-				'../images/blueSkeleton.png',
-				'../images/basicSkeleton.png',
-				'../images/redSkeleton.png',
-				'../images/bigBoss.png',
-				'../images/bat.png',
-				'../images/vampire.png',
-				'../images/clown.png',
-				'../images/bigBlob.png',
-				'../images/blob.png',
-				'../images/miniBlob.png',
-				'../images/grizzlyBear.png',
-				'../images/witch.png',
-				'../images/blueDemon.png',
-				'../images/redDemon.png',
-				'../images/zombieDad.png',
-				'../images/zombieMom.png',
-				'../images/grimReaper.png'
-			)
-			
+function preload() {
+	for (i = 0; i < preload.arguments.length; i++) {
+		images[i] = new Image();
+		images[i].src = preload.arguments[i];
+	}
+}
+preload(
+	'../images/lamp.png',
+	'../images/lampOn.png',
+	'../images/ghost.png',
+	'../images/blueSkeleton.png',
+	'../images/basicSkeleton.png',
+	'../images/redSkeleton.png',
+	'../images/bigBoss.png',
+	'../images/bat.png',
+	'../images/vampire.png',
+	'../images/clown.png',
+	'../images/bigBlob.png',
+	'../images/blob.png',
+	'../images/miniBlob.png',
+	'../images/grizzlyBear.png',
+	'../images/witch.png',
+	'../images/blueDemon.png',
+	'../images/redDemon.png',
+	'../images/zombieDad.png',
+	'../images/zombieMom.png',
+	'../images/grimReaper.png'
+)
+		
 			
 //Determines the distance between two points
 function distance(x1, x2, y1, y2){
@@ -184,7 +184,6 @@ var HTMLID_vanquishEvil = document.getElementById("vanquishEvil");
 
 //global variables
 var ang = 0;
-var oldAng = 0;
 const TRAJ_SPEED = 10;
 
 function menu(){
@@ -965,7 +964,7 @@ var towerxy = {x:0, y:0};
 var objObstruct = false;
 
 //Tower blueprints section--------------------------------------------------------
-var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info){
+var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info, isBuffed){
 	this.cost = cost;
 	this.damage = damage;
 	this.range = range;
@@ -975,8 +974,10 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.upgraded = false;
 	this.targetIndice = -1;
 	this.isShooting = 0;
+	this.lastAngState = 0;
 	this.bulletArr = [];
 	this.info = info;
+	this.isBuffed = false;
 	this.attackEnemy;
 };
 
@@ -993,6 +994,9 @@ tower.prototype.attack = function(towerObj, towerName){
 		var max = 0;
 		towerObj.isShooting = 0;
 		
+		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "trophy"){
+			towerObj.towerBuff(); 
+		}
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "calculator"){
 			towerObj.goldBuff(); 
 		}
@@ -1075,8 +1079,8 @@ tower.prototype.attack = function(towerObj, towerName){
 };
 
 
-function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr);
+function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
 	this.cost = 50;
 	this.damage = 10;
 	this.range = 160;
@@ -1090,8 +1094,8 @@ toyCarLauncher.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined toyCarLauncher Method.")
 };
 
-function lamp(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, on){
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
+function lamp(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, on, isBuffed){
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed);
 	this.cost = 30;
 	this.damage = 0;
 	this.range = 180;
@@ -1130,8 +1134,8 @@ lamp.prototype.lampIO = function(){
 	}
 };
 
-function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice){
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice);
+function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isBuffed){
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isBuffed);
 	this.cost = 150;
 	this.damage = 250;
 	this.range = 90;
@@ -1145,8 +1149,8 @@ actionFigure.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Action Figure Method.")
 };
 
-function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter, isShooting, bulletArr){
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter, isShooting, bulletArr);
+function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter, isShooting, bulletArr, isBuffed){
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter, isShooting, bulletArr, isBuffed);
 	this.cost = 75;
 	this.damage = 10;
 	this.range = 250;
@@ -1181,8 +1185,8 @@ calculator.prototype.goldBuff = function(){
 	Gold += 5;
 };
 
-function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, baseDamage){
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr);
+function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, baseDamage, isBuffed){
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
 	this.cost = 90;
 	this.damage = 15;
 	this.range = 135;
@@ -1200,8 +1204,8 @@ nutsAndBolts.prototype.critChance = function() {
 		}
 };
 
-function mouseTrap(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
+function mouseTrap(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed){
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed);
 	this.cost = 80;
 	this.damage = 75;
 	this.range = 135;
@@ -1214,8 +1218,8 @@ mouseTrap.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined mouseTrap Method.")
 };
 
-function blenderDefender(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting){
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting);
+function blenderDefender(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, isBuffed){
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, isBuffed);
 	this.cost = 50;
 	this.damage = 0.5;
 	this.range = 80;
@@ -1229,8 +1233,8 @@ blenderDefender.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined blenderDefender Method.")
 };
 
-function waterGun(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr);
+function waterGun(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
 	this.cost = 50;
 	this.damage = 2;
 	this.range = 150;
@@ -1244,8 +1248,8 @@ waterGun.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined waterGun Method.")
 };
 
-function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr);
+function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
 	this.cost = 50;
 	this.damage = 200;
 	this.range = 500;
@@ -1261,22 +1265,29 @@ airplaneLauncher.prototype.thisChildMethodNeedsAName = function(){
 
 function trophy(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
-	this.cost = 300;
+	this.cost = 0;
 	this.damage = 0;
-	this.range = 200;
-	this.attackSpeed = 1000;
-	this.info = "Remember when the child won the spelling bee? I certainly don't. This buffs other towers.";
+	this.range = 100;
+	this.attackSpeed = 1;
+	this.info = "Remember when the child won the spelling bee? I certainly don't. This buffs other towers. No stacking.";
 }
 trophy.prototype = Object.create(tower.prototype);
 trophy.prototype.constructor = trophy;
 
-trophy.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined trophy Method.")
+trophy.prototype.towerBuff = function(){
+	for (var i = 0; i < towersOnBoard.length; i++){
+		var distanceFromTrophy = distance(this.xCoord, towersOnBoard[i].xCoord, this.yCoord, towersOnBoard[i].yCoord);
+		if (distanceFromTrophy < this.range && !(towersOnBoard[i] instanceof trophy) && !(towersOnBoard[i] instanceof calculator) && !(towersOnBoard[i] instanceof lamp) && towersOnBoard[i].isBuffed == false){
+			towersOnBoard[i].isBuffed = true;
+			towersOnBoard[i].range *= 1.25;
+			towersOnBoard[i].damage *= 1.25;
+		}
+	}
 };
 
-function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr){
+function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	
-	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr);
+	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
 	this.cost = 0;
 	this.damage = 500;
 	this.range = 500000;
@@ -1491,8 +1502,8 @@ function getStats(turret) {
 			outputTowerStats.innerHTML = "Mouse Trap"; break;
 		case "waterGun":
 			outputTowerStats.innerHTML = "Water Gun"; break;
-		case "airPlaneLauncher":
-			outputTowerStats.innerHTML = "Air Plane Launcher"; break;
+		case "airplaneLauncher":
+			outputTowerStats.innerHTML = "Paper Plane Launcher"; break;
 		case "trophy":
 			outputTowerStats.innerHTML = "Trophy"; break;
 		case "vanquishEvil":
@@ -1650,9 +1661,7 @@ function renderEnemyMovement() {
 function renderTowerAndBullet() {
 	//iterate through towers
 	for (var i = 0; i < towersOnBoard.length; i++){
-		if ( ang != 720 ) {
-			oldAng = ang;
-		}
+
 		if (!(towersOnBoard[i] instanceof lamp)) {
 			towerImg.src = '../images/' + towersOnBoard[i].constructor.name + '.png';
 			//when there are no enemies on board, undefined parameters will be passed in to rotateTower. this if is to check and prevent it from passing through
@@ -1687,6 +1696,7 @@ function renderTowerAndBullet() {
 					ctx.rotate(Math.PI / 180 * ang);
 					//draw bullet with respect to trajectory parameter
 					ctx.fillRect(0, -(towersOnBoard[i].bulletArr[b].trajectory), 5, 5);
+					towersOnBoard[i].lastAngState = ang;
 				}
 				//restore canvas state
 				ctx.restore();
@@ -1707,7 +1717,7 @@ function renderTowerAndBullet() {
 			if ( ang != 720 ) {
 				ctx.rotate(Math.PI / 180 * ang);
 			} else if ( ang == 720 ) {
-				ctx.rotate( Math.PI / 180 * oldAng );
+				ctx.rotate( Math.PI / 180 * towersOnBoard[i].lastAngState );
 			}
 			ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
 			ctx.restore();
@@ -1769,7 +1779,6 @@ function stageWin() {
 
 var stageWave = [[],[],[],[]];
 //Stage 1
-
 stageWave[0][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBoss"];
 stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "blueSkeleton"];
 stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
