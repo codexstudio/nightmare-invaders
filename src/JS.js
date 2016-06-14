@@ -350,13 +350,13 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			console.log();
 			for (var j = 0; j < enemiesOnBoard.length; j++){
 				if (enemiesOnBoard[j].pathPos > (stagePaths[currentStage]).length-1){
-					enemiesOnBoard.splice(j,1);
 					if (enemiesOnBoard[j] instanceof blueDemon) {
-						enemyObj.blueDemonExit;
+						enemyObj.blueDemonExit();
 					}
 					if (enemiesOnBoard[j] instanceof redDemon) {
-						enemyObj.redDemonExit;
+						enemyObj.redDemonExit();
 					}
+					enemiesOnBoard.splice(j,1);
 					break;
 				}
 			}
@@ -1885,7 +1885,7 @@ stageWave[1][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton
 stageWave[1][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[1][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBlob"];
 //Stage 3
-stageWave[2][0] = ["blueSkeleton", "grizzlyBear", "grizzlyBear"];
+stageWave[2][0] = ["redDemon", "blueDemon", "grizzlyBear", "grizzlyBear"];
 stageWave[2][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[2][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[2][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
