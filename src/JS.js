@@ -2,35 +2,35 @@
 const fps = setInterval(update, 33.34); // 30fps
 
 var images = new Array();
-			function preload() {
-				for (i = 0; i < preload.arguments.length; i++) {
-					images[i] = new Image();
-					images[i].src = preload.arguments[i];
-				}
-			}
-			preload(
-				'../images/lamp.png',
-				'../images/lampOn.png',
-				'../images/ghost.png',
-				'../images/blueSkeleton.png',
-				'../images/basicSkeleton.png',
-				'../images/redSkeleton.png',
-				'../images/bigBoss.png',
-				'../images/bat.png',
-				'../images/vampire.png',
-				'../images/clown.png',
-				'../images/bigBlob.png',
-				'../images/blob.png',
-				'../images/miniBlob.png',
-				'../images/grizzlyBear.png',
-				'../images/witch.png',
-				'../images/blueDemon.png',
-				'../images/redDemon.png',
-				'../images/zombieDad.png',
-				'../images/zombieMom.png',
-				'../images/grimReaper.png'
-			)
-			
+function preload() {
+	for (i = 0; i < preload.arguments.length; i++) {
+		images[i] = new Image();
+		images[i].src = preload.arguments[i];
+	}
+}
+preload(
+	'../images/lamp.png',
+	'../images/lampOn.png',
+	'../images/ghost.png',
+	'../images/blueSkeleton.png',
+	'../images/basicSkeleton.png',
+	'../images/redSkeleton.png',
+	'../images/bigBoss.png',
+	'../images/bat.png',
+	'../images/vampire.png',
+	'../images/clown.png',
+	'../images/bigBlob.png',
+	'../images/blob.png',
+	'../images/miniBlob.png',
+	'../images/grizzlyBear.png',
+	'../images/witch.png',
+	'../images/blueDemon.png',
+	'../images/redDemon.png',
+	'../images/zombieDad.png',
+	'../images/zombieMom.png',
+	'../images/grimReaper.png'
+)
+		
 			
 //Determines the distance between two points
 function distance(x1, x2, y1, y2){
@@ -184,7 +184,6 @@ var HTMLID_vanquishEvil = document.getElementById("vanquishEvil");
 
 //global variables
 var ang = 0;
-var oldAng = 0;
 const TRAJ_SPEED = 10;
 
 function menu(){
@@ -975,6 +974,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.upgraded = false;
 	this.targetIndice = -1;
 	this.isShooting = 0;
+	this.lastAngState = 0;
 	this.bulletArr = [];
 	this.info = info;
 	this.attackEnemy;
@@ -1491,8 +1491,8 @@ function getStats(turret) {
 			outputTowerStats.innerHTML = "Mouse Trap"; break;
 		case "waterGun":
 			outputTowerStats.innerHTML = "Water Gun"; break;
-		case "airPlaneLauncher":
-			outputTowerStats.innerHTML = "Air Plane Launcher"; break;
+		case "airplaneLauncher":
+			outputTowerStats.innerHTML = "Paper Plane Launcher"; break;
 		case "trophy":
 			outputTowerStats.innerHTML = "Trophy"; break;
 		case "vanquishEvil":
@@ -1650,9 +1650,7 @@ function renderEnemyMovement() {
 function renderTowerAndBullet() {
 	//iterate through towers
 	for (var i = 0; i < towersOnBoard.length; i++){
-		if ( ang != 720 ) {
-			oldAng = ang;
-		}
+
 		if (!(towersOnBoard[i] instanceof lamp)) {
 			towerImg.src = '../images/' + towersOnBoard[i].constructor.name + '.png';
 			//when there are no enemies on board, undefined parameters will be passed in to rotateTower. this if is to check and prevent it from passing through
@@ -1687,6 +1685,7 @@ function renderTowerAndBullet() {
 					ctx.rotate(Math.PI / 180 * ang);
 					//draw bullet with respect to trajectory parameter
 					ctx.fillRect(0, -(towersOnBoard[i].bulletArr[b].trajectory), 5, 5);
+					towersOnBoard[i].lastAngState = ang;
 				}
 				//restore canvas state
 				ctx.restore();
@@ -1707,7 +1706,7 @@ function renderTowerAndBullet() {
 			if ( ang != 720 ) {
 				ctx.rotate(Math.PI / 180 * ang);
 			} else if ( ang == 720 ) {
-				ctx.rotate( Math.PI / 180 * oldAng );
+				ctx.rotate( Math.PI / 180 * towersOnBoard[i].lastAngState );
 			}
 			ctx.drawImage(towerImg, -towerImg.width/2, -towerImg.height/2);
 			ctx.restore();
