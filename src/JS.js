@@ -1336,7 +1336,7 @@ function placeTower(towerType){
 	}
 	var towerPlaceholder = new (eval(towerType))();
 	tempRange = towerPlaceholder.range;
-	console.log("test");
+	
 	function handler(e){
 	event = e;
 		towerxy.x = event.clientX+5;     // Get the horizontal coordinate, 5 pixel offset as a margin of error for the player
@@ -1525,7 +1525,6 @@ function mouseCoord(e){
 function resetCoord(){
 	cursorX = undefined;
 	cursorY = undefined
-	console.log("test");
 }
 function drawRange(){
 	if (circleCheck === true){
@@ -1534,69 +1533,68 @@ function drawRange(){
 		ctx.stroke();
 	}
 }
-		
-var tempArray = [];
+
+function boxStatus(i){
+	if (storedCoordinates[i][2] == false){
+		storedCoordinates[i][2] = true;
+		console.log("true");
+	}
+	else{
+		storedCoordinates[i][2] = false;
+		console.log("false");
+	}
+}
+var storedCoordinates = [];
 
 function storeTowerCoord(){
-	if (towersOnBoard.length > 0){
-		if (tempArray.length > 0){
-			for (var i = 0; i <= towersOnBoard.length-1; i++){
-				for (var j = 0; j <= tempArray.length-1; j++){
-					if ((towersOnBoard[i].xCoord != tempArray[j][0]) && (towersOnBoard[i].yCoord != tempArray[j][1])){
-						tempArray.push([towersOnBoard[i].xCoord, towersOnBoard[i].yCoord,true]);
-						console.log("pls");
+	console.log(tempX,tempY);
+	if (((cursorX >= tempX) && (cursorX <= (tempX+45))) && ((cursorY >= tempY) && (cursorY <= (tempY+45)))){
+		if (towersOnBoard.length > 0){
+			console.log("step1");
+			console.log(storedCoordinates.length);
+			if (storedCoordinates.length > 0){
+				console.log("step2");
+				for (var i = 0; i <= storedCoordinates.length-1; i++){
+					console.log(storedCoordinates[0]);
+					console.log(storedCoordinates[1]);
+					console.log(storedCoordinates[2]);
+					console.log("step3");
+					if ((storedCoordinates[i][0] == tempX) && (storedCoordinates[i][1] == tempY)){
+						boxStatus(i);
+					}
+					else{
+						storedCoordinates.push([tempX,tempY,false]);
+						console.log("step5");
 					}
 				}
 			}
-		}
-		else{
-			tempArray.push([towersOnBoard[0].xCoord, towersOnBoard[0].yCoord,true]);
-			console.log(tempArray);
-		}
-	}
-}
-
-var tempx;
-var tempy;
-var testing = false;
-
-function change(){
-	if (testing == false){
-		testing = true;
-	}
-	else if (testing == true){
-		testing = false;
-	}
-}
-
-function drawBox(){
-	if (testing == true){
-		ctx.beginPath();
-		ctx.moveTo(tempx,tempy);
-		ctx.lineTo(tempx,tempy+45);
-		ctx.lineTo(tempx+45,tempy+45);
-		ctx.lineTo(tempx+45,tempy);
-		ctx.lineTo(tempx,tempy);
-		ctx.stroke();
-	}
-}
-
-function drawBox(){
-	if (tempArray.length > 0){
-		for (i = 0; i <= tempArray.length-1;i++){
-			if (tempArray[i][2] == true){
-				ctx.beginPath();
-				ctx.moveTo(tempArray[i][0],tempArray[i][1]);
-				ctx.lineTo(tempArray[i][0],tempArray[i][1]+45);
-				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]+45);
-				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]);
-				ctx.lineTo(tempArray[i][0],tempArray[i][1]);
-				ctx.stroke();
-				//tempArray[i][2] = false;
+			else if (storedCoordinates.length < 1){
+				storedCoordinates.push([tempX, tempY, false]);
+				console.log(storedCoordinates);
+				console.log(storedCoordinates[i][2]);
 			}
 		}
 	}
 }
+
+function drawBox(){
+	if (storedCoordinates.length > 0){
+		for (i = 0; i <= storedCoordinates.length-1;i++){
+			if (storedCoordinates[i][2] == true){
+				ctx.beginPath();
+				ctx.moveTo(storedCoordinates[i][0],storedCoordinates[i][1]);
+				ctx.lineTo(storedCoordinates[i][0],storedCoordinates[i][1]+45);
+				ctx.lineTo(storedCoordinates[i][0]+45,storedCoordinates[i][1]+45);
+				ctx.lineTo(storedCoordinates[i][0]+45,storedCoordinates[i][1]);
+				ctx.lineTo(storedCoordinates[i][0],storedCoordinates[i][1]);
+				ctx.stroke();
+			}
+		}
+	}
+}
+
+var tempX;
+var tempY;
 
 function hoverCheck(){
 	document.getElementById('canvas').addEventListener ("click", storeTowerCoord);
@@ -1604,15 +1602,11 @@ function hoverCheck(){
 	{
 		for (var i = 0; i <= (towersOnBoard.length-1); i++){
 			if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
-				tempx = towersOnBoard[i].xCoord;
-				tempy = towersOnBoard[i].yCoord;
+				tempX = towersOnBoard[i].xCoord;
+				tempY = towersOnBoard[i].yCoord;
 				ctx.beginPath();
 				ctx.arc(towersOnBoard[i].xCoord+22.5, towersOnBoard[i].yCoord+22.5, towersOnBoard[i].range, 0, 2 * Math.PI);
 				ctx.stroke();
-				console.log(tempx,tempy);
-				document.addEventListener("click",function(){
-					change();
-				});
 			}
 		}
 	}
@@ -1666,8 +1660,6 @@ function render(){
 	hoverCheck();
 	stageWin();
 	drawBox();
-
-	//pathtest();
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------
@@ -2076,9 +2068,9 @@ function enableTowers() {
 }
 
 function sellTower() {
-	if (tempArray > 0) {
-		for (var i  = 0; i <= tempArray.length-1; i++) {
-			if (((cursorX >= tempArray[i][0]) && (cursorX <= (tempArray[i][0]+45))) && ((cursorY >= tempArray[i][1]) && (cursorY <= tempArray[i][1]+45))) {
+	if (storedCoordinates > 0) {
+		for (var i  = 0; i <= storedCoordinates.length-1; i++) {
+			if (((cursorX >= storedCoordinates[i][0]) && (cursorX <= (storedCoordinates[i][0]+45))) && ((cursorY >= storedCoordinates[i][1]) && (cursorY <= storedCoordinates[i][1]+45))) {
 				
 			}
 		}
