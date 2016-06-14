@@ -756,6 +756,21 @@ grizzlyBear.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
+function bigRoach(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 2000;
+	this.health = 2000;
+	this.damage = 20;
+	this.speed = 50;
+	this.killReward = 0;
+}
+bigRoach.prototype = Object.create(enemy.prototype);
+bigRoach.prototype.constructor = bigRoach;
+
+bigRoach.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+};
+
 function witch(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, towerStolen, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
 	this.startHealth = 300;
@@ -1694,11 +1709,29 @@ function renderEnemyMovement() {
 	for (var i = 0; i < enemiesOnBoard.length; i++) {
 		//draw enemies
 		
-		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof redDemon || enemiesOnBoard[i] instanceof blueDemon || enemiesOnBoard[i] instanceof grizzlyBear) {
+		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof grizzlyBear) {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-30, 55, 60);
 			//draw health bar
 			ctx.fillRect(enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-35, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else if (enemiesOnBoard[i] instanceof bigRoach) {
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-32, 55, 70);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-37, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else if (enemiesOnBoard[i] instanceof redDemon) {
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-29, 35, 60);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-34, (35 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else if (enemiesOnBoard[i] instanceof blueDemon) {
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-29, 45, 60);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-34, (45 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
 		else if (enemiesOnBoard[i] instanceof grimReaper) {
 			enemyImgToPrint.src = '../images/grimReaper.png';
@@ -1824,7 +1857,7 @@ var bossSpawned = false; //Checks to see if boss has spawned
 function stageWin() {
 	var bActive = false; //If boss is on map, turns to true
 	for(var i = 0; i < enemiesOnBoard.length; i++) {
-		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof grimReaper) {
+		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof bigRoach || enemiesOnBoard[i] instanceof grimReaper) {
 			if (bossSpawned == false){
 				gameMessage = "BOSS INCOMING!";
 			}
@@ -1885,7 +1918,7 @@ stageWave[1][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton
 stageWave[1][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
 stageWave[1][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBlob"];
 //Stage 3
-stageWave[2][0] = ["redDemon", "blueDemon", "grizzlyBear", "grizzlyBear"];
+stageWave[2][0] = ["blueDemon", "redDemon", "bigRoach", "bigRoach", "bigRoach", "bigRoach", "bigRoach"];
 stageWave[2][1] = ["blueSkeleton", "basicSkeleton"];
 stageWave[2][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[2][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
