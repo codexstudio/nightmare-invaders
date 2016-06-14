@@ -1323,7 +1323,7 @@ function waterGun(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, ta
 	this.damage = 2;
 	this.range = 80;
 	this.attackSpeed = 400;
-	this.info = "Enough force to slow enemies as they approach.";
+	this.info = "Enough force to slow enemies as they approach. Does not affect ghosts and bats.";
 }
 waterGun.prototype = Object.create(tower.prototype);
 waterGun.prototype.constructor = waterGun;
