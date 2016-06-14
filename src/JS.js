@@ -1040,6 +1040,7 @@ tower.prototype.attack = function(towerObj, towerName){
 					var j = b;
 					if (enemiesOnBoard[j].pathPos == max){
 						//console.log("Enemy # " + i + " health: " + enemiesOnBoard[i].health);
+						if(!(towersOnBoard[j] instanceof actionFigure || towersOnBoard[j] instanceof blenderDefender || towersOnBoard[j] instanceof trophy || towersOnBoard[j] instanceof calculator)) {
 							towerObj.isShooting = 1;
 						}
 						towerObj.targetIndice = j;
@@ -1671,6 +1672,7 @@ function renderTowerAndBullet() {
 				ang = 720;
 			}	
 
+			if(towersOnBoard[i] instanceof actionFigure || towersOnBoard[i] instanceof blenderDefender || towersOnBoard[i] instanceof trophy || towersOnBoard[i] instanceof calculator){
 				ang = 720;
 			}
 			//if tower is shooting then push new bullet to towersOnBoard.bulletArr[]
