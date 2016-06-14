@@ -1034,7 +1034,7 @@ tower.prototype.attack = function(towerObj, towerName){
 		var max = 0;
 		towerObj.isShooting = 0;
 		
-		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "trophy"){
+		if (towersOnBoard.length > 0 && towerName == "trophy"){
 			towerObj.towerBuff(); 
 		}
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "calculator"){
