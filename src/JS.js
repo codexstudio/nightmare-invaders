@@ -2142,6 +2142,7 @@ function hoverCheck(){
 initGame();
 function initGame()
 {
+	setTimeout( function() { nextWave(); }, 5000);
 	currentStageImage.src = "../images/" + stageImages[currentStage];
 	towerAvailable();
 	render();
@@ -2203,6 +2204,7 @@ function update(){
 	}
 	else if (enemiesOnBoard.length == 0){
 		awardGoldOverTime = false;
+		setTimeout( function() { nextWave(); }, 5000);
 	}
 	
 }
@@ -2506,6 +2508,7 @@ stageWave[3][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton
 
 var inAWave = false;
 var waveCounter = 0;
+
 function nextWave (){
 	if (!inAWave && enemiesOnBoard.length == 0){
 		inAWave = true;
