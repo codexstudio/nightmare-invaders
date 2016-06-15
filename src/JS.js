@@ -1,8 +1,12 @@
 //Set FPS
 const fps = setInterval(update, 33.34); // 30fps
 
-var language = 2;
-
+//language related stuff
+var language = 0;
+var HTMLID_langEN = document.getElementById("lang-EN");
+var HTMLID_langFR = document.getElementById("lang-FR");
+var HTMLID_langES = document.getElementById("lang-ES");
+// end language related stuff
 var images = new Array();
 function preload() {
 	for (i = 0; i < preload.arguments.length; i++) {
@@ -202,6 +206,12 @@ var HTMLID_pauseUI = document.getElementById("pauseUI");
 var HTMLBTN_resume = document.getElementById("pauseUI-play");
 var HTMLBTN_muteTgl = document.getElementById("pauseUI-mute");
 var HTMLBTN_mainMenu = document.getElementById("pauseUI-mainMenu");
+var HTMLBTN_pauseTitle = document.getElementById("pauseTitle");
+var HTMLID_langMenu = document.getElementById("languageList");
+var HTMLBTN_langMenuTgl = document.getElementById("pauseUI-lang");
+var HTMLID_langMenuWrapper = document.getElementById("languageDrop");
+var HTMLBTN_pauseButton = document.getElementById("pauseButton");
+var langMenuShow = false;
 // end pausing section
 
 // muting 
@@ -662,7 +672,7 @@ clown.prototype = Object.create(enemy.prototype);
 clown.prototype.constructor = clown;
 
 clown.prototype.stealGold = function(){
-	var percentageGold	= Math.random() * 100;
+	var percentageGold = Math.random() * 100;
 	
 	if (percentageGold >= 0 && percentageGold < 33) { //Three quarters gold stolen.
 		this.goldTaken = (25 / 100) * Gold;
@@ -1699,7 +1709,47 @@ HTMLBTN_playTgl.addEventListener( "click", pauseGame );
 HTMLBTN_muteTgl.addEventListener( "click", function(e) { muteToggle(e); });
 HTMLBTN_resume.addEventListener( "click", pauseGame );
 HTMLBTN_mainMenu.addEventListener( "click", menu );
-
+HTMLBTN_langMenuTgl.addEventListener( "click", function() {
+	if (!langMenuShow) {
+		HTMLID_langMenuWrapper.style.animation = "animation-lang-window 0.4s";
+		HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
+		HTMLID_langMenuWrapper.style.pointerEvents = 'auto';
+	} else {
+		HTMLID_langMenuWrapper.style.animation = "animation-lang-window-reverse 0.4s";
+		HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
+		HTMLID_langMenuWrapper.style.pointerEvents = 'none';
+	}
+	langMenuShow = !langMenuShow;
+} );
+HTMLID_langMenu.addEventListener( "click", function(e) { changeLanguage(e); } );
+function changeLanguage(e) {
+	language = (e.target == HTMLID_langEN) ? 0 :
+		(e.target == HTMLID_langFR) ? 1 :
+		2;
+	if (langMenuShow) {
+		HTMLID_langMenuWrapper.style.animation = "animation-lang-window-reverse 0.4s";
+		HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
+		HTMLID_langMenuWrapper.style.pointerEvents = "none";
+	}
+	if (language === 0){
+		stages[0] = "Child's Bedroom";
+		stages[1] = "Basement";
+		stages[2] = "Kitchen";
+		stages[3] = "Parent's Bedroom";
+	}
+	else if(language === 1){
+		stages[0] = "Chambre D'enfant";
+		stages[1] = "Sous-sol";
+		stages[2] = "Cuisine";
+		stages[3] = "La Chambre des Parents";
+	}
+	else if(language === 2){
+		stages[0] = "El Dormitorio del Nino";
+		stages[1] = "Sotano";
+		stages[2] = "Cocina";
+		stages[3] = "Recamara de los Padres";
+	}
+}
 // tower events -------------------------------------------------------------
 
 HTMLID_toyCarLauncher.addEventListener( "mouseout", clearTowerStats ); 
@@ -1932,21 +1982,33 @@ function initGame()
 
 //Update Game
 function update(){
-
+	
+	if (inAWave) {
+		HTMLBTN_playTgl.style.pointerEvents = 'none';
+		HTMLBTN_pauseButton.style.fill = '#626262';
+	} else {
+		HTMLBTN_playTgl.style.pointerEvents = 'auto';
+		HTMLBTN_pauseButton.style.fill = '#e5e5e5';
+	}
 	if(language === 0){
+		HTMLBTN_pauseTitle.innerHTML = "paused";
+		HTMLBTN_mainMenu.innerHTML = "main menu";
 		outputPlayerStats.innerHTML = "<b>Health: </b>" + Hp;
-		outputPlayerStats.innerHTML += "<br><b>Gold: </b>" + Gold;
 		outputPlayerStats.innerHTML += "<br><b>Gold: </b>" + Gold;
 		outputPlayerStats.innerHTML += "<br><b>Level: </b>" + (currentStage + 1);
 		outputPlayerStats.innerHTML += "<br><b>Wave: </b>" + (waveCounter + 1);
 	}
 	else if(language === 1){
+		HTMLBTN_pauseTitle.innerHTML = "pause";
+		HTMLBTN_mainMenu.innerHTML = "menu principal";
 		outputPlayerStats.innerHTML = "<b>Sante: </b>" + Hp;
 		outputPlayerStats.innerHTML += "<br><b>Or: </b>" + Gold;
 		outputPlayerStats.innerHTML += "<br><b>Niveau: </b>" + (currentStage + 1);
 		outputPlayerStats.innerHTML += "<br><b>Vague: </b>" + (waveCounter + 1);
 	}
 	else if(language === 2){
+		HTMLBTN_pauseTitle.innerHTML = "pausa";
+		HTMLBTN_mainMenu.innerHTML = "menu principal";
 		outputPlayerStats.innerHTML = "<b>Salud: </b>" + Hp;
 		outputPlayerStats.innerHTML += "<br><b>Oro: </b>" + Gold;
 		outputPlayerStats.innerHTML += "<br><b>Nivel: </b>" + (currentStage + 1);
