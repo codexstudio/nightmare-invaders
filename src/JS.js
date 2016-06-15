@@ -1,6 +1,12 @@
 //Set FPS
 const fps = setInterval(update, 33.34); // 30fps
 
+//language related stuff
+var language = 0;
+var HTMLID_langEN = document.getElementById("lang-EN");
+var HTMLID_langFR = document.getElementById("lang-FR");
+var HTMLID_langES = document.getElementById("lang-ES");
+// end language related stuff
 var images = new Array();
 function preload() {
 	for (i = 0; i < preload.arguments.length; i++) {
@@ -28,10 +34,13 @@ preload(
 	'../images/redDemon.png',
 	'../images/zombieDad.png',
 	'../images/zombieMom.png',
-	'../images/grimReaper.png'
+	'../images/grimReaper.png',
+	'../images/bigRoach.png',
+	'../images/kid.png'
 )
 		
 			
+	
 //Determines the distance between two points
 function distance(x1, x2, y1, y2){
 	return Math.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1)));
@@ -58,10 +67,24 @@ for (var i = 0; i <=40; i++){
 var currentStage = 0;
 var stages = [];
 
-stages[0] = "Child's Bedroom";
-stages[1] = "Basement";
-stages[2] = "Kitchen";
-stages[3] = "Parent's Bedroom";
+if (language === 0){
+	stages[0] = "Child's Bedroom";
+	stages[1] = "Basement";
+	stages[2] = "Kitchen";
+	stages[3] = "Parent's Bedroom";
+}
+else if(language === 1){
+	stages[0] = "Chambre D'enfant";
+	stages[1] = "Sous-sol";
+	stages[2] = "Cuisine";
+	stages[3] = "La Chambre des Parents";
+}
+else if(language === 2){
+	stages[0] = "El Dormitorio del Nino";
+	stages[1] = "Sotano";
+	stages[2] = "Cocina";
+	stages[3] = "Recamara de los Padres";
+}
 
 
 //List of stage images
@@ -169,13 +192,80 @@ var Gold = 100;
 var Hp = 100;
 var currentWave = 0;
 var pause = false;
-var gameMessage = "Welcome to Nightmare Invaders!";
+var gameMessage = "";
+if (language === 0){
+	gameMessage = "Welcome to Nightmare Invaders!";
+}
+else if (language === 1){
+	gameMessage = "Bienvenue aux Envahisseurs de Cauchemar!";
+}
+else if (language === 2){
+	gameMessage = "La Bienvenida a los Invasores Pesadilla!";
+}
 var outputTowerStats = document.getElementById("outputTowerStats");
 var outputPlayerStats = document.getElementById("outputPlayerStats");
 var outputGameMessage = document.getElementById("gameMessage");
 var outputStageName = document.getElementById("stageName");
 var disabledTowers = document.getElementsByClassName("disabledTower");
 var allSelected = document.getElementsByClassName("enabledTower");
+
+//pausing section
+var HTMLBTN_playTgl = document.getElementById("btnPlayTgl");
+var SVG_pause = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 60"><g class="btnUI"><path d="M33,46h8V14h-8V46z"/><path d="M19,46h8V14h-8V46z"/></g></svg>'
+var SVG_play = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 294.843 294.843"><g class="btnUI"><path d="M109.699,78.969c-1.876,1.067-3.035,3.059-3.035,5.216v131.674c0,3.314,2.687,6,6,6s6-2.686,6-6V94.74l88.833,52.883l-65.324,42.087c-2.785,1.795-3.589,5.508-1.794,8.293c1.796,2.786,5.508,3.59,8.294,1.794l73.465-47.333c1.746-1.125,2.786-3.073,2.749-5.15c-0.037-2.077-1.145-3.987-2.93-5.05L115.733,79.029C113.877,77.926,111.575,77.902,109.699,78.969z"/></g>'
+var HTMLID_pauseUI = document.getElementById("pauseUI");
+var HTMLBTN_resume = document.getElementById("pauseUI-play");
+var HTMLBTN_muteTgl = document.getElementById("pauseUI-mute");
+var HTMLBTN_mainMenu = document.getElementById("pauseUI-mainMenu");
+var HTMLBTN_pauseTitle = document.getElementById("pauseTitle");
+var HTMLID_langMenu = document.getElementById("languageList");
+var HTMLBTN_langMenuTgl = document.getElementById("pauseUI-lang");
+var HTMLID_langMenuWrapper = document.getElementById("languageDrop");
+var HTMLBTN_pauseButton = document.getElementById("pauseButton");
+var langMenuShow = false;
+// end pausing section
+
+// muting 
+var SVG_soundOn = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 60"><g class="btnUI"> \
+						<path d="M34.437,7.413c-0.979-0.561-2.143-0.553-3.115,0.019c-0.063,0.037-0.121,0.081-0.174,0.131L17.906,19.891 \
+							C17.756,19.963,17.593,20,17.427,20H9.104C7.392,20,6,21.393,6,23.104v12.793C6,37.607,7.392,39,9.104,39h8.324 \
+							c0.166,0,0.329,0.037,0.479,0.109l13.242,12.328c0.053,0.05,0.112,0.094,0.174,0.131c0.492,0.289,1.033,0.434,1.574,0.434 \
+							c0.529,0,1.058-0.138,1.541-0.415C35.416,51.027,36,50.021,36,48.894V10.106C36,8.979,35.416,7.973,34.437,7.413z M34,48.894 \
+							c0,0.577-0.389,0.862-0.556,0.958c-0.158,0.09-0.562,0.262-1.025,0.037l-13.244-12.33c-0.054-0.051-0.113-0.095-0.176-0.131 \
+							C18.522,37.147,17.979,37,17.427,37H9.104C8.495,37,8,36.505,8,35.896V23.104C8,22.495,8.495,22,9.104,22h8.324 \
+							c0.551,0,1.095-0.147,1.572-0.428c0.063-0.036,0.122-0.08,0.176-0.131l13.244-12.33c0.465-0.226,0.868-0.053,1.025,0.037 \
+							C33.611,9.244,34,9.529,34,10.106V48.894z"/> \
+						<path d="M43.248,17.293c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414c6.238,6.238,6.238,16.39,0,22.628 \
+							c-0.391,0.391-0.391,1.023,0,1.414c0.195,0.195,0.451,0.293,0.707,0.293s0.512-0.098,0.707-0.293 \
+							C50.266,35.73,50.266,24.312,43.248,17.293z"/> \
+						<path d="M39.707,20.293c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414c4.297,4.297,4.297,11.289,0,15.586 \
+							c-0.391,0.391-0.391,1.023,0,1.414C38.488,38.902,38.744,39,39,39s0.512-0.098,0.707-0.293 \
+							C44.784,33.63,44.784,25.37,39.707,20.293z"/> \
+						<path d="M46.183,12.293c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414c4.356,4.355,6.755,10.142,6.755,16.293 \
+							s-2.399,11.938-6.755,16.293c-0.391,0.391-0.391,1.023,0,1.414C44.964,47.902,45.22,48,45.476,48s0.512-0.098,0.707-0.293 \
+							c4.734-4.733,7.341-11.021,7.341-17.707S50.917,17.026,46.183,12.293z"/> \
+						<path d="M30,0C13.458,0,0,13.458,0,30s13.458,30,30,30s30-13.458,30-30S46.542,0,30,0z M30,58C14.561,58,2,45.439,2,30 \
+							S14.561,2,30,2s28,12.561,28,28S45.439,58,30,58z"/> \
+					</g>'
+
+var SVG_soundOff = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 59.986 59.986"><g class="btnUI"> \
+					<path d="M51.213,8.78C39.517-2.917,20.484-2.916,8.787,8.78C3.121,14.446,0,21.98,0,29.993S3.121,45.54,8.787,51.206 \
+						c5.848,5.849,13.531,8.772,21.213,8.772s15.365-2.924,21.213-8.772C62.91,39.509,62.91,20.477,51.213,8.78z M10.201,10.194 \
+						C15.66,4.736,22.83,2.007,30,2.007c6.858,0,13.713,2.504,19.074,7.498L42,16.579v-6.479c0-1.127-0.584-2.134-1.563-2.693 \
+						c-0.978-0.561-2.143-0.553-3.115,0.019c-0.063,0.037-0.121,0.081-0.174,0.131L23.906,19.884c-0.149,0.072-0.313,0.109-0.479,0.109 \
+						h-8.324c-1.711,0-3.104,1.393-3.104,3.104v12.793c0,1.711,1.392,3.104,3.104,3.104h4.482L9.511,49.068 \
+						C4.664,43.869,2,37.137,2,29.993C2,22.514,4.913,15.483,10.201,10.194z M21.586,36.993h-6.482c-0.608,0-1.104-0.495-1.104-1.104 \
+						V23.096c0-0.608,0.495-1.104,1.104-1.104h8.324c0.551,0,1.095-0.147,1.572-0.428c0.063-0.036,0.122-0.08,0.176-0.131l13.244-12.33 \
+						c0.465-0.226,0.868-0.053,1.025,0.037C39.611,9.237,40,9.522,40,10.099v8.479L21.586,36.993z M40,21.407v27.479 \
+						c0,0.577-0.389,0.862-0.556,0.958c-0.158,0.09-0.562,0.262-1.025,0.037l-13.244-12.33c-0.054-0.051-0.113-0.095-0.176-0.131 \
+						c-0.224-0.132-0.466-0.229-0.713-0.3L40,21.407z M49.799,49.792c-10.68,10.679-27.908,10.904-38.873,0.689l11.488-11.488h1.013 \
+						c0.166,0,0.329,0.037,0.479,0.109L37.148,51.43c0.053,0.05,0.112,0.094,0.174,0.131c0.492,0.289,1.033,0.434,1.574,0.434 \
+						c0.529,0,1.058-0.138,1.541-0.415C41.416,51.02,42,50.013,42,48.887V19.407l8.488-8.488C60.704,21.884,60.479,39.112,49.799,49.792z \
+						"/> \
+					</g>'
+var bkgAudio = document.getElementById('background_audio');
+var mute = false;
+// end muting
 var HTMLID_toyCarLauncher = document.getElementById("toyCarLauncher");
 var HTMLID_actionFigure = document.getElementById("actionFigure");
 var HTMLID_marbleShooter = document.getElementById("marbleShooter");
@@ -192,7 +282,7 @@ var HTMLID_vanquishEvil = document.getElementById("vanquishEvil");
 
 //global variables
 var ang = 0;
-const TRAJ_SPEED = 10;
+const TRAJ_SPEED = 7;
 
 function menu(){
 	window.location="Menu.html";
@@ -204,6 +294,8 @@ function gameOver(){
 
 function gameWin() {
 	ctx.drawImage(gameCleared, 0, 0);
+	var victory = document.getElementById('Victory');
+	victory.play();
 }
 
 function prevStage(){
@@ -229,7 +321,15 @@ function prevStage(){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	}
 	else{
-		gameMessage = "This is the first stage!";
+		if (language === 0){
+			gameMessage = "This is the first stage!";
+		}
+		else if (language === 1){
+			gameMessage = "Ceci est la Premiere Etape!";
+		}
+		else if (language === 2){
+			gameMessage = "Esta es la Primera Etapa!";
+		}
 	}
 }
 
@@ -257,7 +357,15 @@ function nextStage(){
 		towerAvailable();
 	}
 	else {
-		gameMessage = "This is the last stage!";
+		if (language === 0){
+			gameMessage = "This is the last stage!";
+		}
+		else if (language === 1){
+			gameMessage = "Ceci est la Derniere Etape!";
+		}
+		else if (language === 2){
+			gameMessage = "Esta es la Ultima Etapa!";
+		}
 	}
 }
 
@@ -269,6 +377,7 @@ var ctx = canvas.getContext('2d');
 var towerImg = new Image();
 var lampOnOff = new Image();
 var enemyImgToPrint = new Image();
+var bulletImg = new Image();
 
 
 //Gold Over Time
@@ -277,12 +386,12 @@ var goldOverTime = setInterval(function(){
 	if (awardGoldOverTime == true){
 		Gold++;
 	}
-}, 500);
+}, 1000);
 
 
 //Temporary grid toggle
 var showGrid = true;
-function togGrid(){
+function togGrid() {
 	if (showGrid) {
 		document.getElementById("grid").style.display = "block";
 		showGrid = false;
@@ -297,7 +406,7 @@ function togGrid(){
 var enemiesOnBoard = [];
 
 //Enemies Bluprint Section----------------------------------------------------------
- var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+ var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	this.startHealth = startHealth;
 	this.health = health;
 	this.damage = damage;
@@ -307,6 +416,7 @@ var enemiesOnBoard = [];
 	this.yCoord = (stagePaths[currentStage])[0].y;
 	this.pathPos = 0;
 	this.direction;
+	this.isSlowed = false;
 	this.enemyNextMove;
  }
 enemy.prototype.enemyMovement = function(enemyObj){
@@ -349,18 +459,48 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			console.log();
 			for (var j = 0; j < enemiesOnBoard.length; j++){
 				if (enemiesOnBoard[j].pathPos > (stagePaths[currentStage]).length-1){
-					enemiesOnBoard.splice(j,1);
 					if (enemiesOnBoard[j] instanceof blueDemon) {
-						enemyObj.blueDemonExit;
+						enemyObj.blueDemonExit();
 					}
 					if (enemiesOnBoard[j] instanceof redDemon) {
-						enemyObj.redDemonExit;
+						enemyObj.redDemonExit();
 					}
+					enemiesOnBoard.splice(j,1);
 					break;
 				}
 			}
 			Hp -= enemyObj.damage;
 			clearInterval(enemyObj.enemyNextMove);
+		}
+		if ( !(enemyObj instanceof bat) && !(enemyObj instanceof ghost)){
+			var seenByWaterGun = false;
+	
+			for (var a = 0; a < towersOnBoard.length; a++){
+				var i = a;
+				if(towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towersOnBoard[i] instanceof waterGun){
+					var distanceWaterGun = distance (towersOnBoard[i].xCoord, enemyObj.xCoord, towersOnBoard[i].yCoord, enemyObj.yCoord);
+					
+					if (distanceWaterGun <= towersOnBoard[i].range){
+						seenByWaterGun = true;
+					}
+				}
+			}
+			if (seenByWaterGun){
+				if (enemyObj.isSlowed == false){
+					clearInterval(enemyObj.enemyNextMove);
+					enemyObj.speed = enemyObj.speed * 2;
+					enemyObj.enemyMovement(enemyObj);
+				}
+				enemyObj.isSlowed = true;
+			}
+			else if (!seenByWaterGun){
+				if (enemyObj.isSlowed == true){
+					clearInterval(enemyObj.enemyNextMove);
+					enemyObj.speed = enemyObj.speed / 2;
+					enemyObj.enemyMovement(enemyObj);
+				}
+				enemyObj.isSlowed = false;
+			}
 		}
 		if (enemyObj instanceof ghost){
 			enemyObj.checkGhostVisibility();
@@ -372,24 +512,27 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if (enemyObj.phaseOneComplete == false){
 				enemyObj.spawnMomDad();
 			}
-			//else if () {
-			//	enemyObj.removeRandomTowers();
-			//}
-			//else if () {
-			//	enemyObj.becomeTowerOffense();
-			//}
+			else if (enemyObj.phaseThreeComplete == false) {
+				enemyObj.spawnKid();
+			}
+		}
+		if (enemyObj instanceof kid) {
+			Hp = enemyObj.health;
+			if (Hp <= Hp / 2) {
+				gameMessage = "What are you doing!? Save him!";
+			}
+			enemyObj.safeKid();
 		}
 	}, this.speed);
 }
 
-
-function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 200;
-	this.health = 200;
+function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 250;
+	this.health = 250;
 	this.damage = 1;
 	this.speed = 30;
-	this.killReward = 5;
+	this.killReward = 1;
 }
 basicSkeleton.prototype = Object.create(enemy.prototype);
 basicSkeleton.prototype.constructor = basicSkeleton;
@@ -398,13 +541,13 @@ basicSkeleton.prototype.thisChildMetohdNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
 
-function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 500;
-	this.health = 500;
+function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 600;
+	this.health = 600;
 	this.damage = 2;
 	this.speed = 50;
-	this.killReward = 20;
+	this.killReward = 2;
 }
 redSkeleton.prototype = Object.create(enemy.prototype);
 redSkeleton.prototype.constructor = redSkeleton;
@@ -413,13 +556,13 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
-	this.startHealth = 100;
-	this.health = 100;
+function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed)
+	this.startHealth = 200;
+	this.health = 200;
 	this.damage = 1;
 	this.speed = 20;
-	this.killReward = 2;
+	this.killReward = 1;
 }
 blueSkeleton.prototype = Object.create(enemy.prototype);
 blueSkeleton.prototype.constructor = blueSkeleton;
@@ -427,13 +570,14 @@ blueSkeleton.prototype.constructor = blueSkeleton;
 blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
+
 function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
-	this.startHealth = 350;
-	this.health = 350;
+	this.startHealth = 400;
+	this.health = 400;
 	this.damage = 2;
 	this.speed = 50;
-	this.killReward = 25;
+	this.killReward = 3;
 	this.isVisible = false;
 }
 ghost.prototype = Object.create(enemy.prototype);
@@ -461,10 +605,10 @@ ghost.prototype.checkGhostVisibility = function(){
 	}
 };
 
-function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 200;
-	this.health = 200;
+function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 13000;
+	this.health = 13000;
 	this.damage = 100;
 	this.speed = 80;
 	this.killReward = 0;
@@ -476,12 +620,12 @@ bigBoss.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 400;
-	this.health = 400;
-	this.damage = 20;
-	this.speed = 90;
+function blob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 1000;
+	this.health = 1000;
+	this.damage = 5;
+	this.speed = 70;
 	this.killReward = 0;
 }
 blob.prototype = Object.create(enemy.prototype);
@@ -549,14 +693,14 @@ blob.prototype.blobSplit = function(){
 	}
 };
 
-function miniBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 150;
-	this.health = 150;
+function miniBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 200;
+	this.health = 200;
 	console.log(this.health);
-	this.damage = 5;
-	this.speed = 60;
-	this.killReward = 5;
+	this.damage = 1;
+	this.speed = 20;
+	this.killReward = 1;
 }
 miniBlob.prototype = Object.create(enemy.prototype);
 miniBlob.prototype.constructor = miniBlob;
@@ -564,12 +708,12 @@ miniBlob.prototype.constructor = miniBlob;
 miniBlob.prototype.miniBlob = function(){
 };
 
-function clown(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction);
-	this.startHealth = 10;
-	this.health = 10;
-	this.damage = 5;
-	this.speed = 10;
+function clown(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction, isSlowed);
+	this.startHealth = 150;
+	this.health = 150;
+	this.damage = 1;
+	this.speed = 5;
 	this.killReward = 0;
 	this.goldTaken;
 }
@@ -577,7 +721,7 @@ clown.prototype = Object.create(enemy.prototype);
 clown.prototype.constructor = clown;
 
 clown.prototype.stealGold = function(){
-	var percentageGold	= Math.random() * 100;
+	var percentageGold = Math.random() * 100;
 	
 	if (percentageGold >= 0 && percentageGold < 33) { //Three quarters gold stolen.
 		this.goldTaken = (25 / 100) * Gold;
@@ -591,15 +735,25 @@ clown.prototype.stealGold = function(){
 		this.goldTaken = (75 / 100) * Gold;
 		Gold -= Math.round(this.goldTaken);
 	} 
-	gameMessage = "A clown has stolen " + Math.round(this.goldTaken) + " gold from you! Kill it to get it back!";
+	var clownAudio = document.getElementById('clownLaugh');
+	clownAudio.play();
+	if (language === 0){
+			gameMessage = "A clown has stolen " + Math.round(this.goldTaken) + " gold from you! Kill it to get it back!";
+		}
+		else if (language === 1){
+			gameMessage = "Un clown a vole " + Math.round(this.goldTaken) + " or de vous! Tuez-le pour le recuperer!";
+		}
+		else if (language === 2){
+			gameMessage = "Un payaso ha robado " + Math.round(this.goldTaken) + " oro de usted! Acabar con el para recuperarlo!";
+		}
+
 };
 
-function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 1000;
-	this.health = 1000;
-	this.damage = 100;
-	this.speed = 150;
+function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 15000;
+
+	this.speed = 90;
 	this.killReward = 0;
 }
 bigBlob.prototype = Object.create(enemy.prototype);
@@ -669,18 +823,18 @@ bigBlob.prototype.bigBlobSplit = function(){
 
 function bat(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 300;
-	this.health = 300;
+	this.startHealth = 500;
+	this.health = 500;
 	this.damage = 15;
 	this.speed = 20;
-	this.killReward = 10;
+	this.killReward = 3;
 	this.isVisible = false;
 }
 bat.prototype = Object.create(enemy.prototype);
 bat.prototype.constructor = bat;
 
 bat.prototype.checkBatVisibility = function(){
-		var seenByLamp = false;
+	var seenByLamp = false;
 	
 	for (var a = 0; a < towersOnBoard.length; a++){
 		var i = a;
@@ -710,12 +864,12 @@ bat.prototype.checkBatVisibility = function(){
 	}
 };
 
-function grizzlyBear(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 1000;
-	this.health = 1000;
-	this.damage = 10;
-	this.speed = 70;
+function grizzlyBear(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 1500;
+	this.health = 1500;
+	this.damage = 3;
+	this.speed = 65;
 	this.killReward = 20;
 }
 grizzlyBear.prototype = Object.create(enemy.prototype);
@@ -725,12 +879,27 @@ grizzlyBear.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function witch(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, towerStolen, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 300;
-	this.health = 300;
+function bigRoach(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 2000;
+	this.health = 2000;
+	this.damage = 20;
+	this.speed = 50;
+	this.killReward = 0;
+}
+bigRoach.prototype = Object.create(enemy.prototype);
+bigRoach.prototype.constructor = bigRoach;
+
+bigRoach.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+};
+
+function witch(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, towerStolen, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 400;
+	this.health = 400;
 	this.damage = 1;
-	this.speed = 80;
+	this.speed = 60;
 	this.killReward = 0;
 	this.towerStolen = 0;
 }
@@ -775,16 +944,25 @@ witch.prototype.stealTower = function(){
 	if (rand > 110 && rand <= 120) {
 		this.towerStolen = 12;
 	}
-	gameMessage = "A witch has stolen a tower from the store!";
+	if (language === 0){
+		gameMessage = "A witch has stolen a tower from the store!";
+	}
+	else if (language === 1){
+		gameMessage = "Une sorciere a vole une tour dans le magasin!";
+	}
+	else if (language === 2){
+		gameMessage = "Una bruja ha robado una torre desde la tienda!";
+	}
+	towerAvailable();
 };
 
-function blueDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 500;
-	this.health = 500;
+function blueDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 1000;
+	this.health = 1000;
 	this.damage = 0; 
-	this.speed = 20;
-	this.killReward = 40;
+	this.speed = 15;
+	this.killReward = 200;
 }
 blueDemon.prototype = Object.create(enemy.prototype);
 blueDemon.prototype.constructor = blueDemon;
@@ -793,13 +971,13 @@ blueDemon.prototype.blueDemonExit = function(){
 	Hp = 1; 
 };
 
-function redDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 10000;
-	this.health = 10000;
+function redDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 5000;
+	this.health = 5000;
 	this.damage = 0;
-	this.speed = 1000;
-	this.killReward = 0;
+	this.speed = 95;
+	this.killReward = 200;
 }
 redDemon.prototype = Object.create(enemy.prototype);
 redDemon.prototype.constructor = redDemon;
@@ -808,40 +986,53 @@ redDemon.prototype.redDemonExit = function(){
 	Hp = 1; 
 };
 
-function zombieMom(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 1000;
-	this.health = 1000;
-	this.damage = 10;
+function zombieMom(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 10000;
+	this.health = 10000;
+	this.damage = 5;
 	this.speed = 80;
-	this.killReward = 20;
+	this.killReward = 1000;
 }
 zombieMom.prototype = Object.create(enemy.prototype);
 zombieMom.prototype.constructor = zombieMom;
 
-zombieMom.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+zombieMom.prototype.deaderThanCheddar = function(){	
 };
 
-function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 1000;
-	this.health = 1000;
-	this.damage = 10;
+function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 10000;
+	this.health = 10000;
+	this.damage = 5;
 	this.speed = 80;
-	this.killReward = 20;
+	this.killReward = 1000;
 }
 zombieDad.prototype = Object.create(enemy.prototype);
 zombieDad.prototype.constructor = zombieDad;
 
-zombieDad.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+zombieDad.prototype.afterDeaderThanCheddar = function(){
 };
 
-function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, direction, isVisible, hasPhaseOned, phaseOneComplete, hasPhaseTwoed, hasPhaseThreed){
+function kid(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 1000;
-	this.health = 1000;
+	this.startHealth = Hp * 2000;
+	this.health = Hp * 2000;
+	this.damage = 0;
+	this.speed = 80;
+	this.killReward = 0;
+}
+kid.prototype = Object.create(enemy.prototype);
+kid.prototype.constructor = kid;
+
+kid.prototype.kidDies = function(){
+	gameOver();
+};
+
+function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, direction, isVisible, hasPhaseOned, phaseOneComplete, hasPhaseTwoed, hasPhaseThreed, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 15000;
+	this.health = 15000;
 	this.damage = 100;
 	this.speed = 100;
 	this.killReward = 0;
@@ -851,7 +1042,9 @@ function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoo
 	this.hasPhaseOned = false;
 	this.phaseOneComplete = false;
 	this.hasPhaseTwoed = false;
+	this.phaseTwoComplete = false; 
 	this.hasPhaseThreed = false;
+	this.phaseThreeComplete = false; 
 	this.isVisible = true;
 }
 grimReaper.prototype = Object.create(enemy.prototype);
@@ -911,9 +1104,10 @@ grimReaper.prototype.spawnMomDad = function(){
 		}
 		enemiesOnBoard.push(tempObj2);
 		tempObj2.enemyMovement(tempObj2);
+		gameMessage = "Mom?... Dad?...";
 		
 		clearInterval(this.enemyNextMove);
-		this.speed *= 10;
+		this.speed *= 5;
 		this.enemyMovement(this);
 	}
 	if (this.health < this.phaseOne){
@@ -927,7 +1121,7 @@ grimReaper.prototype.spawnMomDad = function(){
 			this.isVisible = true;
 			this.phaseOneComplete = true;
 			clearInterval(this.enemyNextMove);
-			this.speed /= 10;
+			this.speed /= 5;
 			this.enemyMovement(this);
 		}
 	}
@@ -937,12 +1131,40 @@ grimReaper.prototype.removeRandomTowers = function(){ //MAYBE LOL!
 	console.log("Undefined Child Method.");
 };
 	
-grimReaper.prototype.becomeTowerOffense = function(){ //MAYBE LOL!
-	console.log("Undefined Child Method.");
-};
+grimReaper.prototype.spawnKid = function(){ 	
+	if (this.health < this.phaseThree && this.hasPhaseThreed == false) {
+		this.hasPhaseThreed = true;
+		this.isVisible = false; 
+		var tempObj = new kid;
+		enemiesOnBoard.push(tempObj);
+		tempObj.enemyMovement(tempObj);
+		
+		gameMessage = "NOW YOU WILL UNDERTSTAND HOW IT FEELS!";
+		
+		clearInterval(this.enemyNextMove);
+		console.log(this.speed);
+		this.speed *= 5;
+		console.log(this.speed);
+		this.enemyMovement(this);
+	}
+	if (this.health < this.phaseThree){
+		var kidActive = false;
+		for (var i = 0; i < enemiesOnBoard.length; i++){
+			if(enemiesOnBoard[i] instanceof kid){
+				kidActive = true;
+			}
+		}
+		if (!kidActive){
+			this.isVisible = true;
+			this.phaseThreedComplete = true;
+			clearInterval(this.enemyNextMove);
+			this.speed /= 5;
+			this.enemyMovement(this);
+		}
+	}
+}
 
 // End of enemy bluprint section----------------------------------------------------
-
 
 function spawnEnemy(enemyType){
 	var tempEnemyObj = new (eval(enemyType))();
@@ -972,7 +1194,7 @@ var towerxy = {x:0, y:0};
 var objObstruct = false;
 
 //Tower blueprints section--------------------------------------------------------
-var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info, isBuffed){
+var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info, isBuffed, boolBox){
 	this.cost = cost;
 	this.damage = damage;
 	this.range = range;
@@ -987,6 +1209,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.info = info;
 	this.isBuffed = false;
 	this.attackEnemy;
+	this.boolBox;
 };
 
 tower.prototype.bullet = function() {
@@ -1002,7 +1225,7 @@ tower.prototype.attack = function(towerObj, towerName){
 		var max = 0;
 		towerObj.isShooting = 0;
 		
-		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "trophy"){
+		if (towersOnBoard.length > 0 && towerName == "trophy"){
 			towerObj.towerBuff(); 
 		}
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "calculator"){
@@ -1061,10 +1284,64 @@ tower.prototype.attack = function(towerObj, towerName){
 						if (enemiesOnBoard[j].health <= 0){
 							clearInterval(enemiesOnBoard[j].enemyNextMove);
 							Gold += enemiesOnBoard[j].killReward;
+							if (enemiesOnBoard[j] instanceof kid) {
+								enemiesOnBoard[j].kidDies();
+							}
+							if (enemiesOnBoard[j] instanceof witch){
+								switch (enemiesOnBoard[j].towerStolen){
+									case 1:
+										HTMLID_toyCarLauncher.className = "enabledTower";
+										break;
+									case 2:
+										HTMLID_actionFigure.className = "enabledTower";
+										break;
+									case 3:
+										HTMLID_marbleShooter.className = "enabledTower";
+										break;
+									case 4:
+										HTMLID_lamp.className = "enabledTower";
+										break;
+									case 5:
+										HTMLID_calculator.className = "enabledTower";
+										break;
+									case 6:
+										HTMLID_nutsAndBolts.className = "enabledTower";
+										break;
+									case 7:
+										HTMLID_toaster.className = "enabledTower";
+										break;
+									case 8:
+										HTMLID_blenderDefender.className = "enabledTower";
+										break;
+									case 9:
+										HTMLID_waterGun.className = "enabledTower";
+										break;
+									case 10:
+										HTMLID_airplaneLauncher.className = "enabledTower";
+										break;
+									case 11:
+										HTMLID_trophy.className = "enabledTower";
+										break;
+									case 12:
+										HTMLID_vanquishEvil.className = "enabledTower";
+										break;
+									default:
+									
+								}
+								enableTowers();
+							}
 							if (enemiesOnBoard[j] instanceof clown){
 								Math.round(enemiesOnBoard[j].goldTaken);
-								Gold += enemiesOnBoard[j].goldTaken;
-								gameMessage = "You have killed a clown and stolen back " + Math.round(enemiesOnBoard[j].goldTaken) +" gold!";
+								Gold += Math.round(enemiesOnBoard[j].goldTaken);
+								if (language === 0){
+									gameMessage = "You have killed a clown and stolen back " + Math.round(enemiesOnBoard[j].goldTaken) +" gold!";
+								}
+								else if (language === 1){
+									gameMessage = "Vous avez tue un clown et vole retour " + Math.round(enemiesOnBoard[j].goldTaken) +" or!";
+								}
+								else if (language === 2){
+									gameMessage = "Que ha matado a un payaso y robado " + Math.round(enemiesOnBoard[j].goldTaken) +" oro!";
+								}
 							}
 							if (enemiesOnBoard[j] instanceof blob) {
 								enemiesOnBoard[j].blobSplit();
@@ -1072,8 +1349,8 @@ tower.prototype.attack = function(towerObj, towerName){
 							if (enemiesOnBoard[j] instanceof bigBlob) {
 								enemiesOnBoard[j].bigBlobSplit();
 							}
-							
 							enemiesOnBoard.splice(j,1);
+							
 						}
 						break;
 					}
@@ -1086,14 +1363,21 @@ tower.prototype.attack = function(towerObj, towerName){
 	}, this.attackSpeed);
 };
 
-
 function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 50;
+	this.cost = 25;
 	this.damage = 10;
 	this.range = 160;
 	this.attackSpeed = 900;
-	this.info = "This shoots the dinkie cars at the scary monsters. Not sure what that will do, but use it anyways!";
+	if (language === 0){
+		this.info = "This shoots the dinkie cars at the scary monsters. Not sure what that will do, but use it anyways!";
+	}
+	else if (language === 1){
+		this.info = "Ce tire les voitures de jouet aux monstres effrayants. Je ne sais pas ce que cela va faire, mais l'utiliser de toute facon!";
+	}
+	else if (language === 2){
+		this.info = "Este dispara los coches de mala muerte en los monstruos que dan miedo. No estoy seguro de lo que va a hacer, sino que lo utiliza de todos modos!";
+	}
 }
 toyCarLauncher.prototype = Object.create(tower.prototype);
 toyCarLauncher.prototype.constructor = toyCarLauncher;
@@ -1106,10 +1390,18 @@ function lamp(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, on, is
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed);
 	this.cost = 30;
 	this.damage = 0;
-	this.range = 180;
+	this.range = 120;
 	this.attackSpeed = 1;
 	this.on = false;
-	this.info = "Spots ghosts and changes those pesky bats. You may want to wipe off the dust...";
+	if (language === 0){
+		this.info = "Spots ghosts and changes those pesky bats. You may want to wipe off the dust...";
+	}
+	else if (language === 1){
+		this.info = "Trouve des fantomes et modifie ces chauves-souris embetants. Vous pouvez essuyer la poussiere...";
+	}
+	else if (language === 2){
+		this.info = "Encuentra fantasmas y cambia los murcielagos molestos. Es posible que desee limpiar el polvo ...";
+	}
 }
 lamp.prototype = Object.create(tower.prototype);
 lamp.prototype.constructor = lamp;
@@ -1144,11 +1436,19 @@ lamp.prototype.lampIO = function(){
 
 function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isBuffed);
-	this.cost = 150;
-	this.damage = 250;
-	this.range = 90;
+	this.cost = 100;
+	this.damage = 200;
+	this.range = 100;
 	this.attackSpeed = 4000;
-	this.info = "You think this is Superman? It's actually the action figure Dad steps on every night, and it really hurts!";
+	if (language === 0){
+		this.info = "You think this is Superman? It's actually the action figure Dad steps on every night, and it really hurts!";
+	}
+	else if (language === 1){
+		this.info = "Vous pensez que cela est Superman? Il est en fait la figure d'action papa marche sur tous les soirs, et ca fait vraiment mal!";
+	}
+	else if (language === 2){
+		this.info = "Crees que esto es Superman? En realidad es la figura de accion de papa pasos en cada noche, y me duele mucho!";
+	}
 }
 actionFigure.prototype = Object.create(tower.prototype);
 actionFigure.prototype.constructor = actionFigure;
@@ -1161,10 +1461,18 @@ function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgrade
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter, isShooting, bulletArr, isBuffed);
 	this.cost = 75;
 	this.damage = 10;
-	this.range = 250;
+	this.range = 200;
 	this.attackSpeed = 700;
 	this.shotCounter = 0;
-	this.info = "Shoots marbles at the speed of sound! Every fifth marble may pack a punch!";
+	if (language === 0){
+		this.info = "Shoots marbles at the speed of sound! Every fifth marble may pack a punch!";
+	}
+	else if (language === 1){
+		this.info = "Pousses billes a la vitesse du son! Chaque cinquieme marbre peut emballer un coup de poing!";
+	}
+	else if (language === 2){
+		this.info = "Dispara canicas a la velocidad del sonido! Uno de cada cinco de marmol puede embalar un sacador!";
+	}
 }
 marbleShooter.prototype = Object.create(tower.prototype);
 marbleShooter.prototype.constructor = marbleShooter;
@@ -1180,11 +1488,19 @@ marbleShooter.prototype.marbleBuffShot = function() {
 
 function calculator(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
-	this.cost = 1;
+	this.cost = 150;
 	this.damage = 0;
 	this.range = 1;
 	this.attackSpeed = 5000;
-	this.info = "Allows for more spending which means more video games, tamagothchis, and pokemon cards.";
+	if (language === 0){
+		this.info = "Allows for more spending which means more video games, tamagotchis, and pokemon cards.";
+	}
+	else if (language === 1){
+		this.info = "Permet une augmentation des depenses qui signifie plus de jeux video, tamagotchis, et les cartes pokemon.";
+	}
+	else if (language === 2){
+		this.info = "Permite un mayor gasto que significa mas juegos de video, tamagotchis, y tarjetas de pokemon.";
+	}
 }
 calculator.prototype = Object.create(tower.prototype);
 calculator.prototype.constructor = calculator;
@@ -1195,12 +1511,20 @@ calculator.prototype.goldBuff = function(){
 
 function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, baseDamage, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 90;
+	this.cost = 80;
 	this.damage = 15;
-	this.range = 135;
+	this.range = 140;
 	this.attackSpeed = 800;
 	this.baseDamage = 15;
-	this.info = "Nuts do basic damage and if this tower shoots a bolt, expect lots of damage.";
+	if (language === 0){
+		this.info = "Nuts do basic damage and if this tower shoots a bolt, expect lots of damage.";
+	}
+	else if (language === 1){
+		this.info = "Les noix font des dégâts de base et si cette tour tire un boulon, attendent beaucoup de degats.";
+	}
+	else if (language === 2){
+		this.info = "Frutos secos hacen dano de base y si esta torre dispara un rayo, le espera una gran cantidad de danos.";
+	}
 }
 nutsAndBolts.prototype = Object.create(tower.prototype);
 nutsAndBolts.prototype.constructor = nutsAndBolts;
@@ -1214,11 +1538,19 @@ nutsAndBolts.prototype.critChance = function() {
 
 function toaster(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed);
-	this.cost = 80;
-	this.damage = 75;
+	this.cost = 100;
+	this.damage = 50;
 	this.range = 135;
 	this.attackSpeed = 2000;
-	this.info = "Don't be fooled by it's cute toasty design, it will fire hot toast to toast your enemies to toasty bits. Toast those enemies! TOOAAAST!!";
+	if (language === 0){
+		this.info = "Don't be fooled by it's cute toasty design, it will fire hot toast to toast your enemies to toasty bits. Toast those enemies! TOOAAAST!!";
+	}
+	else if (language === 1){
+		this.info = "Ne vous laissez pas berner par son design mignon grille, il mettra le feu toasts chauds pour griller vos ennemis en morceaux de pain grille. Faire griller les ennemis! PAIN GRILLE!!";
+	}
+	else if (language === 2){
+		this.info = "No se deje enganar por su diseno tostado lindo, que se disparara tostada caliente para brindar por sus enemigos en pedazos tostados. Brindar por los enemigos! BRINDIS!!";
+	}
 }
 toaster.prototype = Object.create(tower.prototype);
 toaster.prototype.constructor = toaster;
@@ -1229,11 +1561,19 @@ toaster.prototype.thisChildMethodNeedsAName = function(){
 
 function blenderDefender(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, isBuffed);
-	this.cost = 50;
+	this.cost = 75;
 	this.damage = 0.5;
 	this.range = 80;
-	this.attackSpeed = 50;
-	this.info = "May blend enemies into a delicious smoothie.";
+	this.attackSpeed = 15;
+	if (language === 0){
+		this.info = "May blend enemies into a delicious smoothie.";
+	}
+	else if (language === 1){
+		this.info = "Peut melanger les ennemis dans un smoothie delicieux.";
+	}
+	else if (language === 2){
+		this.info = "Puede mezclar los enemigos en un delicioso batido.";
+	}
 }
 blenderDefender.prototype = Object.create(tower.prototype);
 blenderDefender.prototype.constructor = blenderDefender;
@@ -1244,11 +1584,19 @@ blenderDefender.prototype.thisChildMethodNeedsAName = function(){
 
 function waterGun(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 50;
-	this.damage = 2;
-	this.range = 150;
-	this.attackSpeed = 200;
-	this.info = "Enough force to slow enemies as they approach.";
+	this.cost = 80;
+	this.damage = 1;
+	this.range = 100;
+	this.attackSpeed = 400;
+	if (language === 0){
+		this.info = "Enough force to slow enemies as they approach.";
+	}
+	else if (language === 1){
+		this.info = "Vigueur assez pour ralentir les ennemis comme ils approchent. N'affecte pas les fantomes et les chauves-souris.";
+	}
+	else if (language === 2){
+		this.info = "La fuerza suficiente para ralentizar enemigos cuando se acercan. No afecta a los fantasmas y los murcielagos.";
+	}
 }
 waterGun.prototype = Object.create(tower.prototype);
 waterGun.prototype.constructor = waterGun;
@@ -1259,11 +1607,20 @@ waterGun.prototype.thisChildMethodNeedsAName = function(){
 
 function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 50;
-	this.damage = 200;
-	this.range = 500;
-	this.attackSpeed = 2000;
-	this.info = "Shoots paper airplanes the kid made. How did they find the time to make all of these?";
+	this.cost = 200;
+	this.damage = 150;
+	this.range = 250;
+	this.attackSpeed = 3000;
+	if (language === 0){
+		this.info = "Shoots paper airplanes the kid made. How did they find the time to make all of these?";
+	}
+	else if (language === 1){
+		this.info = "Tire des avions en papier l'enfant fait. Comment ont-ils trouver le temps de faire tout cela?";
+	}
+	else if (language === 2){
+		this.info = "Dispara aviones de papel hecho el chico. Como encontraron el tiempo para hacer todo esto?";
+	}
+
 }
 airplaneLauncher.prototype = Object.create(tower.prototype);
 airplaneLauncher.prototype.constructor = airplaneLauncher;
@@ -1274,11 +1631,19 @@ airplaneLauncher.prototype.thisChildMethodNeedsAName = function(){
 
 function trophy(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
-	this.cost = 0;
+	this.cost = 100;
 	this.damage = 0;
 	this.range = 100;
 	this.attackSpeed = 1;
-	this.info = "Remember when the child won the spelling bee? I certainly don't. This buffs other towers. No stacking.";
+	if (language === 0){
+		this.info = "Remember when the child won the spelling bee? I certainly don't. This buffs other towers. No stacking.";
+	}
+	else if (language === 1){
+		this.info = "Rappelez-vous quand l'enfant a remporte le concours d'orthographe? Je fais certainement pas. Ce buff d'autres tours. Aucun empilement.";
+	}
+	else if (language === 2){
+		this.info = "Recuerde que cuando el nino gano el concurso de ortografia? Ciertamente no. Esta aficionados a otras torres. No apilamiento.";
+	}
 }
 trophy.prototype = Object.create(tower.prototype);
 trophy.prototype.constructor = trophy;
@@ -1297,11 +1662,19 @@ trophy.prototype.towerBuff = function(){
 function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 0;
-	this.damage = 500;
+	this.cost = 50;
+	this.damage = 600;
 	this.range = 500000;
 	this.attackSpeed = 6000; 
-	this.info = "Caution! Three per customer as per the nightmare safety regulations.";
+	if (language === 0){
+		this.info = "Caution! Three per customer as per the nightmare safety regulations.";
+	}
+	else if (language === 1){
+		this.info = "Prudence! Trois par client selon les regles de securite de cauchemar.";
+	}
+	else if (language === 2){
+		this.info = "Precaucion! Tres por el cliente de acuerdo con las normas de seguridad pesadilla.";
+	}
 }
 vanquishEvil.prototype = Object.create(tower.prototype);
 vanquishEvil.prototype.constructor = vanquishEvil;
@@ -1373,7 +1746,15 @@ function placeTower(towerType){
 		for (var i = 0; i < (stagePaths[currentStage]).length; i++){
 			if ( ((stagePaths[currentStage])[i].x - towerLocationsByPixelPosition[numOfTowers].x > -30) && ((stagePaths[currentStage])[i].x - towerLocationsByPixelPosition[numOfTowers].x < 60) && ((stagePaths[currentStage])[i].y - towerLocationsByPixelPosition[numOfTowers].y > -15) && ((stagePaths[currentStage])[i].y - towerLocationsByPixelPosition[numOfTowers].y < 60) ){
 				objObstruct = true;
-				gameMessage = "Failed to place. Too close to the path.";
+				if (language === 0){
+					gameMessage = "Failed to place. Too close to the path.";
+				}
+				else if (language === 1){
+					gameMessage = "Impossible de placer. Trop proche de la voie.";
+				}
+				else if (language === 2){
+					gameMessage = "No se ha podido colocar. Demasiado cerca de la ruta.";
+				}
 				if (showGrid == false){
 					togGrid();
 				}
@@ -1386,7 +1767,15 @@ function placeTower(towerType){
 			for (var i = 0; i < towerLocationsByPixelPosition.length-1; i++){
 				if ( (towerLocationsByPixelPosition[i].x - towerLocationsByPixelPosition[numOfTowers].x > -45) && (towerLocationsByPixelPosition[i].x - towerLocationsByPixelPosition[numOfTowers].x < 45) && (towerLocationsByPixelPosition[i].y - towerLocationsByPixelPosition[numOfTowers].y > -45) && (towerLocationsByPixelPosition[i].y - towerLocationsByPixelPosition[numOfTowers].y < 45) ){
 					objObstruct = true;
-					gameMessage = "Failed to place. Too close to another tower.";
+					if (language === 0){
+						gameMessage = "Failed to place. Too close to another tower.";
+					}
+					else if (language === 1){
+						gameMessage = "Impossible de placer. Trop pres d'une autre tour.";
+					}
+					else if (language === 2){
+						gameMessage = "No se ha podido colocar. Demasiado cerca de otra torre.";
+					}
 					togGrid();
 					circleCheck = false;
 				}
@@ -1398,15 +1787,19 @@ function placeTower(towerType){
 				vanquishEvilCount++;
 			}
 		}
-		if (vanquishEvilCount >= 3) {
-			objObstruct = true;
+		if (vanquishEvilCount >= 3 && towerType == "vanquishEvil") {
+		objObstruct = true;
+		if (language === 0){
 			gameMessage = "You can have only 3 Vanquish The Evil Towers!";
-			togGrid();
-			circleCheck = false;
-			if (towerType instanceof vanquishEvil) {
-				objObstruct = true;
-				gameMessage = "You can have only 3 Vanquish The Evil Towers!";
-			}
+		}
+		else if (language === 1){
+			gameMessage = "Vous pouvez avoir seulement 3 vaincre les tours du mal!";
+		}
+		else if (language === 2){
+			gameMessage = "Solo puede tener 3 torres vencer a los malos!";
+		}
+		togGrid();
+		circleCheck = false;
 		}
 		var towerObjectHolder = new (eval(towerType))();
 		if (!objObstruct && towerxy.x < 870 && towerxy.y < 570){
@@ -1415,7 +1808,15 @@ function placeTower(towerType){
 				numOfTowers++;
 			}
 			else {
-				gameMessage = "Not enough funds.";
+				if (language === 0){
+					gameMessage = "Not enough funds.";
+				}
+				else if (language === 1){
+					gameMessage = "Pas assez de fonds.";
+				}
+				else if (language === 2){
+					gameMessage = "Sin fondos suficientes.";
+				}
 				togGrid();
 				circleCheck = false;
 			}
@@ -1441,6 +1842,61 @@ function rotateTower(towerX, towerY, enemyX, enemyY) {
 function clearTowerStats () {
 	outputTowerStats.innerHTML = "";
 }
+
+function muteToggle(e) {	
+	e = e || window.event;
+	bkgAudio.muted = !bkgAudio.muted;
+	mute = !mute;
+	e.preventDefault();
+
+	HTMLBTN_muteTgl.innerHTML = mute ? SVG_soundOff : SVG_soundOn;
+}
+HTMLBTN_playTgl.addEventListener( "click", pauseGame );
+HTMLBTN_muteTgl.addEventListener( "click", function(e) { muteToggle(e); });
+HTMLBTN_resume.addEventListener( "click", pauseGame );
+HTMLBTN_mainMenu.addEventListener( "click", menu );
+HTMLBTN_langMenuTgl.addEventListener( "click", function() {
+	if (!langMenuShow) {
+		HTMLID_langMenuWrapper.style.animation = "animation-lang-window 0.4s";
+		HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
+		HTMLID_langMenuWrapper.style.pointerEvents = 'auto';
+	} else {
+		HTMLID_langMenuWrapper.style.animation = "animation-lang-window-reverse 0.4s";
+		HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
+		HTMLID_langMenuWrapper.style.pointerEvents = 'none';
+	}
+	langMenuShow = !langMenuShow;
+} );
+HTMLID_langMenu.addEventListener( "click", function(e) { changeLanguage(e); } );
+function changeLanguage(e) {
+	language = (e.target == HTMLID_langEN) ? 0 :
+		(e.target == HTMLID_langFR) ? 1 :
+		2;
+	if (langMenuShow) {
+		HTMLID_langMenuWrapper.style.animation = "animation-lang-window-reverse 0.4s";
+		HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
+		HTMLID_langMenuWrapper.style.pointerEvents = "none";
+	}
+	if (language === 0){
+		stages[0] = "Child's Bedroom";
+		stages[1] = "Basement";
+		stages[2] = "Kitchen";
+		stages[3] = "Parent's Bedroom";
+	}
+	else if(language === 1){
+		stages[0] = "Chambre D'enfant";
+		stages[1] = "Sous-sol";
+		stages[2] = "Cuisine";
+		stages[3] = "La Chambre des Parents";
+	}
+	else if(language === 2){
+		stages[0] = "El Dormitorio del Nino";
+		stages[1] = "Sotano";
+		stages[2] = "Cocina";
+		stages[3] = "Recamara de los Padres";
+	}
+}
+// tower events -------------------------------------------------------------
 
 HTMLID_toyCarLauncher.addEventListener( "mouseout", clearTowerStats ); 
 HTMLID_actionFigure.addEventListener( "mouseout", clearTowerStats );
@@ -1481,6 +1937,8 @@ HTMLID_airplaneLauncher.addEventListener( "click", function() { placeTower('airp
 HTMLID_trophy.addEventListener( "click", function() { placeTower('trophy'); });
 HTMLID_vanquishEvil.addEventListener( "click", function() { placeTower('vanquishEvil'); });
 
+// end tower events -------------------------------------------------------------
+
 canvas.addEventListener( "mousemove", function(e) { cursorX = e.clientX; cursorY = e.clientY; });
 
 function getStats(turret) {
@@ -1494,49 +1952,194 @@ function getStats(turret) {
 
 	switch (towerPlaceholder.constructor.name) {
 		case "toyCarLauncher":
-			outputTowerStats.innerHTML = "Toy Car Launcher"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Toy Car Launcher"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Voiture Jouet Lanceur"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Lanzador Coche de Juguete"; break;
+			}
 		case "actionFigure":
-			outputTowerStats.innerHTML = "Action Figure"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Action Figure"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Figurine"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Figura de Accion"; break;
+			}
 		case "marbleShooter":
-			outputTowerStats.innerHTML = "Marble Shooter"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Marble Shooter"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Marbre Lanceur"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Tirador de Marmol"; break;
+			}
 		case "lamp":
-			outputTowerStats.innerHTML = "Lava Lamp"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Lava Lamp"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Lampe a Lave"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Lampara de Lava"; break;
+			}
 		case "calculator":
-			outputTowerStats.innerHTML = "Calculator"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Calculator"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Calculatrice"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Calculadora"; break;
+			}
 		case "nutsAndBolts":
-			outputTowerStats.innerHTML = "Nuts and Bolts Shooter"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Nuts and Bolts Shooter"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Ecrous et Boulons Lanceur"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Tuercas y Tornillos Lanzador"; break;
+			}
 		case "blenderDefender":
-			outputTowerStats.innerHTML = "Blender Defender"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Blender Defender"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Defenseur Melangeur"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Defensor de la Licuadora"; break;
+			}
 		case "toaster":
-			outputTowerStats.innerHTML = "Toaster"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Toaster"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Grille-pain"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Tostadora"; break;
+			}
 		case "waterGun":
-			outputTowerStats.innerHTML = "Water Gun"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Water Gun"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Pistolet a Eau"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Pistola de Agua"; break;
+			}
 		case "airplaneLauncher":
-			outputTowerStats.innerHTML = "Paper Plane Launcher"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Paper Plane Launcher"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Papier Avion Lanceur"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Lanzador Avion de Papel"; break;
+			}
 		case "trophy":
-			outputTowerStats.innerHTML = "Trophy"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Trophy"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Trophee"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Trofeo"; break;
+			}
 		case "vanquishEvil":
-			outputTowerStats.innerHTML = "Vanquish Evil"; break;
+			if(language === 0){
+				outputTowerStats.innerHTML = "Vanquish Evil"; break;
+			}
+			else if(language === 1){
+				outputTowerStats.innerHTML = "Vaincre le Mal"; break;
+			}
+			else if(language === 2){
+				outputTowerStats.innerHTML = "Vencer el Mal"; break;
+			}
 	
 	}
-	outputTowerStats.innerHTML += "<br>Cost: " + towerPlaceholder.cost;
-	outputTowerStats.innerHTML += "<br>Damage: " + towerPlaceholder.damage;
-	outputTowerStats.innerHTML += "<br>Range: " + towerPlaceholder.range;
-	outputTowerStats.innerHTML += "<br>Attack Speed: " + towerPlaceholder.attackSpeed + " (Reload Time)";
-	outputTowerStats.innerHTML += "<br>" + towerPlaceholder.info; 
-	//console.log(outputTowerStats);
+	if (language === 0){
+		outputTowerStats.innerHTML += "<br>Cost: " + towerPlaceholder.cost;
+		outputTowerStats.innerHTML += "<br>Damage: " + towerPlaceholder.damage;
+		outputTowerStats.innerHTML += "<br>Range: " + towerPlaceholder.range;
+		outputTowerStats.innerHTML += "<br>Attack Speed: " + towerPlaceholder.attackSpeed + " (Reload Time)";
+		outputTowerStats.innerHTML += "<br>" + towerPlaceholder.info; 
+	}
+	else if(language === 1){
+		outputTowerStats.innerHTML += "<br>Cout: " + towerPlaceholder.cost;
+		outputTowerStats.innerHTML += "<br>Dommage: " + towerPlaceholder.damage;
+		outputTowerStats.innerHTML += "<br>Gamme: " + towerPlaceholder.range;
+		outputTowerStats.innerHTML += "<br>Vitesse d'Attaque: " + towerPlaceholder.attackSpeed + " (Temps de Rechargement)";
+		outputTowerStats.innerHTML += "<br>" + towerPlaceholder.info; 
+	}
+	else if(language === 2){
+		outputTowerStats.innerHTML += "<br>Costo: " + towerPlaceholder.cost;
+		outputTowerStats.innerHTML += "<br>Danar: " + towerPlaceholder.damage;
+		outputTowerStats.innerHTML += "<br>Distancia: " + towerPlaceholder.range;
+		outputTowerStats.innerHTML += "<br>La Velocidad de Ataque: " + towerPlaceholder.attackSpeed + " (Tiempo de Recarga)";
+		outputTowerStats.innerHTML += "<br>" + towerPlaceholder.info; 
+	}
 }
 
 var cursorX;
 var cursorY;
 var circleCheck = false;
 
+function boxStatus(){
+	for (var i = 0; i <= towersOnBoard.length-1;i++){
+		if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
+			if ((towersOnBoard[i].xCoord == tempX) && (towersOnBoard[i].yCoord == tempY)){
+				console.log("setting");
+				if (towersOnBoard[i].boxBool == false){
+					towersOnBoard[i].boxBool = true;
+				}
+				else{
+					towersOnBoard[i].boxBool = false;
+				}
+			}
+		}
+	}
+}
+
+function drawBox(){
+	if (towersOnBoard.length > 0){
+		for (i = 0; i <= towersOnBoard.length-1;i++){
+			if (towersOnBoard[i].boxBool == true){
+				ctx.beginPath();
+				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord)
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+45)
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+45)
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord)
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord)
+				ctx.stroke();
+			}
+		}
+	}
+}
 
 function hoverCheck(){
 	if (towersOnBoard.length > 0)
 	{
 		for (var i = 0; i <= (towersOnBoard.length-1); i++){
 			if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
+				tempX = towersOnBoard[i].xCoord;
+				tempY = towersOnBoard[i].yCoord;
+				canvas.addEventListener ("click", boxStatus);
 				ctx.beginPath();
 				ctx.arc(towersOnBoard[i].xCoord+22.5, towersOnBoard[i].yCoord+22.5, towersOnBoard[i].range, 0, 2 * Math.PI);
 				ctx.stroke();
@@ -1544,6 +2147,7 @@ function hoverCheck(){
 		}
 	}
 }
+
 
 //End tower section ---------------------------------------------------------------------------------------------------------------------------
 
@@ -1559,17 +2163,52 @@ function initGame()
 
 //Update Game
 function update(){
-
-	outputPlayerStats.innerHTML = "<b>Health: </b>" + Hp;
-	outputPlayerStats.innerHTML += "<br><b>Gold: </b>" + Gold;
-	outputPlayerStats.innerHTML += "<br><b>Level: </b>" + (currentStage + 1);
-	outputPlayerStats.innerHTML += "<br><b>Wave: </b>" + (waveCounter + 1);
+	
+	if (inAWave) {
+		HTMLBTN_playTgl.style.pointerEvents = 'none';
+		HTMLBTN_pauseButton.style.fill = '#626262';
+	} else {
+		HTMLBTN_playTgl.style.pointerEvents = 'auto';
+		HTMLBTN_pauseButton.style.fill = '#e5e5e5';
+	}
+	if(language === 0){
+		HTMLBTN_pauseTitle.innerHTML = "paused";
+		HTMLBTN_mainMenu.innerHTML = "main menu";
+		outputPlayerStats.innerHTML = "<b>Health: </b>" + Hp;
+		outputPlayerStats.innerHTML += "<br><b>Gold: </b>" + Gold;
+		outputPlayerStats.innerHTML += "<br><b>Level: </b>" + (currentStage + 1);
+		outputPlayerStats.innerHTML += "<br><b>Wave: </b>" + (waveCounter + 1);
+	}
+	else if(language === 1){
+		HTMLBTN_pauseTitle.innerHTML = "pause";
+		HTMLBTN_mainMenu.innerHTML = "menu principal";
+		outputPlayerStats.innerHTML = "<b>Sante: </b>" + Hp;
+		outputPlayerStats.innerHTML += "<br><b>Or: </b>" + Gold;
+		outputPlayerStats.innerHTML += "<br><b>Niveau: </b>" + (currentStage + 1);
+		outputPlayerStats.innerHTML += "<br><b>Vague: </b>" + (waveCounter + 1);
+	}
+	else if(language === 2){
+		HTMLBTN_pauseTitle.innerHTML = "pausa";
+		HTMLBTN_mainMenu.innerHTML = "menu principal";
+		outputPlayerStats.innerHTML = "<b>Salud: </b>" + Hp;
+		outputPlayerStats.innerHTML += "<br><b>Oro: </b>" + Gold;
+		outputPlayerStats.innerHTML += "<br><b>Nivel: </b>" + (currentStage + 1);
+		outputPlayerStats.innerHTML += "<br><b>Ola: </b>" + (waveCounter + 1);
+	}
 
 	outputGameMessage.innerHTML = gameMessage;
 	outputStageName.innerHTML = stages[currentStage];
 
 	if(Hp <= 0){
-		gameMessage = "Game Over. You got rekt by your nightmares and peed your pants.";
+		if (language === 0){
+			gameMessage = "Game Over. You got rekt by your nightmares and peed your pants.";
+		}
+		else if (language === 1){
+			gameMessage = "Jeu termine. Tu as battu par vos cauchemars et pisse votre pantalon.";
+		}
+		else if (language === 2){
+			gameMessage = "Juego terminado. Usted consiguio golpeado por sus pesadillas y orino en los pantalones.";
+		}
 		gameOver();
 	}
 	
@@ -1593,6 +2232,7 @@ function render(){
 	drawRange();
 	hoverCheck();
 	stageWin();
+	drawBox();
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------
@@ -1619,11 +2259,29 @@ function renderEnemyMovement() {
 	for (var i = 0; i < enemiesOnBoard.length; i++) {
 		//draw enemies
 		
-		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof redDemon || enemiesOnBoard[i] instanceof blueDemon || enemiesOnBoard[i] instanceof grizzlyBear) {
+		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof grizzlyBear) {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-30, 55, 60);
 			//draw health bar
 			ctx.fillRect(enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-35, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else if (enemiesOnBoard[i] instanceof bigRoach) {
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-32, 55, 70);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-37, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else if (enemiesOnBoard[i] instanceof redDemon) {
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-29, 35, 60);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-34, (35 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else if (enemiesOnBoard[i] instanceof blueDemon) {
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-29, 45, 60);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-34, (45 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
 		else if (enemiesOnBoard[i] instanceof grimReaper) {
 			enemyImgToPrint.src = '../images/grimReaper.png';
@@ -1658,7 +2316,13 @@ function renderEnemyMovement() {
 			//draw health bar
 			ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
-		else{
+		else if (enemiesOnBoard[i] instanceof witch){
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-15, enemiesOnBoard[i].yCoord-17, 43, 36);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-15, enemiesOnBoard[i].yCoord-22, (43 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
 			//draw health bar
@@ -1689,6 +2353,28 @@ function renderTowerAndBullet() {
 				towersOnBoard[i].bullet();
 			}
 			
+			if(towersOnBoard[i] instanceof marbleShooter){
+				bulletImg.src = '../images/marble.png';
+			}
+			else if(towersOnBoard[i] instanceof toyCarLauncher){
+				bulletImg.src = '../images/toycar.png';
+			}
+			else if(towersOnBoard[i] instanceof waterGun){
+				bulletImg.src = "../images/water.png";
+			}
+			else if(towersOnBoard[i] instanceof nutsAndBolts){
+				bulletImg.src = '../images/bolt.png';
+			}
+			else if(towersOnBoard[i] instanceof toaster){
+				bulletImg.src = '../images/toast.png';
+			}
+			else if(towersOnBoard[i] instanceof airplaneLauncher){
+				bulletImg.src = '../images/paperPlane.png';
+			}
+			else if(towersOnBoard[i] instanceof vanquishEvil){
+				bulletImg.src = '../images/teddyBear.png';
+			}
+			
 			//iterate through bullets
 			for (var b = 0; b < towersOnBoard[i].bulletArr.length; b++) {
 				//same check as above approx 20 lines up, but also checks if it's an action figure
@@ -1704,7 +2390,7 @@ function renderTowerAndBullet() {
 				if ( ang != 720 ) {
 					ctx.rotate(Math.PI / 180 * ang);
 					//draw bullet with respect to trajectory parameter
-					ctx.fillRect(0, -(towersOnBoard[i].bulletArr[b].trajectory), 5, 5);
+					ctx.drawImage(bulletImg, 0, -(towersOnBoard[i].bulletArr[b].trajectory), 15, 15);
 					towersOnBoard[i].lastAngState = ang;
 				}
 				//restore canvas state
@@ -1734,7 +2420,7 @@ function renderTowerAndBullet() {
 	}
 }
 
-function drawRange(){
+function drawRange() {
 	if (circleCheck === true) {
 		ctx.beginPath();
 		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
@@ -1749,9 +2435,17 @@ var bossSpawned = false; //Checks to see if boss has spawned
 function stageWin() {
 	var bActive = false; //If boss is on map, turns to true
 	for(var i = 0; i < enemiesOnBoard.length; i++) {
-		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof grimReaper) {
+		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof bigRoach || enemiesOnBoard[i] instanceof grimReaper) {
 			if (bossSpawned == false){
-				gameMessage = "BOSS INCOMING!";
+				if (language === 0){
+					gameMessage = "BOSS INCOMING!";
+				}
+				else if (language === 1){
+					gameMessage = "PATRON ENTRANT!";
+				}
+				else if (language === 2){
+					gameMessage = "ENTRANTE JEFE!";
+				}
 			}
 			bActive = true;
 			break;
@@ -1763,7 +2457,15 @@ function stageWin() {
 	}
 	
 	if (bActive == false && bossSpawned == true && Hp > 0 && enemiesOnBoard.length == 0 && currentStage == 3) {
-		gameMessage = "STAGE COMPLETE!";
+		if (language === 0){
+					gameMessage = "STAGE COMPLETE!";
+				}
+				else if (language === 1){
+					gameMessage = "COMPLETE DE LA SCENE!";
+				}
+				else if (language === 2){
+					gameMessage = "ETAPA COMPLETA!";
+				}
 		cancelAnimationFrame(requestID);
 		requestID = undefined;
 		ctx.drawImage(stageTransition, 0, 0);
@@ -1772,7 +2474,15 @@ function stageWin() {
 		}, 4000);
 	}
 	else if (bActive == false && bossSpawned == true && Hp > 0 && enemiesOnBoard.length == 0) {
-		gameMessage = "STAGE COMPLETE!";
+		if (language === 0){
+			gameMessage = "STAGE COMPLETE!";
+		}
+		else if (language === 1){
+			gameMessage = "COMPLETE DE LA SCENE!";
+		}
+		else if (language === 2){
+			gameMessage = "ETAPA COMPLETA!";
+		}
 		cancelAnimationFrame(requestID);
 		requestID = undefined;
 		ctx.drawImage(stageTransition, 0, 0);
@@ -1787,50 +2497,53 @@ function stageWin() {
 
 
 var stageWave = [[],[],[],[]];
+
 //Stage 1
-stageWave[0][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBoss"];
-stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "blueSkeleton"];
-stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[0][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[0][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[0][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[0][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[0][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[0][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+stageWave[0][0] = ["basicSkeleton", "blueSkeleton"];
+stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[0][2] = ["redSkeleton", "basicSkeleton", "basicSkeleton","basicSkeleton", "blueSkeleton"];
+stageWave[0][3] = ["basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton"];
+stageWave[0][4] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					"blueSkeleton"];
+stageWave[0][5] = ["blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					 "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 				   "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton"];
+stageWave[0][6] = ["basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", 				  "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", 					"blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", 				  "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", 				   "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton"];
+stageWave[0][7] = ["basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", 					 "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "redSkeleton", 					"redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton"];
+stageWave[0][8] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", 					 "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", 				   "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton"];
+stageWave[0][9] = ["bigBoss"];
+
 //Stage 2
-stageWave[1][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBlob"];
-stageWave[1][1] = ["blueSkeleton", "basicSkeleton"];
-stageWave[1][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[1][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[1][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[1][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[1][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[1][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[1][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[1][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBlob"];
+stageWave[1][0] = ["ghost"];
+stageWave[1][1] = ["redSkeleton", "basicSkeleton", "bat"];
+stageWave[1][2] = ["blueSkeleton", "ghost", "basicSkeleton", "blueSkeleton", "ghost", "blueSkeleton", "ghost"];
+stageWave[1][3] = ["blueSkeleton", "bat", "ghost", "blueSkeleton", "redSkeleton", "bat", "bat", "ghost", "blob"];
+stageWave[1][4] = ["redSkeleton", "redSkeleton", "blueSkeleton", "ghost", "blob", "blob", "ghost", "blueSkeleton", "blob", "redSkeleton", 					"bat", "redSkeleton", "blueSkeleton", "ghost"];
+stageWave[1][5] = ["ghost", , "redSkeleton", "ghost", "ghost", "blueSkeleton", "ghost", "ghost", "basicSkeleton", "ghost", "ghost", "bat", 					 "ghost", "ghost", "blob", "ghost", "ghost", "blueSkeleton", "ghost", "ghost", "ghost", "ghost", "ghost", "ghost", 					 "ghost", "ghost", "ghost","ghost", "ghost"];
+stageWave[1][6] = ["basicSkeleton", "basicSkeleton", "blob", "basicSkeleton", "blueSkeleton", "blob", "basicSkeleton", "redSkeleton", 					"blob", "basicSkeleton", "basicSkeleton", "blob", "basicSkeleton", "blueSkeleton", "blob", "basicSkeleton", 				  "redSkeleton", "blob"];
+stageWave[1][7] = ["bat", "bat", "bat", "blueSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "bat", "bat", "bat", "blueSkeleton", 					"redSkeleton", "redSkeleton", "redSkeleton", "bat", "bat", "bat", "blueSkeleton", "redSkeleton", "redSkeleton", 				  "redSkeleton"];
+stageWave[1][8] = ["blob", "blob", "blob", "bat", "blob", "blob", "blob", "bat", "blob", "blob", "blob", "bat", "blob", "blob", "blob", 				  "bat", "blob", "blob", "blob", "bat"];
+stageWave[1][9] = ["bigBlob"];
 //Stage 3
-stageWave[2][0] = ["blueSkeleton", "grizzlyBear", "grizzlyBear"];
-stageWave[2][1] = ["blueSkeleton", "basicSkeleton"];
-stageWave[2][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[2][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[2][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[2][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[2][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[2][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[2][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[2][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+stageWave[2][0] = ["basicSkeleton", "basicSkeleton", "blueSkeleton", "ghost"];
+stageWave[2][1] = ["redSkeleton", "ghost", "bat"];
+stageWave[2][2] = ["grizzlyBear"];
+stageWave[2][3] = ["grizzlyBear", "blob", "blueSkeleton", "basicSkeleton", "basicSkeleton", "clown"];
+stageWave[2][4] = ["ghost", "blueSkeleton", "redSkeleton", "ghost", "grizzlyBear", "bat", "clown", "redSkeleton", "blob", "grizzlyBear", 				   "bat", "blueSkeleton"];
+stageWave[2][5] = ["grizzlyBear", "bat", "blob", "blob", "ghost", "redSkeleton", "clown", "grizzlyBear", "bat", "blob", "blob", "ghost", 				   "redSkeleton", "clown", "grizzlyBear", "bat", "blob", "blob", "ghost", "redSkeleton", "clown"];
+stageWave[2][6] = ["ghost", "bat", "clown", "redSkeleton", "blueSkeleton", "blob", "grizzlyBear", "blob", "clown", "blob", "ghost", "bat", 					 "basicSkeleton", "basicSkeleton", "basicSkeleton", "blob", "ghost", "bat", "grizzlyBear", "bat", "clown", "redSkeleton"  				  ,"redSkeleton", "clown", "clown"];
+stageWave[2][7] = ["ghost", "ghost", "ghost", "ghost", "ghost", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 				  "blueSkeleton", "grizzlyBear", "grizzlyBear", "blob", "blob", "blob", "bat", "bat", "bat", "blueSkeleton", 				   "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton"];
+stageWave[2][8] = ["grizzlyBear", "grizzlyBear", "grizzlyBear", "clown", "grizzlyBear", "grizzlyBear", "grizzlyBear", "grizzlyBear", 				   "grizzlyBear", "clown", "clown", "clown", ];
+stageWave[2][9] = ["bigRoach, bigRoach", "bigRoach", "bigRoach", "bigRoach"];
+
 //Stage 4
-stageWave[3][0] = ["grimReaper", "blueDemon"];
-stageWave[3][1] = ["blueSkeleton", "basicSkeleton"];
-stageWave[3][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[3][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[3][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[3][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[3][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[3][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[3][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[3][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+stageWave[3][0] = ["witch"];
+stageWave[3][1] = ["witch", "redSkeleton", "redSkeleton", "witch"];
+stageWave[3][2] = ["basicSkeleton", "blueSkeleton", "blob", "witch", "clown", "basicSkeleton", "ghost", "ghost"];
+stageWave[3][3] = ["blueDemon", "blueSkeleton"];
+stageWave[3][4] = ["ghost", "witch", "bat", "witch", "ghost","witch", "bat", "witch", "ghost", "witch", "bat", "witch", "ghost", "redDemon"];
+stageWave[3][5] = ["grizzlyBear", "witch", "witch", "redSkeleton", "blob", "clown", "blueDemon"];
+stageWave[3][6] = ["clown", "grizzlyBear", "blob", "blob", "blob", "witch", "witch", "grizzlyBear", "redSkeleton", "blueSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "redDemon"];
+stageWave[3][7] = ["grizzlyBear", "grizzlyBear", "blob", "grizzlyBear", "blob", "bat", "bat", "bat", "clown", "bat", "redSkeleton", "basicSkeleton", "blueSkeleton", "ghost", "redDemon", "redDemon", "redSkeleton"];
+stageWave[3][8] = ["basicSkeleton", "blueSkeleton", "redSkeleton", "ghost", "bat", "blob", "clown", "grizzlyBear", "blueDemon", "redDemon", "bigRoach", "basicSkeleton", "blueSkeleton", "redSkeleton", "ghost", "bat", "blob", "clown", "grizzlyBear", "blueDemon", "redDemon", "bigRoach"];
+stageWave[3][9] = ["grimReaper"];
 
 var inAWave = false;
 var waveCounter = 0;
@@ -1860,9 +2573,21 @@ function nextWave (){
 	}
 }
 
+function renderPauseUI() {
+	
+	requestID_PAUSE = requestAnimationFrame(renderPauseUI);
+	
+	ctx.clearRect(0,0, canvas.width, canvas.height);
+	ctx.fillStyle = "rgba(0,0,0, 0.3)";
+	ctx.fillRect(0,0, canvas.width, canvas.height);
+
+}
 
 function pauseGame(){
-	if(!pause){
+	if(!pause) {
+		bkgAudio.volume = 0.2;
+		HTMLBTN_playTgl.innerHTML = SVG_play;
+
 		for (var i = 0; i < towersOnBoard.length; i++){
 			clearInterval(towersOnBoard[i].attackEnemy);
 		}
@@ -1872,9 +2597,16 @@ function pauseGame(){
 		awardGoldOverTime = false;
 		cancelAnimationFrame(requestID);
 		requestID = undefined;
+		renderPauseUI();
+		
+		HTMLID_pauseUI.style.animation = "animation-pause-window 1s";
+		HTMLID_pauseUI.style.animationFillMode = "forwards";
 		pause = true;
 	}
-	else{
+	else {
+		bkgAudio.volume = 1;
+		HTMLBTN_playTgl.innerHTML = SVG_pause;
+
 		for (var i = 0; i < towersOnBoard.length; i++){
 			towersOnBoard[i].attack(towersOnBoard[i], towersOnBoard[i].constructor.name);
 		}
@@ -1882,9 +2614,13 @@ function pauseGame(){
 			enemiesOnBoard[i].enemyMovement(enemiesOnBoard[i], enemiesOnBoard[i].constructor.name);
 		}
 		awardGoldOverTime = true;
+		cancelAnimationFrame(requestID_PAUSE);
+		requestID_PAUSE = undefined;
+
+		HTMLID_pauseUI.style.animation = "animation-pause-window-reverse 1s";
+		HTMLID_pauseUI.style.animationFillMode = "forwards";
 		pause = false;
 		render();
-
 	}
 }
 
@@ -1987,7 +2723,6 @@ function towerAvailable () {
 }
 
 function enableTowers() {
-
 	for (var i = 0; i < allSelected.length; i++) {
 		allSelected[i].style.opacity = '1.0';
 		allSelected[i].style.pointerEvents = 'auto';
@@ -1995,5 +2730,19 @@ function enableTowers() {
 	for (var i = 0; i < disabledTowers.length; i++) {
 		disabledTowers[i].style.opacity = '0.3';
 		disabledTowers[i].style.pointerEvents = 'none';
+	}
+}
+
+function sellTowers() {
+	//HTMLID_btnSell.style.display = "none";
+	//Small bugfix needed for when indice out of range
+	for (var i=towersOnBoard.length-1; i => 0;i--){
+		if (towersOnBoard[i].boxBool == true){
+			numOfTowers--;
+			Gold += Math.round(towersOnBoard[i].cost/2);
+			towerLocationsByPixelPosition.splice(i, 1);
+			clearInterval(towersOnBoard[i].attackEnemy);
+			towersOnBoard.splice(i,1);
+		}
 	}
 }
