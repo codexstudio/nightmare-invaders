@@ -34,10 +34,13 @@ preload(
 	'../images/redDemon.png',
 	'../images/zombieDad.png',
 	'../images/zombieMom.png',
-	'../images/grimReaper.png'
+	'../images/grimReaper.png',
+	'../images/bigRoach.png',
+	'../images/kid.png'
 )
 		
 			
+	
 //Determines the distance between two points
 function distance(x1, x2, y1, y2){
 	return Math.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1)));
@@ -94,80 +97,88 @@ stageImages[3] = "Stage4.png";
 
 
 //List of stage paths (Paths not to be used for enemy path anymore like in prototype. Purpose is now for tower placement checking.)
-var pathChildBedroom = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid[5][56], grid[5][55], grid[5][54], grid[5][53], 
-			grid[5][52], grid[5][51], grid[5][50], grid[5][49], grid[6][49], grid[7][49], grid[8][49], 
-			grid[9][49], grid[10][49], grid[11][49], grid[12][49], grid[12][48], grid[12][47], grid[12][46], 
-			grid[12][45], grid[12][44], grid[12][43], grid[12][42], grid[12][41], grid[12][40], grid[12][39], 
-			grid[12][38], grid[12][37], grid[12][36], grid[12][35], grid[12][34], grid[12][33], grid[12][32], 
-			grid[12][31], grid[12][30], grid[12][29], grid[12][28], grid[12][27], grid[12][26], grid[12][25], 
-			grid[12][24], grid[13][24], grid[14][24], grid[15][24], grid[16][24], grid[17][24], grid[18][24], 
-			grid[19][24], grid[20][24], grid[21][24], grid[22][24], grid[23][24], grid[24][24], grid[25][24], 
-			grid[25][25], grid[25][26], grid[25][27], grid[25][28], grid[25][29], grid[25][30], grid[25][31], 
-			grid[25][32], grid[25][33], grid[25][34], grid[25][35], grid[25][36], grid[25][37], grid[25][38], 
-			grid[25][39], grid[25][40], grid[26][40], grid[27][40], grid[28][40], grid[29][40], grid[30][40], 
-			grid[31][40], grid[32][40], grid[33][40], grid[34][40], grid[35][40], grid[35][39], grid[35][38], 
-			grid[35][37], grid[35][36], grid[35][35], grid[35][34], grid[35][33], grid[35][32], grid[35][31], 
-			grid[35][30], grid[35][29], grid[35][28], grid[35][27], grid[35][26], grid[35][25], grid[35][24], 
-			grid[35][23], grid[35][22], grid[35][21], grid[35][20], grid[35][19], grid[35][18], grid[35][17], 
-			grid[35][16], grid[35][15], grid[35][14], grid[35][13], grid[35][12], grid[35][11], grid[35][10], 
-			grid[35][9], grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], 
-			grid[35][2], grid[35][1], grid[35][0]];
+	//format => [y, x]; [0, 0] => top left; [40, 60] => bottom right;
+	//[same y, higher x] => →; [same y, lower x] => ←; [higher y, same x] => ↓; [lower y, same x] => ↑;
+
+//Stage1Path.png
+//[5, 60] ← [5, 49] ↓ [12, 49] left [12, 24] down [24, 24] right [24, 40] down [35, 40] left [35, 0]
+var pathChildBedroom = [grid[5][60], grid[5][59], grid[5][58], grid[5][57], grid[5][56], grid[5][55], grid[5][54], grid[5][53],
+			grid[5][52], grid[5][51], grid[5][50], grid[5][49], grid[6][49], grid[7][49], grid[8][49], grid[9][49],
+			grid[10][49], grid[11][49], grid[12][49], grid[12][48], grid[12][47], grid[12][46],	grid[12][45],
+			grid[12][44], grid[12][43], grid[12][42], grid[12][41], grid[12][40], grid[12][39],	grid[12][38],
+			grid[12][37], grid[12][36], grid[12][35], grid[12][34], grid[12][33], grid[12][32],	grid[12][31],
+			grid[12][30], grid[12][29], grid[12][28], grid[12][27], grid[12][26], grid[12][25],	grid[12][24],
+			grid[13][24], grid[14][24], grid[15][24], grid[16][24], grid[17][24], grid[18][24],	grid[19][24],
+			grid[20][24], grid[21][24], grid[22][24], grid[23][24], grid[24][24], grid[24][25],	grid[24][26],
+			grid[24][27], grid[24][28], grid[24][29], grid[24][30], grid[24][31], grid[24][32],	grid[24][33],
+			grid[24][34], grid[24][35], grid[24][36], grid[24][37], grid[24][38], grid[24][39], grid[24][40],
+			grid[25][40], grid[26][40], grid[27][40], grid[28][40], grid[29][40], grid[30][40],	grid[31][40],
+			grid[32][40], grid[33][40], grid[34][40], grid[35][40], grid[35][39], grid[35][38], grid[35][37],
+			grid[35][36], grid[35][35], grid[35][34], grid[35][33], grid[35][32], grid[35][31],	grid[35][30],
+			grid[35][29], grid[35][28], grid[35][27], grid[35][26], grid[35][25], grid[35][24], grid[35][23],
+			grid[35][22], grid[35][21], grid[35][20], grid[35][19], grid[35][18], grid[35][17], grid[35][16],
+			grid[35][15], grid[35][14], grid[35][13], grid[35][12], grid[35][11], grid[35][10], grid[35][9],
+			grid[35][8], grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], grid[35][2], grid[35][1], grid[35][0]];
 			
-var pathBasement = [grid[20][60], grid[20][59], grid[20][58], grid[20][57], grid[20][56], grid[20][55], grid[20][54], grid[20][53], 
-			grid[21][53], grid[22][53], grid[23][53], grid[24][53], grid[25][53], grid[26][53], grid[27][53], 
-			grid[28][53], grid[29][53], grid[30][53], grid[31][53], grid[32][53], grid[33][53], grid[34][53], 
-			grid[35][53], grid[35][52], grid[35][51], grid[35][50], grid[35][49], grid[35][48], grid[35][47], 
-			grid[35][46], grid[35][45], grid[35][44], grid[35][43], grid[35][42], grid[35][41], grid[35][40], 
-			grid[35][39], grid[35][38], grid[35][37], grid[34][37], grid[33][37], grid[32][37], grid[31][37], 
-			grid[30][37], grid[29][37], grid[28][37], grid[27][37], grid[26][37], grid[25][37], grid[24][37], 
-			grid[23][37], grid[22][37], grid[21][37], grid[20][37], grid[19][37], grid[18][37], grid[17][37], 
-			grid[16][37], grid[15][37], grid[14][37], grid[13][37], grid[12][37], grid[11][37], grid[10][37], 
-			grid[10][36], grid[10][35], grid[10][34], grid[10][33], grid[10][32], 
-			grid[10][31], grid[10][30], grid[10][29], grid[10][28], grid[10][27], grid[10][26], grid[10][25], 
-			grid[10][24], grid[10][23], grid[10][22], grid[11][22], grid[12][22], grid[13][22], grid[14][22], 
-			grid[15][22], grid[16][22], grid[17][22], grid[18][22], grid[19][22], grid[20][22], grid[21][22], 
-			grid[22][22], grid[23][22], grid[24][22], grid[25][22], grid[25][21], grid[25][20], grid[25][19], 
-			grid[25][18], grid[25][17], grid[25][16], grid[25][15], grid[25][14], grid[25][13], grid[25][12], 
-			grid[25][11], grid[25][10], grid[24][10], grid[23][10], grid[22][10], grid[21][10], grid[20][10], 
-			grid[20][9], grid[20][8], grid[20][7], grid[20][6], grid[20][5], grid[20][4], grid[20][3], grid[20][2], 
-			grid[20][1], grid[20][0]];
+//Stage2Path.png
+//[20, 60] ← [20, 53] ↓ [35, 53] ← [35, 37] ↑ [13, 37] ← [13, 22] ↓ [27, 22] ← [27, 10] ↑ [20, 10] ← [20, 0];
+var pathBasement = [grid[20][60], grid[20][59], grid[20][58], grid[20][57], grid[20][56], grid[20][55], grid[20][54], grid[20][53],
+			grid[21][53], grid[22][53], grid[23][53], grid[24][53], grid[25][53], grid[26][53], grid[27][53],
+			grid[28][53], grid[29][53], grid[30][53], grid[31][53], grid[32][53], grid[33][53], grid[34][53],
+			grid[35][53], grid[35][52], grid[35][51], grid[35][50], grid[35][49], grid[35][48], grid[35][47],
+			grid[35][46], grid[35][45], grid[35][44], grid[35][43], grid[35][42], grid[35][41], grid[35][40],
+			grid[35][39], grid[35][38], grid[35][37], grid[34][37], grid[33][37], grid[32][37], grid[31][37],
+			grid[30][37], grid[29][37], grid[28][37], grid[27][37], grid[26][37], grid[25][37], grid[24][37],
+			grid[23][37], grid[22][37], grid[21][37], grid[20][37], grid[19][37], grid[18][37], grid[17][37],
+			grid[16][37], grid[15][37], grid[14][37], grid[13][37], grid[13][36], grid[13][35], grid[13][34],
+			grid[13][33], grid[13][32], grid[13][31], grid[13][30],	grid[13][29], grid[13][28], grid[13][27],
+			grid[13][26], grid[13][25], grid[13][24], grid[13][23],	grid[13][22], grid[14][22], grid[15][22],
+			grid[16][22], grid[17][22], grid[18][22], grid[19][22],	grid[20][22], grid[21][22], grid[22][22],
+			grid[23][22], grid[24][22], grid[25][22], grid[26][22],	grid[27][22], grid[27][21], grid[27][20],
+			grid[27][19], grid[27][18], grid[27][17], grid[27][16], grid[27][15], grid[27][14], grid[27][13],
+			grid[27][12], grid[27][11], grid[27][10], grid[24][10], grid[23][10], grid[22][10], grid[21][10],
+			grid[20][10], grid[20][9], grid[20][8], grid[20][7], grid[20][6], grid[20][5], grid[20][4],
+			grid[20][3], grid[20][2], grid[20][1], grid[20][0]];
 			
-var pathKitchen = [grid[25][60], grid[25][59], grid[25][58], grid[25][57], grid[25][56], grid[25][55], grid[25][54], grid[25][53], 
-			grid[25][52], grid[25][51], grid[25][50], grid[25][49], grid[25][48], grid[25][47], grid[25][46], 
-			grid[25][45], grid[26][45], grid[27][45], grid[28][45], grid[29][45], grid[30][45], grid[31][45], 
-			grid[32][45], grid[33][45], grid[34][45], grid[35][45], grid[35][44], grid[35][43], grid[35][42], 
-			grid[35][31], grid[35][30], grid[35][29], grid[35][28], grid[35][27], grid[35][26], grid[35][25], 
-			grid[35][24], grid[35][23], grid[34][23], grid[33][23], grid[32][23], grid[31][23], grid[30][23], 
-			grid[29][23], grid[28][23], grid[27][23], grid[26][23], grid[25][23], grid[24][23], grid[23][23], 
-			grid[22][23], grid[21][23], grid[20][23], grid[19][23], grid[18][23], grid[17][23], grid[16][23], 
-			grid[15][23], grid[15][24], grid[15][25], grid[15][26], grid[15][27], grid[15][28], grid[15][29], 
-			grid[15][30], grid[15][31], grid[15][32], grid[15][33], grid[15][34], grid[15][35], grid[15][36], 
-			grid[15][37], grid[14][37], grid[13][37], grid[12][37], grid[11][37], grid[10][37], grid[10][36], 
-			grid[10][35], grid[10][34], grid[10][33], grid[10][32], grid[10][31], grid[10][30], grid[10][29], 
-			grid[10][28], grid[10][27], grid[10][26], grid[10][25], grid[10][24], grid[10][23], grid[10][22], 
-			grid[10][21], grid[10][20], grid[10][19], grid[10][18], grid[10][17], grid[10][16], grid[10][15], 
-			grid[11][15], grid[12][15], grid[13][15], grid[14][15], grid[15][15], grid[15][14], grid[15][13], 
-			grid[15][12], grid[15][11], grid[15][10], grid[15][9], grid[15][8], grid[15][7], grid[15][6], 
-			grid[15][5], grid[15][4], grid[15][3], grid[15][2], grid[15][1], grid[15][0]];
+//Stage3Path.png
+//[25, 60] ← [25, 45] ↓ [35, 45] ← [35, 23] ↑ [20, 23] → [20, 37] ↑ [10, 37] ← [10, 15] ↓ [15, 15] ← [15, 0]
+var pathKitchen = [grid[25][60], grid[25][59], grid[25][58], grid[25][57], grid[25][56], grid[25][55], grid[25][54], grid[25][53],
+			grid[25][52], grid[25][51], grid[25][50], grid[25][49], grid[25][48], grid[25][47], grid[25][46],
+			grid[25][45], grid[26][45], grid[27][45], grid[28][45], grid[29][45], grid[30][45], grid[31][45],
+			grid[32][45], grid[33][45], grid[34][45], grid[35][45], grid[35][44], grid[35][43], grid[35][42],
+			grid[35][41], grid[35][40], grid[35][39], grid[35][38], grid[35][37], grid[35][36], grid[35][35],
+			grid[35][34], grid[35][33], grid[35][32], grid[35][31], grid[35][30], grid[35][29], grid[35][28],
+			grid[35][27], grid[35][26], grid[35][25], grid[35][24], grid[35][23], grid[34][23], grid[33][23],
+			grid[32][23], grid[31][23], grid[30][23], grid[29][23], grid[28][23], grid[27][23], grid[26][23],
+			grid[25][23], grid[24][23], grid[23][23], grid[22][23], grid[21][23], grid[20][23], grid[20][24],
+			grid[20][25], grid[20][26],	grid[20][27], grid[20][28], grid[20][29], grid[20][30], grid[20][31],
+			grid[20][32], grid[20][33],	grid[20][34], grid[20][35], grid[20][36], grid[20][37], grid[19][37],
+			grid[18][37], grid[17][37],	grid[16][37], grid[15][37], grid[14][37], grid[13][37], grid[12][37],
+			grid[11][37], grid[10][37], grid[10][36], grid[10][35], grid[10][34], grid[10][33], grid[10][32],
+			grid[10][31], grid[10][30], grid[10][29], grid[10][28], grid[10][27], grid[10][26], grid[10][25],
+			grid[10][24], grid[10][23], grid[10][22], grid[10][21], grid[10][20], grid[10][19], grid[10][18],
+			grid[10][17], grid[10][16], grid[10][15], grid[11][15], grid[12][15], grid[13][15], grid[14][15],
+			grid[15][15], grid[15][14], grid[15][13], grid[15][12], grid[15][11], grid[15][10], grid[15][9],
+			grid[15][8], grid[15][7], grid[15][6], grid[15][5], grid[15][4], grid[15][3], grid[15][2], grid[15][1], grid[15][0]];
 			
-var pathParentBedroom = [grid[35][60], grid[35][59], grid[35][58], grid[35][57], grid[35][56], grid[35][55], grid[35][54], grid[35][53], 
-			grid[35][52], grid[34][52], grid[33][52], grid[32][52], grid[31][52], grid[30][52], grid[29][52], 
-			grid[28][52], grid[27][52], grid[26][52], grid[25][52], grid[25][51], grid[25][50], grid[25][49], 
-			grid[25][48], grid[25][47], grid[25][46], grid[25][45], grid[24][45], grid[23][45], grid[22][45], 
-			grid[21][45], grid[20][45], grid[20][44], grid[20][43], grid[20][42], grid[20][41], grid[20][40], 
-			grid[20][39], grid[20][38], grid[20][37], grid[19][37], grid[18][37], grid[17][37], grid[16][37], 
-			grid[15][37], grid[14][37], grid[13][37], grid[12][37], grid[11][37], grid[10][37], grid[10][36], 
-			grid[10][35], grid[10][34], grid[10][33], grid[10][32], grid[9][32], grid[8][32], grid[7][32], 
-			grid[6][32], grid[5][32], grid[5][31], grid[5][30], grid[5][29], grid[5][28], grid[6][28], 
-			grid[7][28], grid[8][28], grid[9][28], grid[10][28], grid[10][27], grid[10][26], grid[10][25], 
-			grid[10][24], grid[10][23], grid[11][23], grid[12][23], grid[13][23], grid[14][23], grid[15][23], 
-			grid[16][23], grid[17][23], grid[18][23], grid[19][23], grid[20][23], grid[20][22], grid[20][21], 
-			grid[20][20], grid[20][19], grid[20][18], grid[20][17], grid[20][16], grid[20][15], grid[21][15], 
-			grid[22][15], grid[23][15], grid[24][15], grid[25][15], grid[25][14], grid[25][13], grid[25][12], 
-			grid[25][11], grid[25][10], grid[25][9], grid[25][8], grid[26][8], grid[27][8], grid[28][8], 
-			grid[29][8], grid[30][8], grid[31][8], grid[32][8], grid[33][8], grid[34][8], grid[35][8], 
-			grid[35][7], grid[35][6], grid[35][5], grid[35][4], grid[35][3], grid[35][2], grid[35][1], 
-			grid[35][0]];
+//Stage4Path.png
+//[35, 60] ← [35, 52] ↑ [25, 52] ← [25, 45] ↑ [20, 45] ← [20, 36] ↑ [10, 36] ← [10, 24] ↓ [20, 24] ← [20, 15] ↓ [25, 15] ← [25, 8] ↓ [35, 8] ← [35, 0]
+var pathParentBedroom = [grid[35][60], grid[35][59], grid[35][58], grid[35][57], grid[35][56], grid[35][55], grid[35][54],
+			grid[35][53], grid[35][52], grid[34][52], grid[33][52], grid[32][52], grid[31][52], grid[30][52],
+			grid[29][52], grid[28][52], grid[27][52], grid[26][52], grid[25][52], grid[25][51], grid[25][50],
+			grid[25][49], grid[25][48], grid[25][47], grid[25][46], grid[25][45], grid[24][45], grid[23][45],
+			grid[22][45], grid[21][45], grid[20][45], grid[20][44], grid[20][43], grid[20][42], grid[20][41],
+			grid[20][40], grid[20][39], grid[20][38], grid[20][37], grid[20][36], grid[19][36], grid[18][36],
+			grid[17][36], grid[16][36], grid[15][36], grid[14][36], grid[13][36], grid[12][36], grid[11][36],
+			grid[10][36], grid[10][35], grid[10][34], grid[10][33], grid[10][32], grid[10][31], grid[10][30],
+			grid[10][29], grid[10][28], grid[10][27], grid[10][26], grid[10][25], grid[10][24], grid[11][24],
+			grid[12][24], grid[13][24], grid[14][24], grid[15][24], grid[16][24], grid[17][24], grid[18][24],
+			grid[19][24], grid[20][24], grid[20][23], grid[20][22],	grid[20][21], grid[20][20], grid[20][19],
+			grid[20][18], grid[20][17], grid[20][16], grid[20][15],	grid[21][15], grid[22][15], grid[23][15],
+			grid[24][15], grid[25][15], grid[25][14], grid[25][13],	grid[25][12], grid[25][11], grid[25][10],
+			grid[25][9], grid[25][8], grid[26][8], grid[27][8],	grid[28][8], grid[29][8], grid[30][8],
+			grid[31][8], grid[32][8], grid[33][8], grid[34][8],	grid[35][8], grid[35][7], grid[35][6],
+			grid[35][5], grid[35][4], grid[35][3], grid[35][2], grid[35][1], grid[35][0]];
 			
 var stagePaths = [];
 stagePaths[0] = pathChildBedroom;
@@ -372,12 +383,12 @@ var goldOverTime = setInterval(function(){
 	if (awardGoldOverTime == true){
 		Gold++;
 	}
-}, 500);
+}, 1000);
 
 
 //Temporary grid toggle
 var showGrid = true;
-function togGrid(){
+function togGrid() {
 	if (showGrid) {
 		document.getElementById("grid").style.display = "block";
 		showGrid = false;
@@ -392,7 +403,7 @@ function togGrid(){
 var enemiesOnBoard = [];
 
 //Enemies Bluprint Section----------------------------------------------------------
- var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+ var enemy = function(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	this.startHealth = startHealth;
 	this.health = health;
 	this.damage = damage;
@@ -402,6 +413,7 @@ var enemiesOnBoard = [];
 	this.yCoord = (stagePaths[currentStage])[0].y;
 	this.pathPos = 0;
 	this.direction;
+	this.isSlowed = false;
 	this.enemyNextMove;
  }
 enemy.prototype.enemyMovement = function(enemyObj){
@@ -444,18 +456,48 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			console.log();
 			for (var j = 0; j < enemiesOnBoard.length; j++){
 				if (enemiesOnBoard[j].pathPos > (stagePaths[currentStage]).length-1){
-					enemiesOnBoard.splice(j,1);
 					if (enemiesOnBoard[j] instanceof blueDemon) {
-						enemyObj.blueDemonExit;
+						enemyObj.blueDemonExit();
 					}
 					if (enemiesOnBoard[j] instanceof redDemon) {
-						enemyObj.redDemonExit;
+						enemyObj.redDemonExit();
 					}
+					enemiesOnBoard.splice(j,1);
 					break;
 				}
 			}
 			Hp -= enemyObj.damage;
 			clearInterval(enemyObj.enemyNextMove);
+		}
+		if ( !(enemyObj instanceof bat) && !(enemyObj instanceof ghost)){
+			var seenByWaterGun = false;
+	
+			for (var a = 0; a < towersOnBoard.length; a++){
+				var i = a;
+				if(towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towersOnBoard[i] instanceof waterGun){
+					var distanceWaterGun = distance (towersOnBoard[i].xCoord, enemyObj.xCoord, towersOnBoard[i].yCoord, enemyObj.yCoord);
+					
+					if (distanceWaterGun <= towersOnBoard[i].range){
+						seenByWaterGun = true;
+					}
+				}
+			}
+			if (seenByWaterGun){
+				if (enemyObj.isSlowed == false){
+					clearInterval(enemyObj.enemyNextMove);
+					enemyObj.speed = enemyObj.speed * 2;
+					enemyObj.enemyMovement(enemyObj);
+				}
+				enemyObj.isSlowed = true;
+			}
+			else if (!seenByWaterGun){
+				if (enemyObj.isSlowed == true){
+					clearInterval(enemyObj.enemyNextMove);
+					enemyObj.speed = enemyObj.speed / 2;
+					enemyObj.enemyMovement(enemyObj);
+				}
+				enemyObj.isSlowed = false;
+			}
 		}
 		if (enemyObj instanceof ghost){
 			enemyObj.checkGhostVisibility();
@@ -467,24 +509,23 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if (enemyObj.phaseOneComplete == false){
 				enemyObj.spawnMomDad();
 			}
-			//else if () {
-			//	enemyObj.removeRandomTowers();
-			//}
-			//else if () {
-			//	enemyObj.becomeTowerOffense();
-			//}
+			else if (enemyObj.phaseThreeComplete == false) {
+				enemyObj.spawnKid();
+			}
+		}
+		if (enemyObj instanceof kid) {
+			enemyObj.safeKid();
 		}
 	}, this.speed);
 }
 
-
-function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 200;
-	this.health = 200;
+function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 250;
+	this.health = 250;
 	this.damage = 1;
 	this.speed = 30;
-	this.killReward = 5;
+	this.killReward = 1;
 }
 basicSkeleton.prototype = Object.create(enemy.prototype);
 basicSkeleton.prototype.constructor = basicSkeleton;
@@ -493,13 +534,13 @@ basicSkeleton.prototype.thisChildMetohdNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
 
-function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 500;
-	this.health = 500;
+function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 600;
+	this.health = 600;
 	this.damage = 2;
 	this.speed = 50;
-	this.killReward = 20;
+	this.killReward = 2;
 }
 redSkeleton.prototype = Object.create(enemy.prototype);
 redSkeleton.prototype.constructor = redSkeleton;
@@ -508,13 +549,13 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
-	this.startHealth = 100;
-	this.health = 100;
+function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed)
+	this.startHealth = 200;
+	this.health = 200;
 	this.damage = 1;
 	this.speed = 20;
-	this.killReward = 2;
+	this.killReward = 1;
 }
 blueSkeleton.prototype = Object.create(enemy.prototype);
 blueSkeleton.prototype.constructor = blueSkeleton;
@@ -522,13 +563,14 @@ blueSkeleton.prototype.constructor = blueSkeleton;
 blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
+
 function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
-	this.startHealth = 350;
-	this.health = 350;
+	this.startHealth = 400;
+	this.health = 400;
 	this.damage = 2;
 	this.speed = 50;
-	this.killReward = 25;
+	this.killReward = 3;
 	this.isVisible = false;
 }
 ghost.prototype = Object.create(enemy.prototype);
@@ -556,10 +598,10 @@ ghost.prototype.checkGhostVisibility = function(){
 	}
 };
 
-function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 200;
-	this.health = 200;
+function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 15000;
+	this.health = 15000;
 	this.damage = 100;
 	this.speed = 80;
 	this.killReward = 0;
@@ -571,12 +613,12 @@ bigBoss.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function blob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 400;
-	this.health = 400;
-	this.damage = 20;
-	this.speed = 90;
+function blob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 1000;
+	this.health = 1000;
+	this.damage = 5;
+	this.speed = 70;
 	this.killReward = 0;
 }
 blob.prototype = Object.create(enemy.prototype);
@@ -644,14 +686,14 @@ blob.prototype.blobSplit = function(){
 	}
 };
 
-function miniBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 150;
-	this.health = 150;
+function miniBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 200;
+	this.health = 200;
 	console.log(this.health);
-	this.damage = 5;
-	this.speed = 60;
-	this.killReward = 5;
+	this.damage = 1;
+	this.speed = 20;
+	this.killReward = 1;
 }
 miniBlob.prototype = Object.create(enemy.prototype);
 miniBlob.prototype.constructor = miniBlob;
@@ -659,12 +701,12 @@ miniBlob.prototype.constructor = miniBlob;
 miniBlob.prototype.miniBlob = function(){
 };
 
-function clown(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction);
-	this.startHealth = 10;
-	this.health = 10;
-	this.damage = 5;
-	this.speed = 10;
+function clown(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction, isSlowed);
+	this.startHealth = 150;
+	this.health = 150;
+	this.damage = 1;
+	this.speed = 5;
 	this.killReward = 0;
 	this.goldTaken;
 }
@@ -697,12 +739,11 @@ clown.prototype.stealGold = function(){
 		}
 };
 
-function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 1000;
-	this.health = 1000;
-	this.damage = 100;
-	this.speed = 150;
+function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 15000;
+
+	this.speed = 90;
 	this.killReward = 0;
 }
 bigBlob.prototype = Object.create(enemy.prototype);
@@ -772,18 +813,18 @@ bigBlob.prototype.bigBlobSplit = function(){
 
 function bat(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 300;
-	this.health = 300;
+	this.startHealth = 500;
+	this.health = 500;
 	this.damage = 15;
 	this.speed = 20;
-	this.killReward = 10;
+	this.killReward = 3;
 	this.isVisible = false;
 }
 bat.prototype = Object.create(enemy.prototype);
 bat.prototype.constructor = bat;
 
 bat.prototype.checkBatVisibility = function(){
-		var seenByLamp = false;
+	var seenByLamp = false;
 	
 	for (var a = 0; a < towersOnBoard.length; a++){
 		var i = a;
@@ -813,12 +854,12 @@ bat.prototype.checkBatVisibility = function(){
 	}
 };
 
-function grizzlyBear(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 1000;
-	this.health = 1000;
-	this.damage = 10;
-	this.speed = 70;
+function grizzlyBear(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 1500;
+	this.health = 1500;
+	this.damage = 3;
+	this.speed = 65;
 	this.killReward = 20;
 }
 grizzlyBear.prototype = Object.create(enemy.prototype);
@@ -828,12 +869,27 @@ grizzlyBear.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method.");
 };
 
-function witch(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, towerStolen, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+function bigRoach(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 2000;
+	this.health = 2000;
+	this.damage = 20;
+	this.speed = 50;
+	this.killReward = 0;
+}
+bigRoach.prototype = Object.create(enemy.prototype);
+bigRoach.prototype.constructor = bigRoach;
+
+bigRoach.prototype.thisChildMethodNeedsAName = function(){
+	console.log("Undefined Child Method.");
+};
+
+function witch(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, towerStolen, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
 	this.startHealth = 300;
 	this.health = 300;
 	this.damage = 1;
-	this.speed = 80;
+	this.speed = 60;
 	this.killReward = 0;
 	this.towerStolen = 0;
 }
@@ -879,18 +935,19 @@ witch.prototype.stealTower = function(){
 		this.towerStolen = 12;
 	}
 	if (language === 0){
-			gameMessage = "A witch has stolen a tower from the store!";
-		}
-		else if (language === 1){
-			gameMessage = "Une sorciere a vole une tour dans le magasin!";
-		}
-		else if (language === 2){
-			gameMessage = "Una bruja ha robado una torre desde la tienda!";
-		}
+		gameMessage = "A witch has stolen a tower from the store!";
+	}
+	else if (language === 1){
+		gameMessage = "Une sorciere a vole une tour dans le magasin!";
+	}
+	else if (language === 2){
+		gameMessage = "Una bruja ha robado una torre desde la tienda!";
+	}
+	towerAvailable();
 };
 
-function blueDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+function blueDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
 	this.startHealth = 500;
 	this.health = 500;
 	this.damage = 0; 
@@ -904,8 +961,8 @@ blueDemon.prototype.blueDemonExit = function(){
 	Hp = 1; 
 };
 
-function redDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+function redDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
 	this.startHealth = 10000;
 	this.health = 10000;
 	this.damage = 0;
@@ -919,8 +976,8 @@ redDemon.prototype.redDemonExit = function(){
 	Hp = 1; 
 };
 
-function zombieMom(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+function zombieMom(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
 	this.startHealth = 1000;
 	this.health = 1000;
 	this.damage = 10;
@@ -930,12 +987,11 @@ function zombieMom(startHealth, health, damage, speed, killReward, xCoord, yCoor
 zombieMom.prototype = Object.create(enemy.prototype);
 zombieMom.prototype.constructor = zombieMom;
 
-zombieMom.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+zombieMom.prototype.deaderThanCheddar = function(){	
 };
 
-function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
 	this.startHealth = 1000;
 	this.health = 1000;
 	this.damage = 10;
@@ -945,14 +1001,28 @@ function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoor
 zombieDad.prototype = Object.create(enemy.prototype);
 zombieDad.prototype.constructor = zombieDad;
 
-zombieDad.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+zombieDad.prototype.afterDeaderThanCheddar = function(){
 };
 
-function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, direction, isVisible, hasPhaseOned, phaseOneComplete, hasPhaseTwoed, hasPhaseThreed){
+function kid(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 1000;
-	this.health = 1000;
+	this.startHealth = Hp * 100;
+	this.health = Hp * 100;
+	this.damage = 0;
+	this.speed = 80;
+	this.killReward = 0;
+}
+kid.prototype = Object.create(enemy.prototype);
+kid.prototype.constructor = kid;
+
+kid.prototype.safeKid = function(){
+	
+};
+
+function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, direction, isVisible, hasPhaseOned, phaseOneComplete, hasPhaseTwoed, hasPhaseThreed, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 1500;
+	this.health = 1500;
 	this.damage = 100;
 	this.speed = 100;
 	this.killReward = 0;
@@ -962,7 +1032,9 @@ function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoo
 	this.hasPhaseOned = false;
 	this.phaseOneComplete = false;
 	this.hasPhaseTwoed = false;
+	this.phaseTwoComplete = false; 
 	this.hasPhaseThreed = false;
+	this.phaseThreeComplete = false; 
 	this.isVisible = true;
 }
 grimReaper.prototype = Object.create(enemy.prototype);
@@ -1022,9 +1094,10 @@ grimReaper.prototype.spawnMomDad = function(){
 		}
 		enemiesOnBoard.push(tempObj2);
 		tempObj2.enemyMovement(tempObj2);
+		gameMessage = "Mom?... Dad?...";
 		
 		clearInterval(this.enemyNextMove);
-		this.speed *= 10;
+		this.speed *= 5;
 		this.enemyMovement(this);
 	}
 	if (this.health < this.phaseOne){
@@ -1038,7 +1111,7 @@ grimReaper.prototype.spawnMomDad = function(){
 			this.isVisible = true;
 			this.phaseOneComplete = true;
 			clearInterval(this.enemyNextMove);
-			this.speed /= 10;
+			this.speed /= 5;
 			this.enemyMovement(this);
 		}
 	}
@@ -1048,12 +1121,40 @@ grimReaper.prototype.removeRandomTowers = function(){ //MAYBE LOL!
 	console.log("Undefined Child Method.");
 };
 	
-grimReaper.prototype.becomeTowerOffense = function(){ //MAYBE LOL!
-	console.log("Undefined Child Method.");
-};
+grimReaper.prototype.spawnKid = function(){ 	
+		if (this.health < this.phaseThree && this.hasPhaseThreed == false) {
+		this.hasPhaseThreed = true;
+		this.isVisible = false; 
+		var tempObj = new kid;
+		enemiesOnBoard.push(tempObj);
+		tempObj.enemyMovement(tempObj);
+		
+		gameMessage = "NOW YOU WILL UNDERTSTAND HOW IT FEELS!";
+		
+		clearInterval(this.enemyNextMove);
+		console.log(this.speed);
+		this.speed *= 5;
+		console.log(this.speed);
+		this.enemyMovement(this);
+	}
+	if (this.health < this.phaseThree){
+		var kidActive = false;
+		for (var i = 0; i < enemiesOnBoard.length; i++){
+			if(enemiesOnBoard[i] instanceof kid){
+				kidActive = true;
+			}
+		}
+		if (!kidActive){
+			this.isVisible = true;
+			this.phaseThreedComplete = true;
+			clearInterval(this.enemyNextMove);
+			this.speed /= 5;
+			this.enemyMovement(this);
+		}
+	}
+}
 
 // End of enemy bluprint section----------------------------------------------------
-
 
 function spawnEnemy(enemyType){
 	var tempEnemyObj = new (eval(enemyType))();
@@ -1113,7 +1214,7 @@ tower.prototype.attack = function(towerObj, towerName){
 		var max = 0;
 		towerObj.isShooting = 0;
 		
-		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "trophy"){
+		if (towersOnBoard.length > 0 && towerName == "trophy"){
 			towerObj.towerBuff(); 
 		}
 		if (towersOnBoard.length > 0 && enemiesOnBoard.length > 0 && towerName == "calculator"){
@@ -1172,9 +1273,52 @@ tower.prototype.attack = function(towerObj, towerName){
 						if (enemiesOnBoard[j].health <= 0){
 							clearInterval(enemiesOnBoard[j].enemyNextMove);
 							Gold += enemiesOnBoard[j].killReward;
+							if (enemiesOnBoard[j] instanceof witch){
+								switch (enemiesOnBoard[j].towerStolen){
+									case 1:
+										HTMLID_toyCarLauncher.className = "enabledTower";
+										break;
+									case 2:
+										HTMLID_actionFigure.className = "enabledTower";
+										break;
+									case 3:
+										HTMLID_marbleShooter.className = "enabledTower";
+										break;
+									case 4:
+										HTMLID_lamp.className = "enabledTower";
+										break;
+									case 5:
+										HTMLID_calculator.className = "enabledTower";
+										break;
+									case 6:
+										HTMLID_nutsAndBolts.className = "enabledTower";
+										break;
+									case 7:
+										HTMLID_toaster.className = "enabledTower";
+										break;
+									case 8:
+										HTMLID_blenderDefender.className = "enabledTower";
+										break;
+									case 9:
+										HTMLID_waterGun.className = "enabledTower";
+										break;
+									case 10:
+										HTMLID_airplaneLauncher.className = "enabledTower";
+										break;
+									case 11:
+										HTMLID_trophy.className = "enabledTower";
+										break;
+									case 12:
+										HTMLID_vanquishEvil.className = "enabledTower";
+										break;
+									default:
+									
+								}
+								enableTowers();
+							}
 							if (enemiesOnBoard[j] instanceof clown){
 								Math.round(enemiesOnBoard[j].goldTaken);
-								Gold += enemiesOnBoard[j].goldTaken;
+								Gold += Math.round(enemiesOnBoard[j].goldTaken);
 								if (language === 0){
 									gameMessage = "You have killed a clown and stolen back " + Math.round(enemiesOnBoard[j].goldTaken) +" gold!";
 								}
@@ -1191,8 +1335,8 @@ tower.prototype.attack = function(towerObj, towerName){
 							if (enemiesOnBoard[j] instanceof bigBlob) {
 								enemiesOnBoard[j].bigBlobSplit();
 							}
-							
 							enemiesOnBoard.splice(j,1);
+							
 						}
 						break;
 					}
@@ -1205,10 +1349,9 @@ tower.prototype.attack = function(towerObj, towerName){
 	}, this.attackSpeed);
 };
 
-
 function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 50;
+	this.cost = 30;
 	this.damage = 10;
 	this.range = 160;
 	this.attackSpeed = 900;
@@ -1233,7 +1376,7 @@ function lamp(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, on, is
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed);
 	this.cost = 30;
 	this.damage = 0;
-	this.range = 180;
+	this.range = 120;
 	this.attackSpeed = 1;
 	this.on = false;
 	if (language === 0){
@@ -1279,8 +1422,8 @@ lamp.prototype.lampIO = function(){
 
 function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isBuffed);
-	this.cost = 150;
-	this.damage = 250;
+	this.cost = 100;
+	this.damage = 200;
 	this.range = 90;
 	this.attackSpeed = 4000;
 	if (language === 0){
@@ -1304,7 +1447,7 @@ function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgrade
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter, isShooting, bulletArr, isBuffed);
 	this.cost = 75;
 	this.damage = 10;
-	this.range = 250;
+	this.range = 200;
 	this.attackSpeed = 700;
 	this.shotCounter = 0;
 	if (language === 0){
@@ -1331,7 +1474,7 @@ marbleShooter.prototype.marbleBuffShot = function() {
 
 function calculator(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
-	this.cost = 1;
+	this.cost = 200;
 	this.damage = 0;
 	this.range = 1;
 	this.attackSpeed = 5000;
@@ -1356,7 +1499,7 @@ function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
 	this.cost = 90;
 	this.damage = 15;
-	this.range = 135;
+	this.range = 140;
 	this.attackSpeed = 800;
 	this.baseDamage = 15;
 	if (language === 0){
@@ -1429,16 +1572,16 @@ function waterGun(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, ta
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
 	this.cost = 50;
 	this.damage = 2;
-	this.range = 150;
-	this.attackSpeed = 200;
+	this.range = 80;
+	this.attackSpeed = 400;
 	if (language === 0){
 		this.info = "Enough force to slow enemies as they approach.";
 	}
 	else if (language === 1){
-		this.info = "Vigueur assez pour ralentir les ennemis comme ils approchent.";
+		this.info = "Vigueur assez pour ralentir les ennemis comme ils approchent. N'affecte pas les fantomes et les chauves-souris.";
 	}
 	else if (language === 2){
-		this.info = "La fuerza suficiente para ralentizar enemigos cuando se acercan.";
+		this.info = "La fuerza suficiente para ralentizar enemigos cuando se acercan. No afecta a los fantasmas y los murcielagos.";
 	}
 }
 waterGun.prototype = Object.create(tower.prototype);
@@ -1505,7 +1648,7 @@ function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded
 	
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
 	this.cost = 0;
-	this.damage = 500;
+	this.damage = 300;
 	this.range = 500000;
 	this.attackSpeed = 6000; 
 	if (language === 0){
@@ -1629,31 +1772,19 @@ function placeTower(towerType){
 				vanquishEvilCount++;
 			}
 		}
-		if (vanquishEvilCount >= 3) {
-			objObstruct = true;
-			if (language === 0){
-				gameMessage = "You can have only 3 Vanquish The Evil Towers!";
-			}
-			else if (language === 1){
-				gameMessage = "Vous pouvez avoir seulement 3 vaincre les tours du mal!";
-			}
-			else if (language === 2){
-				gameMessage = "Solo puede tener 3 torres vencer a los malos!";
-			}
-			togGrid();
-			circleCheck = false;
-			if (towerType instanceof vanquishEvil) {
-				objObstruct = true;
-				if (language === 0){
-					gameMessage = "You can have only 3 Vanquish The Evil Towers!";
-				}
-				else if (language === 1){
-					gameMessage = "Vous pouvez avoir seulement 3 vaincre les tours du mal!";
-				}
-				else if (language === 2){
-					gameMessage = "Solo puede tener 3 torres vencer a los malos!";
-				}
-			}
+		if (vanquishEvilCount >= 3 && towerType == "vanquishEvil") {
+		objObstruct = true;
+		if (language === 0){
+			gameMessage = "You can have only 3 Vanquish The Evil Towers!";
+		}
+		else if (language === 1){
+			gameMessage = "Vous pouvez avoir seulement 3 vaincre les tours du mal!";
+		}
+		else if (language === 2){
+			gameMessage = "Solo puede tener 3 torres vencer a los malos!";
+		}
+		togGrid();
+		circleCheck = false;
 		}
 		var towerObjectHolder = new (eval(towerType))();
 		if (!objObstruct && towerxy.x < 870 && towerxy.y < 570){
@@ -1954,8 +2085,44 @@ var cursorX;
 var cursorY;
 var circleCheck = false;
 
+//var tempArray = [];
 
+/*function storeTowerCoord(){
+	if (towersOnBoard.length > 0){
+		if (tempArray.length > 0){
+			for (var i = 0; i <= towersOnBoard.length-1; i++){
+				for (var j = 0; j <= tempArray.length-1; j++){
+					if ((towersOnBoard[i].xCoord != tempArray[j][0]) && (towersOnBoard[i].yCoord != tempArray[j][1])){
+						tempArray.push([towersOnBoard[i].xCoord, towersOnBoard[i].yCoord,true]);
+						console.log("pls");
+					}
+				}
+			}
+		}
+		else{
+			tempArray.push([towersOnBoard[0].xCoord, towersOnBoard[0].yCoord,true]);
+			console.log(tempArray);
+		}
+	}
+}*/
+
+/*function drawBox(){
+	if (tempArray.length > 0){
+		for (i = 0; i <= tempArray.length-1;i++){
+			if (tempArray[i][2] == true){
+				ctx.beginPath();
+				ctx.moveTo(tempArray[i][0],tempArray[i][1]);
+				ctx.lineTo(tempArray[i][0],tempArray[i][1]+45);
+				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]+45);
+				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]);
+				ctx.lineTo(tempArray[i][0],tempArray[i][1]);
+				ctx.stroke();
+			}
+		}
+	}
+}*/
 function hoverCheck(){
+	//document.getElementById('canvas').addEventListener ("click", storeTowerCoord);
 	if (towersOnBoard.length > 0)
 	{
 		for (var i = 0; i <= (towersOnBoard.length-1); i++){
@@ -2051,6 +2218,7 @@ function render(){
 	drawRange();
 	hoverCheck();
 	stageWin();
+	//drawBox();
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------
@@ -2077,11 +2245,29 @@ function renderEnemyMovement() {
 	for (var i = 0; i < enemiesOnBoard.length; i++) {
 		//draw enemies
 		
-		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof redDemon || enemiesOnBoard[i] instanceof blueDemon || enemiesOnBoard[i] instanceof grizzlyBear) {
+		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof grizzlyBear) {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-30, 55, 60);
 			//draw health bar
 			ctx.fillRect(enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-35, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else if (enemiesOnBoard[i] instanceof bigRoach) {
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-32, 55, 70);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-30, enemiesOnBoard[i].yCoord-37, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else if (enemiesOnBoard[i] instanceof redDemon) {
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-29, 35, 60);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-34, (35 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
+		else if (enemiesOnBoard[i] instanceof blueDemon) {
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-29, 45, 60);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-20, enemiesOnBoard[i].yCoord-34, (45 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
 		else if (enemiesOnBoard[i] instanceof grimReaper) {
 			enemyImgToPrint.src = '../images/grimReaper.png';
@@ -2116,7 +2302,8 @@ function renderEnemyMovement() {
 			//draw health bar
 			ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
-		else{
+
+		else {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
 			//draw health bar
@@ -2192,7 +2379,7 @@ function renderTowerAndBullet() {
 	}
 }
 
-function drawRange(){
+function drawRange() {
 	if (circleCheck === true) {
 		ctx.beginPath();
 		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
@@ -2207,7 +2394,7 @@ var bossSpawned = false; //Checks to see if boss has spawned
 function stageWin() {
 	var bActive = false; //If boss is on map, turns to true
 	for(var i = 0; i < enemiesOnBoard.length; i++) {
-		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof grimReaper) {
+		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof bigRoach || enemiesOnBoard[i] instanceof grimReaper) {
 			if (bossSpawned == false){
 				if (language === 0){
 					gameMessage = "BOSS INCOMING!";
@@ -2269,51 +2456,53 @@ function stageWin() {
 
 
 var stageWave = [[],[],[],[]];
-//Stage 1
 
-stageWave[0][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBoss"];
-stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "blueSkeleton"];
-stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[0][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[0][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[0][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[0][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[0][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[0][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+//Stage 1
+stageWave[0][0] = ["basicSkeleton", "blueSkeleton"];
+stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[0][2] = ["redSkeleton", "basicSkeleton", "basicSkeleton","basicSkeleton", "blueSkeleton"];
+stageWave[0][3] = ["basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton"];
+stageWave[0][4] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					"blueSkeleton"];
+stageWave[0][5] = ["blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					 "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 				   "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton"];
+stageWave[0][6] = ["basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", 				  "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", 					"blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", 				  "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", 				   "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton"];
+stageWave[0][7] = ["basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", 					 "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "redSkeleton", 					"redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton"];
+stageWave[0][8] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", 					 "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", 				   "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton"];
+stageWave[0][9] = ["bigBoss"];
+
 //Stage 2
-stageWave[1][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBlob"];
-stageWave[1][1] = ["blueSkeleton", "basicSkeleton"];
-stageWave[1][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[1][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[1][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[1][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[1][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[1][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[1][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[1][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBlob"];
+stageWave[1][0] = ["ghost"];
+stageWave[1][1] = ["redSkeleton", "basicSkeleton", "bat"];
+stageWave[1][2] = ["blueSkeleton", "ghost", "basicSkeleton", "blueSkeleton", "ghost", "blueSkeleton", "ghost"];
+stageWave[1][3] = ["blueSkeleton", "bat", "ghost", "blueSkeleton", "redSkeleton", "bat", "bat", "ghost", "blob"];
+stageWave[1][4] = ["redSkeleton", "redSkeleton", "blueSkeleton", "ghost", "blob", "blob", "ghost", "blueSkeleton", "blob", "redSkeleton", 					"bat", "redSkeleton", "blueSkeleton", "ghost"];
+stageWave[1][5] = ["ghost", , "redSkeleton", "ghost", "ghost", "blueSkeleton", "ghost", "ghost", "basicSkeleton", "ghost", "ghost", "bat", 					 "ghost", "ghost", "blob", "ghost", "ghost", "blueSkeleton", "ghost", "ghost", "ghost", "ghost", "ghost", "ghost", 					 "ghost", "ghost", "ghost","ghost", "ghost"];
+stageWave[1][6] = ["basicSkeleton", "basicSkeleton", "blob", "basicSkeleton", "blueSkeleton", "blob", "basicSkeleton", "redSkeleton", 					"blob", "basicSkeleton", "basicSkeleton", "blob", "basicSkeleton", "blueSkeleton", "blob", "basicSkeleton", 				  "redSkeleton", "blob"];
+stageWave[1][7] = ["bat", "bat", "bat", "blueSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "bat", "bat", "bat", "blueSkeleton", 					"redSkeleton", "redSkeleton", "redSkeleton", "bat", "bat", "bat", "blueSkeleton", "redSkeleton", "redSkeleton", 				  "redSkeleton"];
+stageWave[1][8] = ["blob", "blob", "blob", "bat", "blob", "blob", "blob", "bat", "blob", "blob", "blob", "bat", "blob", "blob", "blob", 				  "bat", "blob", "blob", "blob", "bat"];
+stageWave[1][9] = ["bigBlob"];
 //Stage 3
-stageWave[2][0] = ["blueSkeleton", "grizzlyBear", "grizzlyBear"];
-stageWave[2][1] = ["blueSkeleton", "basicSkeleton"];
-stageWave[2][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[2][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[2][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[2][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[2][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[2][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[2][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[2][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+stageWave[2][0] = ["basicSkeleton", "basicSkeleton", "blueSkeleton", "ghost"];
+stageWave[2][1] = ["redSkeleton", "ghost", "bat"];
+stageWave[2][2] = ["grizzlyBear"];
+stageWave[2][3] = ["grizzlyBear", "blob", "blueSkeleton", "basicSkeleton", "basicSkeleton", "clown"];
+stageWave[2][4] = ["ghost", "blueSkeleton", "redSkeleton", "ghost", "grizzlyBear", "bat", "clown", "redSkeleton", "blob", "grizzlyBear", 				   "bat", "blueSkeleton"];
+stageWave[2][5] = ["grizzlyBear", "bat", "blob", "blob", "ghost", "redSkeleton", "clown", "grizzlyBear", "bat", "blob", "blob", "ghost", 				   "redSkeleton", "clown", "grizzlyBear", "bat", "blob", "blob", "ghost", "redSkeleton", "clown"];
+stageWave[2][6] = ["ghost", "bat", "clown", "redSkeleton", "blueSkeleton", "blob", "grizzlyBear", "blob", "clown", "blob", "ghost", "bat", 					 "basicSkeleton", "basicSkeleton", "basicSkeleton", "blob", "ghost", "bat", "grizzlyBear", "bat", "clown", "redSkeleton"  				  ,"redSkeleton", "clown", "clown"];
+stageWave[2][7] = ["ghost", "ghost", "ghost", "ghost", "ghost", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 				  "blueSkeleton", "grizzlyBear", "grizzlyBear", "blob", "blob", "blob", "bat", "bat", "bat", "blueSkeleton", 				   "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton"];
+stageWave[2][8] = ["grizzlyBear", "grizzlyBear", "grizzlyBear", "clown", "grizzlyBear", "grizzlyBear", "grizzlyBear", "grizzlyBear", 				   "grizzlyBear", "clown", "clown", "clown", ];
+stageWave[2][9] = ["stageThreeBoss"];
+
 //Stage 4
-stageWave[3][0] = ["grimReaper", "blueDemon"];
-stageWave[3][1] = ["blueSkeleton", "basicSkeleton"];
-stageWave[3][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[3][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[3][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[3][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[3][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[3][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[3][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[3][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+stageWave[3][0] = ["grimReaper", "redSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "witch"];
+stageWave[3][1] = ["ghost", "bat", "ghost", "bat", "clown"];
+stageWave[3][2] = ["blueSkeleton", "blueSkeleton", "blob", "redSkeleton", "basicSkeleton", "basicSkeleton", "ghost", "ghost"];
+stageWave[3][3] = ["grizzlyBear", "blob", "blob", "clown", "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "redSkeleton", 				   "redSkeleton", "blueDemon", "blueDemon"];
+stageWave[3][4] = ["blueDemon", "blueDemon", "blueDemon", "clown", "grizzlyBear", "grizzlyBear", "grizzlyBear", "blob", "blob", "blob", 				  "bat", "bat", "bat", "ghost", "ghost", "ghost"];
+stageWave[3][5] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "ghost", "bat", "blueSkeleton", 					"blueSkeleton", "grizzlyBear", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					 "grizzlyBear", "blob", "blueSkeleton", "blueDemon", "blueSkeleton", "blueDemon", "blueSkeleton", "blueDemon", 					 "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueDemon", "redDemon"];
+stageWave[3][6] = ["redDemon", "redDemon", "blueDemon", "blueDemon", "basicSkeleton", "basicSkeleton"];
+stageWave[3][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", 					 "redSkeleton"];
+stageWave[3][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", 					 "redSkeleton", "blueSkeleton"];
+stageWave[3][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", 					 "redSkeleton", "blueSkeleton", "bigBoss"];
 
 var inAWave = false;
 var waveCounter = 0;
@@ -2494,7 +2683,6 @@ function towerAvailable () {
 }
 
 function enableTowers() {
-
 	for (var i = 0; i < allSelected.length; i++) {
 		allSelected[i].style.opacity = '1.0';
 		allSelected[i].style.pointerEvents = 'auto';
