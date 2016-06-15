@@ -9,10 +9,11 @@
 		<img id="currentStageImage" width="900" height="600">
 		<img id="grid" src="../images/grid.png" width="900" height="600"> <!--Temp grid for easier development-->
 		<img id="stageTransition" src="../images/StageCleared.png" width="900px" height="600px">
+		<img id="gameCleared" src="../images/GameCleared.png" width="900px" height="600px">
 		<canvas id="canvas" width="900" height="600"></canvas>
 		
 		<!--Temporary display of path, will be removed when path and stage image are the same picture-->
-		<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2">
+		<!--<img src="../images/ChildBedroomStagePath.png" width="900" height="600" style="position: absolute;z-index:2-->
 		
 		<audio id=background_audio src="../audio/StarEater.mp3" loop="true" autoplay="true"></audio>
 		
@@ -31,7 +32,7 @@
 				</tr>
 				<tr>
 					<td><img class="turret" id="waterGun" width="45" height="45" src="../images/waterGun.png"></td>
-					<td><img class="turret" id="mouseTrap" width="45" height="45" src="../images/mouseTrap.png"></td>
+					<td><img class="turret" id="toaster" width="45" height="45" src="../images/toaster.png"></td>
 					<td><img class="turret" id="blenderDefender" width="45" height="45" src="../images/blenderDefender.png"></td>
 					<td><img class="turret" id="trophy" width="45" height="45" src="../images/trophy.png"></td>
 					<td><img class="turret" id="airplaneLauncher" width="45" height="45" src="../images/airplaneLauncher.png"></td>
@@ -58,7 +59,6 @@
 				<button class= "btnDress" id="nextWave" onclick=nextWave()>Next Wave</button>
 				<button class= "btnDress" id="nextStage" onclick=nextStage()>Next Stage</button>
 				<button class="btnDress" id="togGrid" onclick=togGrid()>Toggle Grid</button>
-				<button class="btnDress" id="sellTower" onclick=sellButton()>Refund Tower</button> 
 			</div>
 			
 			<div class="message">
