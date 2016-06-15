@@ -32,6 +32,7 @@ body
 	font-size: 30px;
 	font-weight: 400;
 	text-decoration: none;
+	z-index:1000;
 	cursor:default;
 }
 #continue
@@ -76,7 +77,6 @@ body
 }
 #play:hover
 {
-	cursor: 
 	color: #001A00;
 	font-weight: bold;
 }
@@ -84,21 +84,17 @@ audio
 {
 	opacity: 0; 
 }
-#mute
-{
-	margin-left: 850px;
-	margin-top: 120px;
-}
 </style>
 </head>
 <body>
 
+<div style="position:absolute;width:900px;height:600px;top:0;left:0">
 <audio id=background_audio src="../audio/They're Here.mp3" loop="true" autoplay="true" controls></audio>
 <br><br><br><br>
-<a id=gameTitle href=Menu.html>Nightmare Invaders</a>
+<a id=gameTitle href="Menu.html">Nightmare Invaders</a>
 
 <br><br><br>
-<a id=play href=Synopsis.html>Start Your Nightmare</a>
+<a id=play href="Synopsis.html">Start Your Nightmare</a>
 <br>
 <a id=continue >Continue</a>
 <br>
@@ -108,7 +104,6 @@ audio
 <br>
 <a id=exit >Wake Up</a>
 <br>
-<div style="position:absolute;width:900px;height:600px;top:0;left:0">
 <div id=mute style="width:45px;height:45px;right:10px;position:absolute;bottom:10px;cursor:pointer">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 60">
 					<g fill="#e5e5e5">
@@ -133,8 +128,7 @@ audio
 							S14.561,2,30,2s28,12.561,28,28S45.439,58,30,58z"/>
 					</g>
 </div></div>
+<script src="MenuJS.js"></script>
 </body>        
 </html>
 
-<script src="MenuJS.js">
-</script>
