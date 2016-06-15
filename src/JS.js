@@ -1194,7 +1194,7 @@ var towerxy = {x:0, y:0};
 var objObstruct = false;
 
 //Tower blueprints section--------------------------------------------------------
-var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info, isBuffed, boolBox){
+var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info, isBuffed){
 	this.cost = cost;
 	this.damage = damage;
 	this.range = range;
@@ -1209,7 +1209,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.info = info;
 	this.isBuffed = false;
 	this.attackEnemy;
-	this.boolBox;
+	this.boxBool = false;
 };
 
 tower.prototype.bullet = function() {
@@ -1620,7 +1620,6 @@ function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgr
 	else if (language === 2){
 		this.info = "Dispara aviones de papel hecho el chico. Como encontraron el tiempo para hacer todo esto?";
 	}
->>>>>>> refs/remotes/origin/staging
 }
 airplaneLauncher.prototype = Object.create(tower.prototype);
 airplaneLauncher.prototype.constructor = airplaneLauncher;
