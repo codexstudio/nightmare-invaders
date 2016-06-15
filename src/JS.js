@@ -1194,7 +1194,7 @@ var towerxy = {x:0, y:0};
 var objObstruct = false;
 
 //Tower blueprints section--------------------------------------------------------
-var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info, isBuffed, boolBox){
+var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info, isBuffed){
 	this.cost = cost;
 	this.damage = damage;
 	this.range = range;
@@ -1209,7 +1209,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.info = info;
 	this.isBuffed = false;
 	this.attackEnemy;
-	this.boolBox;
+	this.boxBool = false;
 };
 
 tower.prototype.bullet = function() {
@@ -1662,7 +1662,7 @@ trophy.prototype.towerBuff = function(){
 function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 50;
+	this.cost = 500;
 	this.damage = 600;
 	this.range = 500000;
 	this.attackSpeed = 6000; 
