@@ -53,7 +53,7 @@ body{
 .playerInfo {
 	position: absolute;
 	color: #e5e5e5;
-	bottom: 40px;
+	bottom: 100px;
 	left: 30px;
 }
 
@@ -76,7 +76,7 @@ body{
 .message{
 	position:absolute;
 	left: 30px;
-	bottom: 10px;
+	bottom: 75px;
 	color: #e5e5e5;
 }
 
