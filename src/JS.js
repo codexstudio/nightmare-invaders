@@ -157,7 +157,7 @@ stagePaths[3] = pathParentBedroom;
 
 
 //UI Elements
-var Gold = 100; 
+var Gold = 1000; 
 var Hp = 100;
 var currentWave = 0;
 var pause = false;
@@ -181,6 +181,7 @@ var HTMLID_airplaneLauncher = document.getElementById("airplaneLauncher");
 var HTMLID_trophy = document.getElementById("trophy");
 var HTMLID_vanquishEvil = document.getElementById("vanquishEvil");
 
+var HTMLID_btnSell = document.getElementById("sell");
 
 //global variables
 var ang = 0;
@@ -982,6 +983,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.bulletArr = [];
 	this.info = info;
 	this.attackEnemy;
+	this.boxBool = false;
 };
 
 tower.prototype.bullet = function() {
@@ -1318,16 +1320,16 @@ function createTowerObject(towerType, x, y){
 	//console.log("y pixel loc = " + towersOnBoard[towersOnBoard.length-1].yCoord);
 	//console.log("Upgraded? = " + towersOnBoard[towersOnBoard.length-1].upgraded);
 
-		if (towersOnBoard.length > 0){
-			tempTowerObject.attack(tempTowerObject, towerType);
-		}
+	if (towersOnBoard.length > 0){
+		tempTowerObject.attack(tempTowerObject, towerType);
+	}
 }
 
 var tempRange;
 
 function placeTower(towerType){
 	document.body.style.cursor = "url('../images/" + towerType + ".png'),auto";
-	document.getElementById('canvas').addEventListener ("click", handler); 
+	canvas.addEventListener ("click", handler); 
 	if (circleCheck == false){
 		circleCheck = true;
 	}
@@ -1514,8 +1516,8 @@ function getStats(turret) {
 var cursorX;
 var cursorY;
 var circleCheck = false;
-document.getElementById("canvas").onmousemove = function(){mouseCoord(event)};
-document.getElementById("canvas").onmouseout = function(){resetCoord()};
+canvas.onmousemove = function(){mouseCoord(event)};
+canvas.onmouseout = function(){resetCoord()};
 
 function mouseCoord(e){
 	cursorX = e.clientX;
@@ -1534,76 +1536,45 @@ function drawRange(){
 	}
 }
 
-function boxStatus(i){
-	if (storedCoordinates[i][2] == false){
-		storedCoordinates[i][2] = true;
-		console.log("true");
-	}
-	else{
-		storedCoordinates[i][2] = false;
-		console.log("false");
-	}
-}
-var storedCoordinates = [];
-
-function storeTowerCoord(){
-	console.log(tempX,tempY);
-	if (((cursorX >= tempX) && (cursorX <= (tempX+45))) && ((cursorY >= tempY) && (cursorY <= (tempY+45)))){
-		if (towersOnBoard.length > 0){
-			console.log("step1");
-			console.log(storedCoordinates.length);
-			if (storedCoordinates.length > 0){
-				console.log("step2");
-				for (var i = 0; i <= storedCoordinates.length-1; i++){
-					console.log(storedCoordinates[0]);
-					console.log(storedCoordinates[1]);
-					console.log(storedCoordinates[2]);
-					console.log("step3");
-					if ((storedCoordinates[i][0] == tempX) && (storedCoordinates[i][1] == tempY)){
-						boxStatus(i);
-					}
-					else{
-						storedCoordinates.push([tempX,tempY,false]);
-						console.log("step5");
-					}
+function boxStatus(){
+	for (var i = 0; i <= towersOnBoard.length-1;i++){
+		if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
+			if ((towersOnBoard[i].xCoord == tempX) && (towersOnBoard[i].yCoord == tempY)){
+				if (towersOnBoard[i].boxBool == false){
+					towersOnBoard[i].boxBool = true;
 				}
-			}
-			else if (storedCoordinates.length < 1){
-				storedCoordinates.push([tempX, tempY, false]);
-				console.log(storedCoordinates);
-				console.log(storedCoordinates[i][2]);
+				else{
+					towersOnBoard[i].boxBool = false;
+				}
 			}
 		}
 	}
 }
 
 function drawBox(){
-	if (storedCoordinates.length > 0){
-		for (i = 0; i <= storedCoordinates.length-1;i++){
-			if (storedCoordinates[i][2] == true){
+	if (towersOnBoard.length > 0){
+		for (i = 0; i <= towersOnBoard.length-1;i++){
+			if (towersOnBoard[i].boxBool == true){
 				ctx.beginPath();
-				ctx.moveTo(storedCoordinates[i][0],storedCoordinates[i][1]);
-				ctx.lineTo(storedCoordinates[i][0],storedCoordinates[i][1]+45);
-				ctx.lineTo(storedCoordinates[i][0]+45,storedCoordinates[i][1]+45);
-				ctx.lineTo(storedCoordinates[i][0]+45,storedCoordinates[i][1]);
-				ctx.lineTo(storedCoordinates[i][0],storedCoordinates[i][1]);
+				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord)
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+45)
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+45)
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord)
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord)
 				ctx.stroke();
 			}
 		}
 	}
 }
 
-var tempX;
-var tempY;
-
 function hoverCheck(){
-	document.getElementById('canvas').addEventListener ("click", storeTowerCoord);
 	if (towersOnBoard.length > 0)
 	{
 		for (var i = 0; i <= (towersOnBoard.length-1); i++){
 			if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
 				tempX = towersOnBoard[i].xCoord;
 				tempY = towersOnBoard[i].yCoord;
+				canvas.addEventListener ("click", boxStatus);
 				ctx.beginPath();
 				ctx.arc(towersOnBoard[i].xCoord+22.5, towersOnBoard[i].yCoord+22.5, towersOnBoard[i].range, 0, 2 * Math.PI);
 				ctx.stroke();
@@ -1619,6 +1590,7 @@ function hoverCheck(){
 initGame();
 function initGame()
 {
+	//HTMLID_btnSell.style.display = "none";
 	currentStageImage.src = "../images/" + stageImages[currentStage];
 	towerAvailable();
 	render();
@@ -1660,6 +1632,7 @@ function render(){
 	hoverCheck();
 	stageWin();
 	drawBox();
+	//toggleSellButton();
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------
@@ -2067,12 +2040,16 @@ function enableTowers() {
 	}
 }
 
-function sellTower() {
-	if (storedCoordinates > 0) {
-		for (var i  = 0; i <= storedCoordinates.length-1; i++) {
-			if (((cursorX >= storedCoordinates[i][0]) && (cursorX <= (storedCoordinates[i][0]+45))) && ((cursorY >= storedCoordinates[i][1]) && (cursorY <= storedCoordinates[i][1]+45))) {
-				
-			}
+
+function sellTowers() {
+	//HTMLID_btnSell.style.display = "none";
+	for (var i=towersOnBoard.length-1; i => 0;i--){
+		if (towersOnBoard[i].boxBool == true){
+			numOfTowers--;
+			Gold += (towersOnBoard[i].cost/2);
+			towerLocationsByPixelPosition.splice(i, 1);
+			clearInterval(towersOnBoard[i].attackEnemy);
+			towersOnBoard.splice(i,1);
 		}
-	}		
+	}
 }
