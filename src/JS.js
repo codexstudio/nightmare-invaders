@@ -282,7 +282,7 @@ var HTMLID_vanquishEvil = document.getElementById("vanquishEvil");
 
 //global variables
 var ang = 0;
-const TRAJ_SPEED = 10;
+const TRAJ_SPEED = 7;
 
 function menu(){
 	window.location="Menu.html";
@@ -375,6 +375,7 @@ var ctx = canvas.getContext('2d');
 var towerImg = new Image();
 var lampOnOff = new Image();
 var enemyImgToPrint = new Image();
+var bulletImg = new Image();
 
 
 //Gold Over Time
@@ -1122,7 +1123,7 @@ grimReaper.prototype.removeRandomTowers = function(){ //MAYBE LOL!
 };
 	
 grimReaper.prototype.spawnKid = function(){ 	
-		if (this.health < this.phaseThree && this.hasPhaseThreed == false) {
+	if (this.health < this.phaseThree && this.hasPhaseThreed == false) {
 		this.hasPhaseThreed = true;
 		this.isVisible = false; 
 		var tempObj = new kid;
@@ -2302,7 +2303,12 @@ function renderEnemyMovement() {
 			//draw health bar
 			ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
-
+		else if (enemiesOnBoard[i] instanceof witch){
+			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
+			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-15, enemiesOnBoard[i].yCoord-17, 43, 36);
+			//draw health bar
+			ctx.fillRect(enemiesOnBoard[i].xCoord-15, enemiesOnBoard[i].yCoord-22, (43 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+		}
 		else {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
@@ -2334,6 +2340,28 @@ function renderTowerAndBullet() {
 				towersOnBoard[i].bullet();
 			}
 			
+			if(towersOnBoard[i] instanceof marbleShooter){
+				bulletImg.src = '../images/marble.png';
+			}
+			else if(towersOnBoard[i] instanceof toyCarLauncher){
+				bulletImg.src = '../images/toycar.png';
+			}
+			else if(towersOnBoard[i] instanceof waterGun){
+				bulletImg.src = "../images/water.png";
+			}
+			else if(towersOnBoard[i] instanceof nutsAndBolts){
+				bulletImg.src = '../images/bolt.png';
+			}
+			else if(towersOnBoard[i] instanceof toaster){
+				bulletImg.src = '../images/toast.png';
+			}
+			else if(towersOnBoard[i] instanceof airplaneLauncher){
+				bulletImg.src = '../images/paperPlane.png';
+			}
+			else if(towersOnBoard[i] instanceof vanquishEvil){
+				//bulletImg.src = '../images/teddy.png';
+			}
+			
 			//iterate through bullets
 			for (var b = 0; b < towersOnBoard[i].bulletArr.length; b++) {
 				//same check as above approx 20 lines up, but also checks if it's an action figure
@@ -2349,7 +2377,7 @@ function renderTowerAndBullet() {
 				if ( ang != 720 ) {
 					ctx.rotate(Math.PI / 180 * ang);
 					//draw bullet with respect to trajectory parameter
-					ctx.fillRect(0, -(towersOnBoard[i].bulletArr[b].trajectory), 5, 5);
+					ctx.drawImage(bulletImg, 0, -(towersOnBoard[i].bulletArr[b].trajectory), 15, 15);
 					towersOnBoard[i].lastAngState = ang;
 				}
 				//restore canvas state
