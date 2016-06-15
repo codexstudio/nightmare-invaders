@@ -1620,7 +1620,7 @@ function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgr
 	else if (language === 2){
 		this.info = "Dispara aviones de papel hecho el chico. Como encontraron el tiempo para hacer todo esto?";
 	}
->>>>>>> refs/remotes/origin/staging
+
 }
 airplaneLauncher.prototype = Object.create(tower.prototype);
 airplaneLauncher.prototype.constructor = airplaneLauncher;
@@ -1662,7 +1662,7 @@ trophy.prototype.towerBuff = function(){
 function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 500;
+	this.cost = 50;
 	this.damage = 600;
 	this.range = 500000;
 	this.attackSpeed = 6000; 
@@ -2372,7 +2372,7 @@ function renderTowerAndBullet() {
 				bulletImg.src = '../images/paperPlane.png';
 			}
 			else if(towersOnBoard[i] instanceof vanquishEvil){
-				//bulletImg.src = '../images/teddy.png';
+				bulletImg.src = '../images/teddyBear.png';
 			}
 			
 			//iterate through bullets
