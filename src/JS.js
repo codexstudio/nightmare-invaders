@@ -2,36 +2,37 @@
 const fps = setInterval(update, 33.34); // 30fps
 
 var images = new Array();
-function preload() {
-	for (i = 0; i < preload.arguments.length; i++) {
-		images[i] = new Image();
-		images[i].src = preload.arguments[i];
-	}
-}
-preload(
-	'../images/lamp.png',
-	'../images/lampOn.png',
-	'../images/ghost.png',
-	'../images/blueSkeleton.png',
-	'../images/basicSkeleton.png',
-	'../images/redSkeleton.png',
-	'../images/bigBoss.png',
-	'../images/bat.png',
-	'../images/vampire.png',
-	'../images/clown.png',
-	'../images/bigBlob.png',
-	'../images/blob.png',
-	'../images/miniBlob.png',
-	'../images/grizzlyBear.png',
-	'../images/witch.png',
-	'../images/blueDemon.png',
-	'../images/redDemon.png',
-	'../images/zombieDad.png',
-	'../images/zombieMom.png',
-	'../images/grimReaper.png'
-)
-		
-			
+			function preload() {
+				for (i = 0; i < preload.arguments.length; i++) {
+					images[i] = new Image();
+					images[i].src = preload.arguments[i];
+				}
+			}
+			preload(
+				'../images/lamp.png',
+				'../images/lampOn.png',
+				'../images/ghost.png',
+				'../images/blueSkeleton.png',
+				'../images/basicSkeleton.png',
+				'../images/redSkeleton.png',
+				'../images/bigBoss.png',
+				'../images/bat.png',
+				'../images/vampire.png',
+				'../images/clown.png',
+				'../images/bigBlob.png',
+				'../images/blob.png',
+				'../images/miniBlob.png',
+				'../images/grizzlyBear.png',
+				'../images/bigRoach.png',
+				'../images/witch.png',
+				'../images/blueDemon.png',
+				'../images/redDemon.png',
+				'../images/zombieDad.png',
+				'../images/zombieMom.png',
+				'../images/kid.png',
+				'../images/grimReaper.png'
+			)
+	
 //Determines the distance between two points
 function distance(x1, x2, y1, y2){
 	return Math.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1)));
@@ -277,12 +278,12 @@ var goldOverTime = setInterval(function(){
 	if (awardGoldOverTime == true){
 		Gold++;
 	}
-}, 500);
+}, 1000);
 
 
 //Temporary grid toggle
 var showGrid = true;
-function togGrid(){
+function togGrid() {
 	if (showGrid) {
 		document.getElementById("grid").style.display = "block";
 		showGrid = false;
@@ -403,24 +404,23 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if (enemyObj.phaseOneComplete == false){
 				enemyObj.spawnMomDad();
 			}
-			//else if () {
-			//	enemyObj.removeRandomTowers();
-			//}
-			//else if () {
-			//	enemyObj.becomeTowerOffense();
-			//}
+			else if (enemyObj.phaseThreeComplete == false) {
+				enemyObj.spawnKid();
+			}
+		}
+		if (enemyObj instanceof kid) {
+			enemyObj.safeKid();
 		}
 	}, this.speed);
 }
 
-
 function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 200;
-	this.health = 200;
+	this.startHealth = 250;
+	this.health = 250;
 	this.damage = 1;
 	this.speed = 30;
-	this.killReward = 5;
+	this.killReward = 1;
 }
 basicSkeleton.prototype = Object.create(enemy.prototype);
 basicSkeleton.prototype.constructor = basicSkeleton;
@@ -431,11 +431,11 @@ basicSkeleton.prototype.thisChildMetohdNeedsAName = function(){
 
 function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 500;
-	this.health = 500;
+	this.startHealth = 600;
+	this.health = 600;
 	this.damage = 2;
 	this.speed = 50;
-	this.killReward = 20;
+	this.killReward = 2;
 }
 redSkeleton.prototype = Object.create(enemy.prototype);
 redSkeleton.prototype.constructor = redSkeleton;
@@ -446,11 +446,11 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 
 function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed)
-	this.startHealth = 100;
-	this.health = 100;
+	this.startHealth = 200;
+	this.health = 200;
 	this.damage = 1;
 	this.speed = 20;
-	this.killReward = 2;
+	this.killReward = 1;
 }
 blueSkeleton.prototype = Object.create(enemy.prototype);
 blueSkeleton.prototype.constructor = blueSkeleton;
@@ -458,13 +458,14 @@ blueSkeleton.prototype.constructor = blueSkeleton;
 blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 	console.log("Undefined Child Method");
 };
+
 function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
-	this.startHealth = 350;
-	this.health = 350;
+	this.startHealth = 400;
+	this.health = 400;
 	this.damage = 2;
 	this.speed = 50;
-	this.killReward = 25;
+	this.killReward = 3;
 	this.isVisible = false;
 }
 ghost.prototype = Object.create(enemy.prototype);
@@ -494,8 +495,8 @@ ghost.prototype.checkGhostVisibility = function(){
 
 function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 200;
-	this.health = 200;
+	this.startHealth = 15000;
+	this.health = 15000;
 	this.damage = 100;
 	this.speed = 80;
 	this.killReward = 0;
@@ -509,10 +510,10 @@ bigBoss.prototype.thisChildMethodNeedsAName = function(){
 
 function blob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 400;
-	this.health = 400;
-	this.damage = 20;
-	this.speed = 90;
+	this.startHealth = 1000;
+	this.health = 1000;
+	this.damage = 5;
+	this.speed = 70;
 	this.killReward = 0;
 }
 blob.prototype = Object.create(enemy.prototype);
@@ -582,12 +583,12 @@ blob.prototype.blobSplit = function(){
 
 function miniBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 150;
-	this.health = 150;
+	this.startHealth = 200;
+	this.health = 200;
 	console.log(this.health);
-	this.damage = 5;
-	this.speed = 60;
-	this.killReward = 5;
+	this.damage = 1;
+	this.speed = 20;
+	this.killReward = 1;
 }
 miniBlob.prototype = Object.create(enemy.prototype);
 miniBlob.prototype.constructor = miniBlob;
@@ -597,10 +598,10 @@ miniBlob.prototype.miniBlob = function(){
 
 function clown(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, goldTaken, direction, isSlowed);
-	this.startHealth = 10;
-	this.health = 10;
-	this.damage = 5;
-	this.speed = 10;
+	this.startHealth = 150;
+	this.health = 150;
+	this.damage = 1;
+	this.speed = 5;
 	this.killReward = 0;
 	this.goldTaken;
 }
@@ -627,10 +628,10 @@ clown.prototype.stealGold = function(){
 
 function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 1000;
-	this.health = 1000;
+	this.startHealth = 15000;
+	this.health = 15000;
 	this.damage = 100;
-	this.speed = 150;
+	this.speed = 90;
 	this.killReward = 0;
 }
 bigBlob.prototype = Object.create(enemy.prototype);
@@ -700,11 +701,11 @@ bigBlob.prototype.bigBlobSplit = function(){
 
 function bat(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = 300;
-	this.health = 300;
+	this.startHealth = 500;
+	this.health = 500;
 	this.damage = 15;
 	this.speed = 20;
-	this.killReward = 10;
+	this.killReward = 3;
 	this.isVisible = false;
 }
 bat.prototype = Object.create(enemy.prototype);
@@ -743,10 +744,10 @@ bat.prototype.checkBatVisibility = function(){
 
 function grizzlyBear(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 1000;
-	this.health = 1000;
-	this.damage = 10;
-	this.speed = 70;
+	this.startHealth = 1500;
+	this.health = 1500;
+	this.damage = 3;
+	this.speed = 65;
 	this.killReward = 20;
 }
 grizzlyBear.prototype = Object.create(enemy.prototype);
@@ -866,8 +867,7 @@ function zombieMom(startHealth, health, damage, speed, killReward, xCoord, yCoor
 zombieMom.prototype = Object.create(enemy.prototype);
 zombieMom.prototype.constructor = zombieMom;
 
-zombieMom.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+zombieMom.prototype.deaderThanCheddar = function(){	
 };
 
 function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
@@ -881,14 +881,28 @@ function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoor
 zombieDad.prototype = Object.create(enemy.prototype);
 zombieDad.prototype.constructor = zombieDad;
 
-zombieDad.prototype.thisChildMethodNeedsAName = function(){
-	console.log("Undefined Child Method.");
+zombieDad.prototype.afterDeaderThanCheddar = function(){
+};
+
+function kid(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
+	this.startHealth = Hp * 100;
+	this.health = Hp * 100;
+	this.damage = 0;
+	this.speed = 80;
+	this.killReward = 0;
+}
+kid.prototype = Object.create(enemy.prototype);
+kid.prototype.constructor = kid;
+
+kid.prototype.safeKid = function(){
+	
 };
 
 function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, direction, isVisible, hasPhaseOned, phaseOneComplete, hasPhaseTwoed, hasPhaseThreed, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 1000;
-	this.health = 1000;
+	this.startHealth = 1500;
+	this.health = 1500;
 	this.damage = 100;
 	this.speed = 100;
 	this.killReward = 0;
@@ -898,7 +912,9 @@ function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoo
 	this.hasPhaseOned = false;
 	this.phaseOneComplete = false;
 	this.hasPhaseTwoed = false;
+	this.phaseTwoComplete = false; 
 	this.hasPhaseThreed = false;
+	this.phaseThreeComplete = false; 
 	this.isVisible = true;
 }
 grimReaper.prototype = Object.create(enemy.prototype);
@@ -958,9 +974,10 @@ grimReaper.prototype.spawnMomDad = function(){
 		}
 		enemiesOnBoard.push(tempObj2);
 		tempObj2.enemyMovement(tempObj2);
+		gameMessage = "Mom?... Dad?...";
 		
 		clearInterval(this.enemyNextMove);
-		this.speed *= 10;
+		this.speed *= 5;
 		this.enemyMovement(this);
 	}
 	if (this.health < this.phaseOne){
@@ -974,7 +991,7 @@ grimReaper.prototype.spawnMomDad = function(){
 			this.isVisible = true;
 			this.phaseOneComplete = true;
 			clearInterval(this.enemyNextMove);
-			this.speed /= 10;
+			this.speed /= 5;
 			this.enemyMovement(this);
 		}
 	}
@@ -984,12 +1001,40 @@ grimReaper.prototype.removeRandomTowers = function(){ //MAYBE LOL!
 	console.log("Undefined Child Method.");
 };
 	
-grimReaper.prototype.becomeTowerOffense = function(){ //MAYBE LOL!
-	console.log("Undefined Child Method.");
-};
+grimReaper.prototype.spawnKid = function(){ 	
+		if (this.health < this.phaseThree && this.hasPhaseThreed == false) {
+		this.hasPhaseThreed = true;
+		this.isVisible = false; 
+		var tempObj = new kid;
+		enemiesOnBoard.push(tempObj);
+		tempObj.enemyMovement(tempObj);
+		
+		gameMessage = "NOW YOU WILL UNDERTSTAND HOW IT FEELS!";
+		
+		clearInterval(this.enemyNextMove);
+		console.log(this.speed);
+		this.speed *= 5;
+		console.log(this.speed);
+		this.enemyMovement(this);
+	}
+	if (this.health < this.phaseThree){
+		var kidActive = false;
+		for (var i = 0; i < enemiesOnBoard.length; i++){
+			if(enemiesOnBoard[i] instanceof kid){
+				kidActive = true;
+			}
+		}
+		if (!kidActive){
+			this.isVisible = true;
+			this.phaseThreedComplete = true;
+			clearInterval(this.enemyNextMove);
+			this.speed /= 5;
+			this.enemyMovement(this);
+		}
+	}
+}
 
 // End of enemy bluprint section----------------------------------------------------
-
 
 function spawnEnemy(enemyType){
 	var tempEnemyObj = new (eval(enemyType))();
@@ -1153,7 +1198,7 @@ tower.prototype.attack = function(towerObj, towerName){
 							}
 							if (enemiesOnBoard[j] instanceof clown){
 								Math.round(enemiesOnBoard[j].goldTaken);
-								Gold += enemiesOnBoard[j].goldTaken;
+								Gold += Math.round(enemiesOnBoard[j].goldTaken);
 								gameMessage = "You have killed a clown and stolen back " + Math.round(enemiesOnBoard[j].goldTaken) +" gold!";
 							}
 							if (enemiesOnBoard[j] instanceof blob) {
@@ -1162,8 +1207,8 @@ tower.prototype.attack = function(towerObj, towerName){
 							if (enemiesOnBoard[j] instanceof bigBlob) {
 								enemiesOnBoard[j].bigBlobSplit();
 							}
-							
 							enemiesOnBoard.splice(j,1);
+							
 						}
 						break;
 					}
@@ -1176,10 +1221,9 @@ tower.prototype.attack = function(towerObj, towerName){
 	}, this.attackSpeed);
 };
 
-
 function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 50;
+	this.cost = 30;
 	this.damage = 10;
 	this.range = 160;
 	this.attackSpeed = 900;
@@ -1196,7 +1240,7 @@ function lamp(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, on, is
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed);
 	this.cost = 30;
 	this.damage = 0;
-	this.range = 180;
+	this.range = 120;
 	this.attackSpeed = 1;
 	this.on = false;
 	this.info = "Spots ghosts and changes those pesky bats. You may want to wipe off the dust...";
@@ -1234,8 +1278,8 @@ lamp.prototype.lampIO = function(){
 
 function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isBuffed);
-	this.cost = 150;
-	this.damage = 250;
+	this.cost = 100;
+	this.damage = 200;
 	this.range = 90;
 	this.attackSpeed = 4000;
 	this.info = "You think this is Superman? It's actually the action figure Dad steps on every night, and it really hurts!";
@@ -1251,7 +1295,7 @@ function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgrade
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter, isShooting, bulletArr, isBuffed);
 	this.cost = 75;
 	this.damage = 10;
-	this.range = 250;
+	this.range = 200;
 	this.attackSpeed = 700;
 	this.shotCounter = 0;
 	this.info = "Shoots marbles at the speed of sound! Every fifth marble may pack a punch!";
@@ -1270,7 +1314,7 @@ marbleShooter.prototype.marbleBuffShot = function() {
 
 function calculator(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
-	this.cost = 1;
+	this.cost = 200;
 	this.damage = 0;
 	this.range = 1;
 	this.attackSpeed = 5000;
@@ -1283,11 +1327,11 @@ calculator.prototype.goldBuff = function(){
 	Gold += 5;
 };
 
-function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, baseDamage, isBuffed){
+function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, baseDamage, isBuffe){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
 	this.cost = 90;
 	this.damage = 15;
-	this.range = 135;
+	this.range = 140;
 	this.attackSpeed = 800;
 	this.baseDamage = 15;
 	this.info = "Nuts do basic damage and if this tower shoots a bolt, expect lots of damage.";
@@ -1388,7 +1432,7 @@ function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded
 	
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
 	this.cost = 0;
-	this.damage = 500;
+	this.damage = 300;
 	this.range = 500000;
 	this.attackSpeed = 6000; 
 	this.info = "Caution! Three per customer as per the nightmare safety regulations.";
@@ -1488,15 +1532,11 @@ function placeTower(towerType){
 				vanquishEvilCount++;
 			}
 		}
-		if (vanquishEvilCount >= 3) {
+			if (vanquishEvilCount >= 3 && towerType == "vanquishEvil") {
 			objObstruct = true;
 			gameMessage = "You can have only 3 Vanquish The Evil Towers!";
 			togGrid();
 			circleCheck = false;
-			if (towerType instanceof vanquishEvil) {
-				objObstruct = true;
-				gameMessage = "You can have only 3 Vanquish The Evil Towers!";
-			}
 		}
 		var towerObjectHolder = new (eval(towerType))();
 		if (!objObstruct && towerxy.x < 870 && towerxy.y < 570){
@@ -1621,8 +1661,44 @@ var cursorX;
 var cursorY;
 var circleCheck = false;
 
+//var tempArray = [];
 
+/*function storeTowerCoord(){
+	if (towersOnBoard.length > 0){
+		if (tempArray.length > 0){
+			for (var i = 0; i <= towersOnBoard.length-1; i++){
+				for (var j = 0; j <= tempArray.length-1; j++){
+					if ((towersOnBoard[i].xCoord != tempArray[j][0]) && (towersOnBoard[i].yCoord != tempArray[j][1])){
+						tempArray.push([towersOnBoard[i].xCoord, towersOnBoard[i].yCoord,true]);
+						console.log("pls");
+					}
+				}
+			}
+		}
+		else{
+			tempArray.push([towersOnBoard[0].xCoord, towersOnBoard[0].yCoord,true]);
+			console.log(tempArray);
+		}
+	}
+}*/
+
+/*function drawBox(){
+	if (tempArray.length > 0){
+		for (i = 0; i <= tempArray.length-1;i++){
+			if (tempArray[i][2] == true){
+				ctx.beginPath();
+				ctx.moveTo(tempArray[i][0],tempArray[i][1]);
+				ctx.lineTo(tempArray[i][0],tempArray[i][1]+45);
+				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]+45);
+				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]);
+				ctx.lineTo(tempArray[i][0],tempArray[i][1]);
+				ctx.stroke();
+			}
+		}
+	}
+}*/
 function hoverCheck(){
+	//document.getElementById('canvas').addEventListener ("click", storeTowerCoord);
 	if (towersOnBoard.length > 0)
 	{
 		for (var i = 0; i <= (towersOnBoard.length-1); i++){
@@ -1683,6 +1759,7 @@ function render(){
 	drawRange();
 	hoverCheck();
 	stageWin();
+	//drawBox();
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------
@@ -1766,7 +1843,8 @@ function renderEnemyMovement() {
 			//draw health bar
 			ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 		}
-		else{
+
+		else {
 			enemyImgToPrint.src = '../images/' + enemiesOnBoard[i].constructor.name + '.png';
 			ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
 			//draw health bar
@@ -1842,7 +1920,7 @@ function renderTowerAndBullet() {
 	}
 }
 
-function drawRange(){
+function drawRange() {
 	if (circleCheck === true) {
 		ctx.beginPath();
 		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
@@ -1895,50 +1973,53 @@ function stageWin() {
 
 
 var stageWave = [[],[],[],[]];
+
 //Stage 1
-stageWave[0][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBoss"];
-stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "blueSkeleton"];
-stageWave[0][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[0][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[0][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[0][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[0][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[0][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[0][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[0][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+stageWave[0][0] = ["basicSkeleton", "blueSkeleton"];
+stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[0][2] = ["redSkeleton", "basicSkeleton", "basicSkeleton","basicSkeleton", "blueSkeleton"];
+stageWave[0][3] = ["basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton"];
+stageWave[0][4] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					"blueSkeleton"];
+stageWave[0][5] = ["blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					 "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 				   "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton"];
+stageWave[0][6] = ["basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", 				  "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", 					"blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", 				  "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", 				   "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton"];
+stageWave[0][7] = ["basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", 					 "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "redSkeleton", 					"redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton"];
+stageWave[0][8] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", 					 "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", 				   "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton"];
+stageWave[0][9] = ["bigBoss"];
+
 //Stage 2
-stageWave[1][0] = ["blueSkeleton", "basicSkeleton", "clown", "redSkeleton", "bat", "blueSkeleton", "bigBlob"];
-stageWave[1][1] = ["blueSkeleton", "basicSkeleton"];
-stageWave[1][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[1][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[1][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[1][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[1][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[1][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[1][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[1][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBlob"];
+stageWave[1][0] = ["ghost"];
+stageWave[1][1] = ["redSkeleton", "basicSkeleton", "bat"];
+stageWave[1][2] = ["blueSkeleton", "ghost", "basicSkeleton", "blueSkeleton", "ghost", "blueSkeleton", "ghost"];
+stageWave[1][3] = ["blueSkeleton", "bat", "ghost", "blueSkeleton", "redSkeleton", "bat", "bat", "ghost", "blob"];
+stageWave[1][4] = ["redSkeleton", "redSkeleton", "blueSkeleton", "ghost", "blob", "blob", "ghost", "blueSkeleton", "blob", "redSkeleton", 					"bat", "redSkeleton", "blueSkeleton", "ghost"];
+stageWave[1][5] = ["ghost", , "redSkeleton", "ghost", "ghost", "blueSkeleton", "ghost", "ghost", "basicSkeleton", "ghost", "ghost", "bat", 					 "ghost", "ghost", "blob", "ghost", "ghost", "blueSkeleton", "ghost", "ghost", "ghost", "ghost", "ghost", "ghost", 					 "ghost", "ghost", "ghost","ghost", "ghost"];
+stageWave[1][6] = ["basicSkeleton", "basicSkeleton", "blob", "basicSkeleton", "blueSkeleton", "blob", "basicSkeleton", "redSkeleton", 					"blob", "basicSkeleton", "basicSkeleton", "blob", "basicSkeleton", "blueSkeleton", "blob", "basicSkeleton", 				  "redSkeleton", "blob"];
+stageWave[1][7] = ["bat", "bat", "bat", "blueSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "bat", "bat", "bat", "blueSkeleton", 					"redSkeleton", "redSkeleton", "redSkeleton", "bat", "bat", "bat", "blueSkeleton", "redSkeleton", "redSkeleton", 				  "redSkeleton"];
+stageWave[1][8] = ["blob", "blob", "blob", "bat", "blob", "blob", "blob", "bat", "blob", "blob", "blob", "bat", "blob", "blob", "blob", 				  "bat", "blob", "blob", "blob", "bat"];
+stageWave[1][9] = ["bigBlob"];
 //Stage 3
-stageWave[2][0] = ["blueDemon", "redDemon", "bigRoach", "bigRoach", "bigRoach", "bigRoach", "bigRoach"];
-stageWave[2][1] = ["blueSkeleton", "basicSkeleton"];
-stageWave[2][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[2][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[2][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[2][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[2][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[2][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[2][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[2][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+stageWave[2][0] = ["basicSkeleton", "basicSkeleton", "blueSkeleton", "ghost"];
+stageWave[2][1] = ["redSkeleton", "ghost", "bat"];
+stageWave[2][2] = ["grizzlyBear"];
+stageWave[2][3] = ["grizzlyBear", "blob", "blueSkeleton", "basicSkeleton", "basicSkeleton", "clown"];
+stageWave[2][4] = ["ghost", "blueSkeleton", "redSkeleton", "ghost", "grizzlyBear", "bat", "clown", "redSkeleton", "blob", "grizzlyBear", 				   "bat", "blueSkeleton"];
+stageWave[2][5] = ["grizzlyBear", "bat", "blob", "blob", "ghost", "redSkeleton", "clown", "grizzlyBear", "bat", "blob", "blob", "ghost", 				   "redSkeleton", "clown", "grizzlyBear", "bat", "blob", "blob", "ghost", "redSkeleton", "clown"];
+stageWave[2][6] = ["ghost", "bat", "clown", "redSkeleton", "blueSkeleton", "blob", "grizzlyBear", "blob", "clown", "blob", "ghost", "bat", 					 "basicSkeleton", "basicSkeleton", "basicSkeleton", "blob", "ghost", "bat", "grizzlyBear", "bat", "clown", "redSkeleton"  				  ,"redSkeleton", "clown", "clown"];
+stageWave[2][7] = ["ghost", "ghost", "ghost", "ghost", "ghost", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 				  "blueSkeleton", "grizzlyBear", "grizzlyBear", "blob", "blob", "blob", "bat", "bat", "bat", "blueSkeleton", 				   "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton"];
+stageWave[2][8] = ["grizzlyBear", "grizzlyBear", "grizzlyBear", "clown", "grizzlyBear", "grizzlyBear", "grizzlyBear", "grizzlyBear", 				   "grizzlyBear", "clown", "clown", "clown", ];
+stageWave[2][9] = ["stageThreeBoss"];
+
 //Stage 4
-stageWave[3][0] = ["witch", "witch"];
-stageWave[3][1] = ["blueSkeleton", "basicSkeleton"];
-stageWave[3][2] = ["blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[3][3] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[3][4] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton"];
-stageWave[3][5] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[3][6] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[3][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[3][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton"];
-stageWave[3][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "bigBoss"];
+stageWave[3][0] = ["grimReaper", "redSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "witch"];
+stageWave[3][1] = ["ghost", "bat", "ghost", "bat", "clown"];
+stageWave[3][2] = ["blueSkeleton", "blueSkeleton", "blob", "redSkeleton", "basicSkeleton", "basicSkeleton", "ghost", "ghost"];
+stageWave[3][3] = ["grizzlyBear", "blob", "blob", "clown", "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "redSkeleton", 				   "redSkeleton", "blueDemon", "blueDemon"];
+stageWave[3][4] = ["blueDemon", "blueDemon", "blueDemon", "clown", "grizzlyBear", "grizzlyBear", "grizzlyBear", "blob", "blob", "blob", 				  "bat", "bat", "bat", "ghost", "ghost", "ghost"];
+stageWave[3][5] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "ghost", "bat", "blueSkeleton", 					"blueSkeleton", "grizzlyBear", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					 "grizzlyBear", "blob", "blueSkeleton", "blueDemon", "blueSkeleton", "blueDemon", "blueSkeleton", "blueDemon", 					 "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueDemon", "redDemon"];
+stageWave[3][6] = ["redDemon", "redDemon", "blueDemon", "blueDemon", "basicSkeleton", "basicSkeleton"];
+stageWave[3][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", 					 "redSkeleton"];
+stageWave[3][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", 					 "redSkeleton", "blueSkeleton"];
+stageWave[3][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", 					 "redSkeleton", "blueSkeleton", "bigBoss"];
 
 var inAWave = false;
 var waveCounter = 0;
@@ -2095,7 +2176,6 @@ function towerAvailable () {
 }
 
 function enableTowers() {
-
 	for (var i = 0; i < allSelected.length; i++) {
 		allSelected[i].style.opacity = '1.0';
 		allSelected[i].style.pointerEvents = 'auto';
