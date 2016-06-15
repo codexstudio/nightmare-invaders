@@ -294,6 +294,8 @@ function gameOver(){
 
 function gameWin() {
 	ctx.drawImage(gameCleared, 0, 0);
+	var victory = document.getElementById('Victory');
+	victory.play();
 }
 
 function prevStage(){
@@ -515,6 +517,10 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			}
 		}
 		if (enemyObj instanceof kid) {
+			Hp = enemyObj.health;
+			if (Hp <= Hp / 2) {
+				gameMessage = "What are you doing!? Save him!";
+			}
 			enemyObj.safeKid();
 		}
 	}, this.speed);
@@ -601,8 +607,8 @@ ghost.prototype.checkGhostVisibility = function(){
 
 function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 15000;
-	this.health = 15000;
+	this.startHealth = 13000;
+	this.health = 13000;
 	this.damage = 100;
 	this.speed = 80;
 	this.killReward = 0;
@@ -729,6 +735,8 @@ clown.prototype.stealGold = function(){
 		this.goldTaken = (75 / 100) * Gold;
 		Gold -= Math.round(this.goldTaken);
 	} 
+	var clownAudio = document.getElementById('clownLaugh');
+	clownAudio.play();
 	if (language === 0){
 			gameMessage = "A clown has stolen " + Math.round(this.goldTaken) + " gold from you! Kill it to get it back!";
 		}
@@ -738,6 +746,7 @@ clown.prototype.stealGold = function(){
 		else if (language === 2){
 			gameMessage = "Un payaso ha robado " + Math.round(this.goldTaken) + " oro de usted! Acabar con el para recuperarlo!";
 		}
+
 };
 
 function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
@@ -887,8 +896,8 @@ bigRoach.prototype.thisChildMethodNeedsAName = function(){
 
 function witch(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, towerStolen, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 300;
-	this.health = 300;
+	this.startHealth = 400;
+	this.health = 400;
 	this.damage = 1;
 	this.speed = 60;
 	this.killReward = 0;
@@ -949,11 +958,11 @@ witch.prototype.stealTower = function(){
 
 function blueDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 500;
-	this.health = 500;
+	this.startHealth = 1000;
+	this.health = 1000;
 	this.damage = 0; 
-	this.speed = 20;
-	this.killReward = 40;
+	this.speed = 15;
+	this.killReward = 200;
 }
 blueDemon.prototype = Object.create(enemy.prototype);
 blueDemon.prototype.constructor = blueDemon;
@@ -964,11 +973,11 @@ blueDemon.prototype.blueDemonExit = function(){
 
 function redDemon(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 10000;
-	this.health = 10000;
+	this.startHealth = 5000;
+	this.health = 5000;
 	this.damage = 0;
-	this.speed = 1000;
-	this.killReward = 0;
+	this.speed = 95;
+	this.killReward = 200;
 }
 redDemon.prototype = Object.create(enemy.prototype);
 redDemon.prototype.constructor = redDemon;
@@ -979,11 +988,11 @@ redDemon.prototype.redDemonExit = function(){
 
 function zombieMom(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 1000;
-	this.health = 1000;
-	this.damage = 10;
+	this.startHealth = 10000;
+	this.health = 10000;
+	this.damage = 5;
 	this.speed = 80;
-	this.killReward = 20;
+	this.killReward = 1000;
 }
 zombieMom.prototype = Object.create(enemy.prototype);
 zombieMom.prototype.constructor = zombieMom;
@@ -993,11 +1002,11 @@ zombieMom.prototype.deaderThanCheddar = function(){
 
 function zombieDad(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 1000;
-	this.health = 1000;
-	this.damage = 10;
+	this.startHealth = 10000;
+	this.health = 10000;
+	this.damage = 5;
 	this.speed = 80;
-	this.killReward = 20;
+	this.killReward = 1000;
 }
 zombieDad.prototype = Object.create(enemy.prototype);
 zombieDad.prototype.constructor = zombieDad;
@@ -1007,8 +1016,8 @@ zombieDad.prototype.afterDeaderThanCheddar = function(){
 
 function kid(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction);
-	this.startHealth = Hp * 100;
-	this.health = Hp * 100;
+	this.startHealth = Hp * 2000;
+	this.health = Hp * 2000;
 	this.damage = 0;
 	this.speed = 80;
 	this.killReward = 0;
@@ -1016,14 +1025,14 @@ function kid(startHealth, health, damage, speed, killReward, xCoord, yCoord, pat
 kid.prototype = Object.create(enemy.prototype);
 kid.prototype.constructor = kid;
 
-kid.prototype.safeKid = function(){
-	
+kid.prototype.kidDies = function(){
+	gameOver();
 };
 
 function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, direction, isVisible, hasPhaseOned, phaseOneComplete, hasPhaseTwoed, hasPhaseThreed, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 1500;
-	this.health = 1500;
+	this.startHealth = 15000;
+	this.health = 15000;
 	this.damage = 100;
 	this.speed = 100;
 	this.killReward = 0;
@@ -1185,7 +1194,7 @@ var towerxy = {x:0, y:0};
 var objObstruct = false;
 
 //Tower blueprints section--------------------------------------------------------
-var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info, isBuffed){
+var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, info, isBuffed, boolBox){
 	this.cost = cost;
 	this.damage = damage;
 	this.range = range;
@@ -1200,6 +1209,7 @@ var tower = function(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded,
 	this.info = info;
 	this.isBuffed = false;
 	this.attackEnemy;
+	this.boolBox;
 };
 
 tower.prototype.bullet = function() {
@@ -1274,6 +1284,9 @@ tower.prototype.attack = function(towerObj, towerName){
 						if (enemiesOnBoard[j].health <= 0){
 							clearInterval(enemiesOnBoard[j].enemyNextMove);
 							Gold += enemiesOnBoard[j].killReward;
+							if (enemiesOnBoard[j] instanceof kid) {
+								enemiesOnBoard[j].kidDies();
+							}
 							if (enemiesOnBoard[j] instanceof witch){
 								switch (enemiesOnBoard[j].towerStolen){
 									case 1:
@@ -1352,7 +1365,7 @@ tower.prototype.attack = function(towerObj, towerName){
 
 function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 30;
+	this.cost = 25;
 	this.damage = 10;
 	this.range = 160;
 	this.attackSpeed = 900;
@@ -1425,7 +1438,7 @@ function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isBuffed);
 	this.cost = 100;
 	this.damage = 200;
-	this.range = 90;
+	this.range = 100;
 	this.attackSpeed = 4000;
 	if (language === 0){
 		this.info = "You think this is Superman? It's actually the action figure Dad steps on every night, and it really hurts!";
@@ -1475,7 +1488,7 @@ marbleShooter.prototype.marbleBuffShot = function() {
 
 function calculator(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
-	this.cost = 200;
+	this.cost = 150;
 	this.damage = 0;
 	this.range = 1;
 	this.attackSpeed = 5000;
@@ -1498,7 +1511,7 @@ calculator.prototype.goldBuff = function(){
 
 function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, baseDamage, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 90;
+	this.cost = 80;
 	this.damage = 15;
 	this.range = 140;
 	this.attackSpeed = 800;
@@ -1525,8 +1538,8 @@ nutsAndBolts.prototype.critChance = function() {
 
 function toaster(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, isBuffed);
-	this.cost = 80;
-	this.damage = 75;
+	this.cost = 100;
+	this.damage = 50;
 	this.range = 135;
 	this.attackSpeed = 2000;
 	if (language === 0){
@@ -1548,10 +1561,10 @@ toaster.prototype.thisChildMethodNeedsAName = function(){
 
 function blenderDefender(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, isBuffed);
-	this.cost = 50;
+	this.cost = 75;
 	this.damage = 0.5;
 	this.range = 80;
-	this.attackSpeed = 50;
+	this.attackSpeed = 15;
 	if (language === 0){
 		this.info = "May blend enemies into a delicious smoothie.";
 	}
@@ -1571,9 +1584,9 @@ blenderDefender.prototype.thisChildMethodNeedsAName = function(){
 
 function waterGun(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 50;
-	this.damage = 2;
-	this.range = 80;
+	this.cost = 80;
+	this.damage = 1;
+	this.range = 100;
 	this.attackSpeed = 400;
 	if (language === 0){
 		this.info = "Enough force to slow enemies as they approach.";
@@ -1594,10 +1607,10 @@ waterGun.prototype.thisChildMethodNeedsAName = function(){
 
 function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 50;
-	this.damage = 200;
-	this.range = 500;
-	this.attackSpeed = 2000;
+	this.cost = 200;
+	this.damage = 150;
+	this.range = 250;
+	this.attackSpeed = 3000;
 	if (language === 0){
 		this.info = "Shoots paper airplanes the kid made. How did they find the time to make all of these?";
 	}
@@ -1607,6 +1620,7 @@ function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgr
 	else if (language === 2){
 		this.info = "Dispara aviones de papel hecho el chico. Como encontraron el tiempo para hacer todo esto?";
 	}
+>>>>>>> refs/remotes/origin/staging
 }
 airplaneLauncher.prototype = Object.create(tower.prototype);
 airplaneLauncher.prototype.constructor = airplaneLauncher;
@@ -1617,7 +1631,7 @@ airplaneLauncher.prototype.thisChildMethodNeedsAName = function(){
 
 function trophy(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
-	this.cost = 0;
+	this.cost = 100;
 	this.damage = 0;
 	this.range = 100;
 	this.attackSpeed = 1;
@@ -1648,8 +1662,8 @@ trophy.prototype.towerBuff = function(){
 function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 0;
-	this.damage = 300;
+	this.cost = 500;
+	this.damage = 600;
 	this.range = 500000;
 	this.attackSpeed = 6000; 
 	if (language === 0){
@@ -2086,48 +2100,46 @@ var cursorX;
 var cursorY;
 var circleCheck = false;
 
-//var tempArray = [];
-
-/*function storeTowerCoord(){
-	if (towersOnBoard.length > 0){
-		if (tempArray.length > 0){
-			for (var i = 0; i <= towersOnBoard.length-1; i++){
-				for (var j = 0; j <= tempArray.length-1; j++){
-					if ((towersOnBoard[i].xCoord != tempArray[j][0]) && (towersOnBoard[i].yCoord != tempArray[j][1])){
-						tempArray.push([towersOnBoard[i].xCoord, towersOnBoard[i].yCoord,true]);
-						console.log("pls");
-					}
+function boxStatus(){
+	for (var i = 0; i <= towersOnBoard.length-1;i++){
+		if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
+			if ((towersOnBoard[i].xCoord == tempX) && (towersOnBoard[i].yCoord == tempY)){
+				console.log("setting");
+				if (towersOnBoard[i].boxBool == false){
+					towersOnBoard[i].boxBool = true;
+				}
+				else{
+					towersOnBoard[i].boxBool = false;
 				}
 			}
 		}
-		else{
-			tempArray.push([towersOnBoard[0].xCoord, towersOnBoard[0].yCoord,true]);
-			console.log(tempArray);
-		}
 	}
-}*/
+}
 
-/*function drawBox(){
-	if (tempArray.length > 0){
-		for (i = 0; i <= tempArray.length-1;i++){
-			if (tempArray[i][2] == true){
+function drawBox(){
+	if (towersOnBoard.length > 0){
+		for (i = 0; i <= towersOnBoard.length-1;i++){
+			if (towersOnBoard[i].boxBool == true){
 				ctx.beginPath();
-				ctx.moveTo(tempArray[i][0],tempArray[i][1]);
-				ctx.lineTo(tempArray[i][0],tempArray[i][1]+45);
-				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]+45);
-				ctx.lineTo(tempArray[i][0]+45,tempArray[i][1]);
-				ctx.lineTo(tempArray[i][0],tempArray[i][1]);
+				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord)
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+45)
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+45)
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord)
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord)
 				ctx.stroke();
 			}
 		}
 	}
-}*/
+}
+
 function hoverCheck(){
-	//document.getElementById('canvas').addEventListener ("click", storeTowerCoord);
 	if (towersOnBoard.length > 0)
 	{
 		for (var i = 0; i <= (towersOnBoard.length-1); i++){
 			if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
+				tempX = towersOnBoard[i].xCoord;
+				tempY = towersOnBoard[i].yCoord;
+				canvas.addEventListener ("click", boxStatus);
 				ctx.beginPath();
 				ctx.arc(towersOnBoard[i].xCoord+22.5, towersOnBoard[i].yCoord+22.5, towersOnBoard[i].range, 0, 2 * Math.PI);
 				ctx.stroke();
@@ -2135,6 +2147,7 @@ function hoverCheck(){
 		}
 	}
 }
+
 
 //End tower section ---------------------------------------------------------------------------------------------------------------------------
 
@@ -2219,7 +2232,7 @@ function render(){
 	drawRange();
 	hoverCheck();
 	stageWin();
-	//drawBox();
+	drawBox();
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------
@@ -2518,19 +2531,19 @@ stageWave[2][5] = ["grizzlyBear", "bat", "blob", "blob", "ghost", "redSkeleton",
 stageWave[2][6] = ["ghost", "bat", "clown", "redSkeleton", "blueSkeleton", "blob", "grizzlyBear", "blob", "clown", "blob", "ghost", "bat", 					 "basicSkeleton", "basicSkeleton", "basicSkeleton", "blob", "ghost", "bat", "grizzlyBear", "bat", "clown", "redSkeleton"  				  ,"redSkeleton", "clown", "clown"];
 stageWave[2][7] = ["ghost", "ghost", "ghost", "ghost", "ghost", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 				  "blueSkeleton", "grizzlyBear", "grizzlyBear", "blob", "blob", "blob", "bat", "bat", "bat", "blueSkeleton", 				   "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton"];
 stageWave[2][8] = ["grizzlyBear", "grizzlyBear", "grizzlyBear", "clown", "grizzlyBear", "grizzlyBear", "grizzlyBear", "grizzlyBear", 				   "grizzlyBear", "clown", "clown", "clown", ];
-stageWave[2][9] = ["stageThreeBoss"];
+stageWave[2][9] = ["bigRoach, bigRoach", "bigRoach", "bigRoach", "bigRoach"];
 
 //Stage 4
-stageWave[3][0] = ["grimReaper", "redSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "witch"];
-stageWave[3][1] = ["ghost", "bat", "ghost", "bat", "clown"];
-stageWave[3][2] = ["blueSkeleton", "blueSkeleton", "blob", "redSkeleton", "basicSkeleton", "basicSkeleton", "ghost", "ghost"];
-stageWave[3][3] = ["grizzlyBear", "blob", "blob", "clown", "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "redSkeleton", 				   "redSkeleton", "blueDemon", "blueDemon"];
-stageWave[3][4] = ["blueDemon", "blueDemon", "blueDemon", "clown", "grizzlyBear", "grizzlyBear", "grizzlyBear", "blob", "blob", "blob", 				  "bat", "bat", "bat", "ghost", "ghost", "ghost"];
-stageWave[3][5] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "ghost", "bat", "blueSkeleton", 					"blueSkeleton", "grizzlyBear", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					 "grizzlyBear", "blob", "blueSkeleton", "blueDemon", "blueSkeleton", "blueDemon", "blueSkeleton", "blueDemon", 					 "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueDemon", "redDemon"];
-stageWave[3][6] = ["redDemon", "redDemon", "blueDemon", "blueDemon", "basicSkeleton", "basicSkeleton"];
-stageWave[3][7] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", 					 "redSkeleton"];
-stageWave[3][8] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", 					 "redSkeleton", "blueSkeleton"];
-stageWave[3][9] = ["blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton", "blueSkeleton", 					 "redSkeleton", "blueSkeleton", "bigBoss"];
+stageWave[3][0] = ["witch"];
+stageWave[3][1] = ["witch", "redSkeleton", "redSkeleton", "witch"];
+stageWave[3][2] = ["basicSkeleton", "blueSkeleton", "blob", "witch", "clown", "basicSkeleton", "ghost", "ghost"];
+stageWave[3][3] = ["blueDemon", "blueSkeleton"];
+stageWave[3][4] = ["ghost", "witch", "bat", "witch", "ghost","witch", "bat", "witch", "ghost", "witch", "bat", "witch", "ghost", "redDemon"];
+stageWave[3][5] = ["grizzlyBear", "witch", "witch", "redSkeleton", "blob", "clown", "blueDemon"];
+stageWave[3][6] = ["clown", "grizzlyBear", "blob", "blob", "blob", "witch", "witch", "grizzlyBear", "redSkeleton", "blueSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "redDemon"];
+stageWave[3][7] = ["grizzlyBear", "grizzlyBear", "blob", "grizzlyBear", "blob", "bat", "bat", "bat", "clown", "bat", "redSkeleton", "basicSkeleton", "blueSkeleton", "ghost", "redDemon", "redDemon", "redSkeleton"];
+stageWave[3][8] = ["basicSkeleton", "blueSkeleton", "redSkeleton", "ghost", "bat", "blob", "clown", "grizzlyBear", "blueDemon", "redDemon", "bigRoach", "basicSkeleton", "blueSkeleton", "redSkeleton", "ghost", "bat", "blob", "clown", "grizzlyBear", "blueDemon", "redDemon", "bigRoach"];
+stageWave[3][9] = ["grimReaper"];
 
 var inAWave = false;
 var waveCounter = 0;
@@ -2608,7 +2621,6 @@ function pauseGame(){
 		HTMLID_pauseUI.style.animationFillMode = "forwards";
 		pause = false;
 		render();
-
 	}
 }
 
@@ -2718,5 +2730,19 @@ function enableTowers() {
 	for (var i = 0; i < disabledTowers.length; i++) {
 		disabledTowers[i].style.opacity = '0.3';
 		disabledTowers[i].style.pointerEvents = 'none';
+	}
+}
+
+function sellTowers() {
+	//HTMLID_btnSell.style.display = "none";
+	//Small bugfix needed for when indice out of range
+	for (var i=towersOnBoard.length-1; i => 0;i--){
+		if (towersOnBoard[i].boxBool == true){
+			numOfTowers--;
+			Gold += Math.round(towersOnBoard[i].cost/2);
+			towerLocationsByPixelPosition.splice(i, 1);
+			clearInterval(towersOnBoard[i].attackEnemy);
+			towersOnBoard.splice(i,1);
+		}
 	}
 }
