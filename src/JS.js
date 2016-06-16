@@ -1687,7 +1687,7 @@ trophy.prototype.towerBuff = function(){
 function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 50;
+	this.cost = 500;
 	this.damage = 600;
 	this.range = 500000;
 	this.attackSpeed = 6000; 
