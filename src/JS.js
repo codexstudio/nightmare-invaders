@@ -776,6 +776,8 @@ clown.prototype.stealGold = function(){
 
 function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 12000;
+	this.health = 12000;
 	this.damage = 100; 
 	this.speed = 90;
 	this.killReward = 0;
