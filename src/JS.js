@@ -386,8 +386,33 @@ var goldOverTime = setInterval(function(){
 	if (awardGoldOverTime == true){
 		Gold++;
 	}
-}, 1000);
+}, 500);
 
+var tips = setInterval(function(){
+	var displayTip = Math.random() * 100;
+	if (currentStage == 0) {
+		if (displayTip < 100 && displayTip >= 75){
+		gameMessage = "Tip: Sometimes sacrificing health for more gold over time can be a good strategy.";
+		}
+		else if (displayTip < 75 && displayTip >= 50){
+		gameMessage = "Tip: Tower placement is important! Look at your range indicator surrounding the tower.";
+		}
+		else if (displayTip < 50 && displayTip >= 25){
+		gameMessage = "Tip: You can sell towers to upgrade to better towers.";
+		}
+		else if (displayTip < 25 && displayTip >= 0){
+		gameMessage = "Tip: If you are able to clear all enemies, save money for better towers.";
+		}
+	}
+	if (currentStage == 1) {
+		if (displayTip < 100 && displayTip >= 75){
+		gameMessage = "Tip: Calculators help you in the long run.";
+		}
+		else if (displayTip < 75 && displayTip >= 50){
+		gameMessage = "Tip: Killing a blob makes three small fast blobs. Be careful as they can get away quickly.";
+		}
+	}
+}, 30000);
 
 //Temporary grid toggle
 var showGrid = true;
@@ -528,11 +553,11 @@ enemy.prototype.enemyMovement = function(enemyObj){
 
 function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 250;
-	this.health = 250;
+	this.startHealth = 220;
+	this.health = 220;
 	this.damage = 1;
 	this.speed = 30;
-	this.killReward = 1;
+	this.killReward = 2;
 }
 basicSkeleton.prototype = Object.create(enemy.prototype);
 basicSkeleton.prototype.constructor = basicSkeleton;
@@ -543,11 +568,11 @@ basicSkeleton.prototype.thisChildMetohdNeedsAName = function(){
 
 function redSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 600;
-	this.health = 600;
+	this.startHealth = 500;
+	this.health = 500;
 	this.damage = 2;
 	this.speed = 50;
-	this.killReward = 2;
+	this.killReward = 5;
 }
 redSkeleton.prototype = Object.create(enemy.prototype);
 redSkeleton.prototype.constructor = redSkeleton;
@@ -558,11 +583,11 @@ redSkeleton.prototype.thisChildMethodNeedsAName = function(){
 
 function blueSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed)
-	this.startHealth = 200;
-	this.health = 200;
+	this.startHealth = 150;
+	this.health = 150;
 	this.damage = 1;
 	this.speed = 20;
-	this.killReward = 1;
+	this.killReward = 4;
 }
 blueSkeleton.prototype = Object.create(enemy.prototype);
 blueSkeleton.prototype.constructor = blueSkeleton;
@@ -573,11 +598,11 @@ blueSkeleton.prototype.thisChildMethodNeedsAName = function(){
 
 function ghost(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isVisible, direction){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction)
-	this.startHealth = 400;
-	this.health = 400;
+	this.startHealth = 300;
+	this.health = 300;
 	this.damage = 2;
 	this.speed = 50;
-	this.killReward = 3;
+	this.killReward = 10;
 	this.isVisible = false;
 }
 ghost.prototype = Object.create(enemy.prototype);
@@ -607,8 +632,8 @@ ghost.prototype.checkGhostVisibility = function(){
 
 function bigBoss(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 13000;
-	this.health = 13000;
+	this.startHealth = 10000;
+	this.health = 10000;
 	this.damage = 100;
 	this.speed = 80;
 	this.killReward = 0;
@@ -622,8 +647,8 @@ bigBoss.prototype.thisChildMethodNeedsAName = function(){
 
 function blob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 1000;
-	this.health = 1000;
+	this.startHealth = 750;
+	this.health = 750;
 	this.damage = 5;
 	this.speed = 70;
 	this.killReward = 0;
@@ -700,7 +725,7 @@ function miniBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord
 	console.log(this.health);
 	this.damage = 1;
 	this.speed = 20;
-	this.killReward = 1;
+	this.killReward = 5;
 }
 miniBlob.prototype = Object.create(enemy.prototype);
 miniBlob.prototype.constructor = miniBlob;
@@ -713,7 +738,7 @@ function clown(startHealth, health, damage, speed, killReward, xCoord, yCoord, p
 	this.startHealth = 150;
 	this.health = 150;
 	this.damage = 1;
-	this.speed = 5;
+	this.speed = 10;
 	this.killReward = 0;
 	this.goldTaken;
 }
@@ -751,8 +776,7 @@ clown.prototype.stealGold = function(){
 
 function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 15000;
-
+	this.damage = 100; 
 	this.speed = 90;
 	this.killReward = 0;
 }
@@ -1365,9 +1389,9 @@ tower.prototype.attack = function(towerObj, towerName){
 
 function toyCarLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 25;
-	this.damage = 10;
-	this.range = 160;
+	this.cost = 40;
+	this.damage = 5;
+	this.range = 150;
 	this.attackSpeed = 900;
 	if (language === 0){
 		this.info = "This shoots the dinkie cars at the scary monsters. Not sure what that will do, but use it anyways!";
@@ -1437,8 +1461,8 @@ lamp.prototype.lampIO = function(){
 function actionFigure(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isBuffed);
 	this.cost = 100;
-	this.damage = 200;
-	this.range = 100;
+	this.damage = 60;
+	this.range = 110;
 	this.attackSpeed = 4000;
 	if (language === 0){
 		this.info = "You think this is Superman? It's actually the action figure Dad steps on every night, and it really hurts!";
@@ -1460,7 +1484,7 @@ actionFigure.prototype.thisChildMethodNeedsAName = function(){
 function marbleShooter(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter, isShooting, bulletArr, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, shotCounter, isShooting, bulletArr, isBuffed);
 	this.cost = 75;
-	this.damage = 10;
+	this.damage = 5;
 	this.range = 200;
 	this.attackSpeed = 700;
 	this.shotCounter = 0;
@@ -1511,13 +1535,13 @@ calculator.prototype.goldBuff = function(){
 
 function nutsAndBolts(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, baseDamage, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
-	this.cost = 80;
-	this.damage = 15;
+	this.cost = 120;
+	this.damage = 10;
 	this.range = 140;
-	this.attackSpeed = 800;
+	this.attackSpeed = 750;
 	this.baseDamage = 15;
 	if (language === 0){
-		this.info = "Nuts do basic damage and if this tower shoots a bolt, expect lots of damage.";
+		this.info = "Nuts do basic damage and there is a 10% chance to shoot a Bolt for 4x damage.";
 	}
 	else if (language === 1){
 		this.info = "Les noix font des dégâts de base et si cette tour tire un boulon, attendent beaucoup de degats.";
@@ -1620,10 +1644,6 @@ function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgr
 	else if (language === 2){
 		this.info = "Dispara aviones de papel hecho el chico. Como encontraron el tiempo para hacer todo esto?";
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/staging
 }
 airplaneLauncher.prototype = Object.create(tower.prototype);
 airplaneLauncher.prototype.constructor = airplaneLauncher;
@@ -2502,15 +2522,16 @@ function stageWin() {
 var stageWave = [[],[],[],[]];
 
 //Stage 1
-stageWave[0][0] = ["basicSkeleton", "blueSkeleton"];
-stageWave[0][1] = ["blueSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton"];
-stageWave[0][2] = ["redSkeleton", "basicSkeleton", "basicSkeleton","basicSkeleton", "blueSkeleton"];
-stageWave[0][3] = ["basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton"];
+stageWave[0][0] = ["basicSkeleton"];
+stageWave[0][1] = ["basicSkeleton", "basicSkeleton", "blueSkeleton"];
+stageWave[0][2] = ["basicSkeleton", "basicSkeleton","basicSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
+stageWave[0][3] = ["redSkeleton", "basicSkeleton", "basicSkeleton", "blueSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", 				   "basicSkeleton"];
 stageWave[0][4] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					"blueSkeleton"];
-stageWave[0][5] = ["blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					 "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 				   "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton"];
-stageWave[0][6] = ["basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", 				  "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", 					"blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", 				  "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", 				   "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton"];
-stageWave[0][7] = ["basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", 					 "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "redSkeleton", 					"redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton"];
-stageWave[0][8] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", 					 "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", 				   "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton"];
+stageWave[0][5] = ["blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "blueSkeleton", 					"blueSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					 "redSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", 					 "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton"];
+stageWave[0][6] = ["basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", 				  "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", 					"blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", 				  "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton"];
+stageWave[0][7] = ["basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", 					 "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "redSkeleton",
+				   "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton"];
+stageWave[0][8] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", 					 "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", 				   "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", 					 "redSkeleton", "redSkeleton", "redSkeleton"];
 stageWave[0][9] = ["bigBoss"];
 
 //Stage 2
@@ -2519,11 +2540,12 @@ stageWave[1][1] = ["redSkeleton", "basicSkeleton", "bat"];
 stageWave[1][2] = ["blueSkeleton", "ghost", "basicSkeleton", "blueSkeleton", "ghost", "blueSkeleton", "ghost"];
 stageWave[1][3] = ["blueSkeleton", "bat", "ghost", "blueSkeleton", "redSkeleton", "bat", "bat", "ghost", "blob"];
 stageWave[1][4] = ["redSkeleton", "redSkeleton", "blueSkeleton", "ghost", "blob", "blob", "ghost", "blueSkeleton", "blob", "redSkeleton", 					"bat", "redSkeleton", "blueSkeleton", "ghost"];
-stageWave[1][5] = ["ghost", , "redSkeleton", "ghost", "ghost", "blueSkeleton", "ghost", "ghost", "basicSkeleton", "ghost", "ghost", "bat", 					 "ghost", "ghost", "blob", "ghost", "ghost", "blueSkeleton", "ghost", "ghost", "ghost", "ghost", "ghost", "ghost", 					 "ghost", "ghost", "ghost","ghost", "ghost"];
+stageWave[1][5] = ["ghost", "redSkeleton", "ghost", "ghost", "blueSkeleton", "ghost", "ghost", "basicSkeleton", "ghost", "ghost", "bat", 				   "ghost", "ghost", "blob", "ghost", "ghost", "blueSkeleton", "ghost", "ghost", "ghost", "ghost", "ghost", "ghost", 				   "ghost", "ghost", "ghost","ghost", "ghost"];
 stageWave[1][6] = ["basicSkeleton", "basicSkeleton", "blob", "basicSkeleton", "blueSkeleton", "blob", "basicSkeleton", "redSkeleton", 					"blob", "basicSkeleton", "basicSkeleton", "blob", "basicSkeleton", "blueSkeleton", "blob", "basicSkeleton", 				  "redSkeleton", "blob"];
 stageWave[1][7] = ["bat", "bat", "bat", "blueSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "bat", "bat", "bat", "blueSkeleton", 					"redSkeleton", "redSkeleton", "redSkeleton", "bat", "bat", "bat", "blueSkeleton", "redSkeleton", "redSkeleton", 				  "redSkeleton"];
 stageWave[1][8] = ["blob", "blob", "blob", "bat", "blob", "blob", "blob", "bat", "blob", "blob", "blob", "bat", "blob", "blob", "blob", 				  "bat", "blob", "blob", "blob", "bat"];
 stageWave[1][9] = ["bigBlob"];
+
 //Stage 3
 stageWave[2][0] = ["basicSkeleton", "basicSkeleton", "blueSkeleton", "ghost"];
 stageWave[2][1] = ["redSkeleton", "ghost", "bat"];
@@ -2541,7 +2563,7 @@ stageWave[3][0] = ["witch"];
 stageWave[3][1] = ["witch", "redSkeleton", "redSkeleton", "witch"];
 stageWave[3][2] = ["basicSkeleton", "blueSkeleton", "blob", "witch", "clown", "basicSkeleton", "ghost", "ghost"];
 stageWave[3][3] = ["blueDemon", "blueSkeleton"];
-stageWave[3][4] = ["ghost", "witch", "bat", "witch", "ghost","witch", "bat", "witch", "ghost", "witch", "bat", "witch", "ghost", "redDemon"];
+stageWave[3][4] = ["ghost", "witch", "bat", "witch", "ghost","witch", "bat", "witch", "ghost", "witch", "bat", "witch", "ghost", "redDemon"						];
 stageWave[3][5] = ["grizzlyBear", "witch", "witch", "redSkeleton", "blob", "clown", "blueDemon"];
 stageWave[3][6] = ["clown", "grizzlyBear", "blob", "blob", "blob", "witch", "witch", "grizzlyBear", "redSkeleton", "blueSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "redDemon"];
 stageWave[3][7] = ["grizzlyBear", "grizzlyBear", "blob", "grizzlyBear", "blob", "bat", "bat", "bat", "clown", "bat", "redSkeleton", "basicSkeleton", "blueSkeleton", "ghost", "redDemon", "redDemon", "redSkeleton"];
