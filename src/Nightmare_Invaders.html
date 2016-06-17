@@ -6,6 +6,7 @@
 		<title>Nightmare Invaders</title>
 	</head>
 	<body>
+	<div unselectable=on id=highlightOff> <!--turn off double click!-->
 		<img id="currentStageImage" width="900" height="600">
 		<img id="grid" src="../images/grid.png" width="900" height="600"> <!--Temp grid for easier development-->
 		<img id="stageTransition" src="../images/StageCleared.png" width="900px" height="600px">
@@ -89,9 +90,9 @@
 					<td><img class="turret" id="toyCarLauncher" width="45" height="45" src="../images/toyCarLauncher.png"></td>
 					<td><img class="turret" id="marbleShooter" width="45" height="45" src="../images/marbleShooter.png"></td>
 					<td><img class="turret" id="actionFigure" width="45" height="45" src="../images/actionFigure.png"></td>
+					<td><img class="turret" id="nutsAndBolts" width="45" height="45" src="../images/nutsAndBolts.png"></td>
 					<td><img class="turret" id="calculator" width="45" height="45" src="../images/calculator.png"></td>
 					<td><img class="turret" id="lamp" width="45" height="45" src="../images/lamp.png"></td>
-					<td><img class="turret" id="nutsAndBolts" width="45" height="45" src="../images/nutsAndBolts.png"></td>
 				</tr>
 				<tr>
 					<td><img class="turret" id="waterGun" width="45" height="45" src="../images/waterGun.png"></td>
@@ -128,5 +129,6 @@
 		</div>
 		
 		<script src="JS.js"></script>
+	</div>	
 	</body>
 </html>
