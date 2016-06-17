@@ -1620,7 +1620,6 @@ function airplaneLauncher(cost, damage, range, attackSpeed, xCoord, yCoord, upgr
 	else if (language === 2){
 		this.info = "Dispara aviones de papel hecho el chico. Como encontraron el tiempo para hacer todo esto?";
 	}
->>>>>>> refs/remotes/origin/staging
 }
 airplaneLauncher.prototype = Object.create(tower.prototype);
 airplaneLauncher.prototype.constructor = airplaneLauncher;
