@@ -45,33 +45,33 @@ function getBeastStats(enemy) {
 	
 	switch (enemy) {
 		case "basicSkeleton":
-			HTMLID_outputEnemyStats.innerHTML = "Basic Skeleton:<br> Normal speed and normal health, plus easier to kill. Something you don't want to find in your closet!! "; break;
+			HTMLID_outputEnemyStats.innerHTML = "Basic Skeleton:<br> Normal speed and normal health, plus easier to kill. Something you don't want to find in your closet. "; break;
 		case "blueSkeleton":
 			HTMLID_outputEnemyStats.innerHTML = "Blue Skeleton:<br> Fragile and fast. Would beat you in a 100m dash. "; break;
 		case "redSkeleton":
-			HTMLID_outputEnemyStats.innerHTML = "Red Skeleton:<br> Tanky and slow. Can give Rocky a run for his mone. "; break;
+			HTMLID_outputEnemyStats.innerHTML = "Red Skeleton:<br> Tanky and slow. Can give Rocky a run for his money. "; break;
 		case "bat":
 			HTMLID_outputEnemyStats.innerHTML = "Bat:<br> Fast when a bat and slow when a vampire. "; break;
 		case "vampire":
-			HTMLID_outputEnemyStats.innerHTML = "Vampire:<br> Slow when a vampire and fast when a bat. His name is not Edward tho!! "; break;
+			HTMLID_outputEnemyStats.innerHTML = "Vampire:<br> Slow when a vampire and fast when a bat. His name is not Edward though. "; break;
 		case "witch":
 			HTMLID_outputEnemyStats.innerHTML = "Witch:<br> Steals the option to buy a tower. Might live in a candy house. "; break;
 		case "ghost":
-			HTMLID_outputEnemyStats.innerHTML = "Ghost:<br> Invisible to other towers unless it comes into contact with the light. Who you gonna call? GHOST BUSTERS!!! "; break;
+			HTMLID_outputEnemyStats.innerHTML = "Ghost:<br> Invisible to other towers unless it comes into contact with the light. Who you gonna call?"; break;
 		case "clown":
 			HTMLID_outputEnemyStats.innerHTML = "Clown:<br> Steal a fraction of your gold. Don't invite him to your kids birthday party."; break;
 		case "bigRoach":
-			HTMLID_outputEnemyStats.innerHTML = "Big Roach:<br> Kill one and another one shows up. Cockroaches are imune to nuclear radiation Woahhhh!!! "; break;
+			HTMLID_outputEnemyStats.innerHTML = "Big Roach:<br> Kill one and another one shows up. Cockroaches are immune to nuclear radiation. "; break;
 		case "blob":
-			HTMLID_outputEnemyStats.innerHTML = "Blob:<br> Splits into three mini blobs. ";break;
+			HTMLID_outputEnemyStats.innerHTML = "Blob:<br> Splits into three mini blobs. "; break;
 		case "blueDemon":
 			HTMLID_outputEnemyStats.innerHTML = "Blue Demon:<br> Really fast and decreases your health to one upon escaping. He loves the song I'm blue da bu de da bu da. "; break;
 		case "redDemon":
 			HTMLID_outputEnemyStats.innerHTML = "Red Demon:<br> Very tanky and very slow, plus he decreases your health to one upon escaping. Didn't star in little Nicky. "; break;
 		case "zombieDad":
-			HTMLID_outputEnemyStats.innerHTML = "Zombie Dad:<br> He's your dad but dead. Buhh "; break;
+			HTMLID_outputEnemyStats.innerHTML = "Zombie Dad:<br> He's your dad but dead. Buhh. "; break;
 		case "zombieMom":
-			HTMLID_outputEnemyStats.innerHTML = "Zombie Mom:<br> She's your mom but dead. Buhh "; break;	
+			HTMLID_outputEnemyStats.innerHTML = "Zombie Mom:<br> She's your mom but dead. Buhh. "; break;	
 		case "bigBoss":
 			HTMLID_outputEnemyStats.innerHTML = "Big Boss:<br> He is a skeleton but better. "; break;
 		case "grizzlyBear":
