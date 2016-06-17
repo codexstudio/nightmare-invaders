@@ -1662,7 +1662,7 @@ function vanquishEvil(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded
 	
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, bulletArr, isBuffed);
 	this.cost = 500;
-	this.damage = 600;
+	this.damage = 200;
 	this.range = 500000;
 	this.attackSpeed = 6000; 
 	if (language === 0){
@@ -2371,7 +2371,7 @@ function renderTowerAndBullet() {
 				bulletImg.src = '../images/paperPlane.png';
 			}
 			else if(towersOnBoard[i] instanceof vanquishEvil){
-				//bulletImg.src = '../images/teddy.png';
+				bulletImg.src = '../images/teddyBear.png';
 			}
 			
 			//iterate through bullets
