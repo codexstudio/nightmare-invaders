@@ -1090,7 +1090,7 @@ grimReaper.prototype.spawnMomDad = function(){
 		tempObj2.yCoord = (stagePaths[currentStage])[tempObj2.pathPos].y;
 		enemiesOnBoard.push(tempObj2);
 		tempObj2.enemyMovement(tempObj2);
-		gameMessage = "Mom?... Dad?...";
+		gameMessage = "Mom?... Dad?...!";
 		
 		clearInterval(this.enemyNextMove);
 		this.speed *= 5;
