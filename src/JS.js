@@ -194,20 +194,12 @@ stagePaths[3] = pathParentBedroom;
 
 
 //UI Elements
-var Gold = 100; 
+var Gold = 80; 
 var Hp = 100;
 var currentWave = 0;
 var pause = false;
 var gameMessage = "";
-if (language === 0){
-	gameMessage = "Welcome to Nightmare Invaders!";
-}
-else if (language === 1){
-	gameMessage = "Bienvenue aux Envahisseurs de Cauchemar!";
-}
-else if (language === 2){
-	gameMessage = "La Bienvenida a los Invasores Pesadilla!";
-}
+
 var outputTowerStats = document.getElementById("outputTowerStats");
 var outputPlayerStats = document.getElementById("outputPlayerStats");
 var outputGameMessage = document.getElementById("gameMessage");
@@ -284,6 +276,8 @@ var HTMLID_waterGun = document.getElementById("waterGun");
 var HTMLID_airplaneLauncher = document.getElementById("airplaneLauncher");
 var HTMLID_trophy = document.getElementById("trophy");
 var HTMLID_vanquishEvil = document.getElementById("vanquishEvil");
+
+var HTMLID_sellTowers = document.getElementById("sellTowers");
 
 
 //global variables
@@ -390,24 +384,57 @@ var bulletImg = new Image();
 var awardGoldOverTime;
 var goldOverTime = setInterval(function(){
 	if (awardGoldOverTime == true){
-		Gold++;
+			Gold++;
 	}
 }, 500);
 
+
 var tips = setInterval(function(){
+	
 	var displayTip = Math.random() * 100;
-	if (currentStage == 0) {
+	if (currentStage == 0 && waveCounter >= 2) {
 		if (displayTip < 100 && displayTip >= 75){
-		gameMessage = "Tip: Sometimes sacrificing health for more gold over time can be a good strategy.";
+			if (language === 0) {
+				gameMessage = "Tip: Sometimes sacrificing health for more gold over time can be a good strategy.";
+			}
+			if (language === 1) {
+				gameMessage = "Astuce: Parfois sacrifier la santé pour plus d'or au fil du temps peut être une bonne stratégie.";
+			}
+			if (language === 2) {
+				gameMessage = "Consejo: A veces sacrificar la salud para más de oro con el tiempo puede ser una buena estrategia.";
+			}
 		}
 		else if (displayTip < 75 && displayTip >= 50){
-		gameMessage = "Tip: Tower placement is important! Look at your range indicator surrounding the tower.";
+			if (language === 0) {
+				gameMessage = "Tip: Tower placement is important! Look at your range indicator surrounding the tower.";
+			}
+			if (language === 1) {
+				
+				gameMessage = "Astuce: Placement Tower est important! Regardez votre indicateur de plage entourant la tour.";
+			}
+			if (language === 2) {
+				
+				gameMessage = "Consejo: La colocación de la torre es importante! Mire a su indicador de rango que rodea la torre.";
+			}
 		}
 		else if (displayTip < 50 && displayTip >= 25){
-		gameMessage = "Tip: You can sell towers to upgrade to better towers.";
+			if (language === 0) {
+				gameMessage = "Tip: You can sell towers to upgrade to better towers.";
+			}
+			if (language === 1) {
+				gameMessage = "Astuce: Vous pouvez vendre des tours pour passer à de meilleurs tours.";
+			}
+			if (language === 2) {
+				gameMessage = "Consejo: Usted puede vender torres para actualizar a mejores torres.";
+			}
 		}
 		else if (displayTip < 25 && displayTip >= 0){
-		gameMessage = "Tip: If you are able to clear all enemies, save money for better towers.";
+			if (language === 0) {
+				gameMessage = "Tip: If you are able to clear all enemies, save money for better towers.";
+			}
+			if (language === 1) {
+				gamMessage = "Astuce: Si vous êtes en mesure d' effacer tous les ennemis , économiser de l'argent pour de meilleurs tours.";
+			}
 		}
 	}
 	if (currentStage == 1) {
@@ -528,6 +555,9 @@ enemy.prototype.enemyMovement = function(enemyObj){
 				enemyObj.isSlowed = false;
 			}
 		}
+		if (enemyObj instanceof sensei) {
+			enemyObj.tutorial(); //runs tutorial function on 569
+		}
 		if (enemyObj instanceof ghost){
 			enemyObj.checkGhostVisibility();
 		}
@@ -552,10 +582,41 @@ enemy.prototype.enemyMovement = function(enemyObj){
 	}, this.speed);
 }
 
-function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isSlowed){
-	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos, isSlowed);
-	this.startHealth = 250;
-	this.health = 250;
+function sensei(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed, hasSpawned){
+	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 200;
+	this.health = 200;
+	this.damage = 0;
+	this.speed = 110;
+	this.killReward = 100;
+	this.hasSpawned = false;
+}
+sensei.prototype = Object.create(enemy.prototype);
+sensei.prototype.constructor = sensei;
+
+sensei.prototype.tutorial = function(){
+	if (this.health < this.startHealth) {
+		gameMessage = "Good job! Now use the towers to get me out of this Nightmare!"; 
+	}
+	if (this.health <= 175) {
+		gameMessage = "As enemies walk through the path, you will have to place more towers to deal with them. Make sure you have enough gold for the tower you want."; 
+	}
+	if (this.health <= 125){
+		gameMessage = "You can always click on a tower to sell it for half your gold back.";
+	}
+	if (this.health <= 75) {
+		gameMessage = "If you allow an enemy to travel through the path, Tommy's health will be lowered. Don't let his health go to 0 or else you will lose."; 
+	}
+	if (this.health <= 6) { //should prob move this to splice so it doesn't bring bugs :O
+		gameMessage = "Thanks for getting me outa hereeeeeee! Take 100 gold to help you on your adventure. Good luck!";
+	}
+	console.log("Don't be frightened!");
+};
+
+function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth,health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 220;
+	this.health = 220;
 	this.damage = 1;
 	this.speed = 30;
 	this.killReward = 1;
@@ -741,10 +802,10 @@ clown.prototype.stealGold = function(){
 
 };
 
-function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isSlowed){
-	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isSlowed);
-	this.startHealth = 12000;
-	this.health = 12000;
+function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
+	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
+	this.startHealth = 14000;
+	this.health = 14000;
 	this.damage = 100; 
 	this.speed = 90;
 	this.killReward = 0;
@@ -1107,6 +1168,9 @@ function spawnEnemy(enemyType){
 		enemiesOnBoard[enemiesOnBoard.length-1].stealTower();
 	}
 	enemiesOnBoard[enemiesOnBoard.length-1].enemyMovement(tempEnemyObj);
+	if (tempEnemyObj instanceof sensei) {
+		gameMessage = "Hello, I am the sensei of Tommy's wonderful dreams. But unfortunately you have fallen into his Nightmare. Try clicking on a tower and placing it on the floor!";
+	}
 }
 //End of enemy related section-------------------------------------------------------------------------------------------------------------
 
@@ -1413,7 +1477,7 @@ marbleShooter.prototype.marbleBuffShot = function() {
 
 function calculator(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
-	this.cost = 150;
+	this.cost = 250;
 	this.damage = 0;
 	this.range = 1;
 	this.attackSpeed = 5000;
@@ -1457,7 +1521,7 @@ nutsAndBolts.prototype.constructor = nutsAndBolts;
 nutsAndBolts.prototype.critChance = function() {
 	crit = Math.random() * 100;
 		if (crit <= 20) {
-			this.damage = this.damage * 4;
+			this.damage = this.damage * 3;
 		}
 };
 
@@ -1862,7 +1926,8 @@ HTMLID_vanquishEvil.addEventListener( "click", function() { placeTower('vanquish
 
 // end tower events -------------------------------------------------------------
 
-canvas.addEventListener( "mousemove", function(e) { cursorX = e.clientX; cursorY = e.clientY; });
+canvas.addEventListener( "mousemove", function(e) { cursorX = e.clientX; cursorY = e.clientY; })	
+canvas.addEventListener("mouseout", function(){resetCoord();});
 
 function getStats(turret) {
 	
@@ -2023,6 +2088,11 @@ var cursorX;
 var cursorY;
 var circleCheck = false;
 
+function resetCoord(){
+	cursorX = undefined;
+	cursorY = undefined;	
+}
+
 function boxStatus(){
 	for (var i = 0; i <= towersOnBoard.length-1;i++){
 		if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
@@ -2044,11 +2114,21 @@ function drawBox(){
 		for (i = 0; i <= towersOnBoard.length-1;i++){
 			if (towersOnBoard[i].boxBool == true){
 				ctx.beginPath();
-				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord)
-				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+45)
-				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+45)
-				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord)
-				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord)
+				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+15);
+				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+30);
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+45);
+				ctx.lineTo(towersOnBoard[i].xCoord+15, towersOnBoard[i].yCoord+45);
+				ctx.moveTo(towersOnBoard[i].xCoord+30, towersOnBoard[i].yCoord+45);
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+45);
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+30);
+				ctx.moveTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+15);
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord);
+				ctx.lineTo(towersOnBoard[i].xCoord+30, towersOnBoard[i].yCoord);
+				ctx.moveTo(towersOnBoard[i].xCoord+15, towersOnBoard[i].yCoord);
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
+				ctx.lineWidth = 2.75;
+				ctx.strokeStyle = "#f0ff00";
 				ctx.stroke();
 			}
 		}
@@ -2065,6 +2145,8 @@ function hoverCheck(){
 				canvas.addEventListener ("click", boxStatus);
 				ctx.beginPath();
 				ctx.arc(towersOnBoard[i].xCoord+22.5, towersOnBoard[i].yCoord+22.5, towersOnBoard[i].range, 0, 2 * Math.PI);
+				ctx.lineWidth = 2.75;
+				ctx.strokeStyle = "#f0ff00";
 				ctx.stroke();
 			}
 		}
@@ -2095,24 +2177,27 @@ function update(){
 		HTMLBTN_pauseButton.style.fill = '#e5e5e5';
 	}
 	if(language === 0){
-		HTMLBTN_pauseTitle.innerHTML = "paused";
-		HTMLBTN_mainMenu.innerHTML = "main menu";
+		HTMLID_sellTowers.innerHTML = "Sell Towers";
+		HTMLBTN_pauseTitle.innerHTML = "Paused";
+		HTMLBTN_mainMenu.innerHTML = "Main Menu";
 		outputPlayerStats.innerHTML = "<b>Health: </b>" + Hp;
 		outputPlayerStats.innerHTML += "<br><b>Gold: </b>" + Gold;
 		outputPlayerStats.innerHTML += "<br><b>Level: </b>" + (currentStage + 1);
 		outputPlayerStats.innerHTML += "<br><b>Wave: </b>" + (waveCounter + 1);
 	}
 	else if(language === 1){
-		HTMLBTN_pauseTitle.innerHTML = "pause";
-		HTMLBTN_mainMenu.innerHTML = "menu principal";
+		HTMLID_sellTowers.innerHTML = "Vendre la Tours";
+		HTMLBTN_pauseTitle.innerHTML = "Pause";
+		HTMLBTN_mainMenu.innerHTML = "Menu Principal";
 		outputPlayerStats.innerHTML = "<b>Sante: </b>" + Hp;
 		outputPlayerStats.innerHTML += "<br><b>Or: </b>" + Gold;
 		outputPlayerStats.innerHTML += "<br><b>Niveau: </b>" + (currentStage + 1);
 		outputPlayerStats.innerHTML += "<br><b>Vague: </b>" + (waveCounter + 1);
 	}
 	else if(language === 2){
-		HTMLBTN_pauseTitle.innerHTML = "pausa";
-		HTMLBTN_mainMenu.innerHTML = "menu principal";
+		HTMLID_sellTowers.innerHTML = "Venders Torres";
+		HTMLBTN_pauseTitle.innerHTML = "Pausa";
+		HTMLBTN_mainMenu.innerHTML = "Menu principal";
 		outputPlayerStats.innerHTML = "<b>Salud: </b>" + Hp;
 		outputPlayerStats.innerHTML += "<br><b>Oro: </b>" + Gold;
 		outputPlayerStats.innerHTML += "<br><b>Nivel: </b>" + (currentStage + 1);
@@ -2135,13 +2220,12 @@ function update(){
 		gameOver();
 	}
 	
-	if (enemiesOnBoard.length > 0 && !pause){
-		awardGoldOverTime = true;
-	}
-	else if (enemiesOnBoard.length == 0){
+	if (enemiesOnBoard.length == 0 || (currentStage == 0 && waveCounter == 0)){
 		awardGoldOverTime = false;
 	}
-	
+	else if (enemiesOnBoard.length > 0 && !pause){
+		awardGoldOverTime = true;
+	}
 }
 
 
@@ -2347,6 +2431,8 @@ function drawRange() {
 	if (circleCheck === true) {
 		ctx.beginPath();
 		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
+		ctx.lineWidth = 2.75;
+		ctx.strokeStyle = "#f0ff00";
 		ctx.stroke();
 	}
 }
@@ -2361,13 +2447,13 @@ function stageWin() {
 		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof bigRoach || enemiesOnBoard[i] instanceof grimReaper) {
 			if (bossSpawned == false){
 				if (language === 0){
-					gameMessage = "BOSS INCOMING!";
+					gameMessage = "BOSS INCOMING! YOU HAVE TO STOP HIM!";
 				}
 				else if (language === 1){
-					gameMessage = "PATRON ENTRANT!";
+					gameMessage = "PATRON ENTRANT! VOUS DEVEZ ARRÊTER LUI!";
 				}
 				else if (language === 2){
-					gameMessage = "ENTRANTE JEFE!";
+					gameMessage = "ENTRANTE JEFE! USTED TIENE QUE PARAR EL!";
 				}
 			}
 			bActive = true;
@@ -2422,11 +2508,11 @@ function stageWin() {
 var stageWave = [[],[],[],[]];
 
 //Stage 1
-stageWave[0][0] = ["basicSkeleton"];
+stageWave[0][0] = ["sensei"];
 stageWave[0][1] = ["basicSkeleton", "basicSkeleton", "blueSkeleton"];
 stageWave[0][2] = ["basicSkeleton", "basicSkeleton","basicSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[0][3] = ["redSkeleton", "basicSkeleton", "basicSkeleton", "blueSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", 				   "basicSkeleton"];
-stageWave[0][4] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					"blueSkeleton"];
+stageWave[0][4] = ["redSkeleton", "redSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton"];
 stageWave[0][5] = ["blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "blueSkeleton", 					"blueSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					 "redSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", 					 "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton"];
 stageWave[0][6] = ["basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", 				  "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", 					"blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", 				  "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton"];
 stageWave[0][7] = ["basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", 					 "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "redSkeleton",
