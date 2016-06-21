@@ -79,7 +79,7 @@ function getBeastStats(enemy) {
 		case "bigBlob":
 			HTMLID_outputEnemyStats.innerHTML = "Big Blob:<br> Splits into to three normal blobs. Ughhh so annoying. "; break;			
 		case "grimReaper":
-			HTMLID_outputEnemyStats.innerHTML = "Grim Reaper:<br> Phase 1 he spawns a zombie form of mom and dad, beware! Phase 2 he gives the kid a change to run along the path to his parents, but the towers on board target him. "; break;				
+			HTMLID_outputEnemyStats.innerHTML = "Grim Reaper:<br> Phase two he spawns a zombie form of mom and dad, beware! Phase two he gives the kid a change to run along the path to his parents, but the towers on board target him. "; break;				
 			 
 	
 	}

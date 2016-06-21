@@ -16,6 +16,8 @@
 {
 	font-family: BoneText; 
 	src: url(SketchBones.ttf);
+	font-family: gameMessage;
+	src: url(gameMessae.ttf);
 }
 
 body{
@@ -83,10 +85,14 @@ body{
 	top: 0px;
 }
 .message{
-	position:absolute;
+	position: absolute;
 	left: 30px;
-	bottom: 75px;
+	bottom: 30px;
 	color: #e5e5e5;
+}
+#gameMessage{
+	font-family: gameMessage; 
+	font-size: 17px;
 }
 
 .btnDress {
