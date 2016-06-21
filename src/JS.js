@@ -594,9 +594,6 @@ sensei.prototype = Object.create(enemy.prototype);
 sensei.prototype.constructor = sensei;
 
 sensei.prototype.tutorial = function(){
-	if (towersOnBoard[i] == 0) {
-		gameMessage = "Good job, now by using thse tools from around the house you can attack the nightmares. Use one to attack me!";
-	}
 	if (this.health < this.startHealth) {
 		gameMessage = "Good job! Now use the towers to get me out of this Nightmare!"; 
 	}
@@ -840,8 +837,8 @@ clown.prototype.stealGold = function(){
 
 function bigBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed);
-	this.startHealth = 12000;
-	this.health = 12000;
+	this.startHealth = 14000;
+	this.health = 14000;
 	this.damage = 100; 
 	this.speed = 90;
 	this.killReward = 0;
@@ -1581,7 +1578,7 @@ marbleShooter.prototype.marbleBuffShot = function() {
 
 function calculator(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded);
-	this.cost = 150;
+	this.cost = 250;
 	this.damage = 0;
 	this.range = 1;
 	this.attackSpeed = 5000;
@@ -1625,7 +1622,7 @@ nutsAndBolts.prototype.constructor = nutsAndBolts;
 nutsAndBolts.prototype.critChance = function() {
 	crit = Math.random() * 100;
 		if (crit <= 20) {
-			this.damage = this.damage * 4;
+			this.damage = this.damage * 3;
 		}
 };
 
@@ -2031,7 +2028,8 @@ HTMLID_vanquishEvil.addEventListener( "click", function() { placeTower('vanquish
 
 // end tower events -------------------------------------------------------------
 
-canvas.addEventListener( "mousemove", function(e) { cursorX = e.clientX; cursorY = e.clientY; });
+canvas.addEventListener( "mousemove", function(e) { cursorX = e.clientX; cursorY = e.clientY; })	
+canvas.addEventListener("mouseout", function(){resetCoord();});
 
 function getStats(turret) {
 	
@@ -2192,6 +2190,11 @@ var cursorX;
 var cursorY;
 var circleCheck = false;
 
+function resetCoord(){
+	cursorX = undefined;
+	cursorY = undefined;	
+}
+
 function boxStatus(){
 	for (var i = 0; i <= towersOnBoard.length-1;i++){
 		if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
@@ -2213,11 +2216,21 @@ function drawBox(){
 		for (i = 0; i <= towersOnBoard.length-1;i++){
 			if (towersOnBoard[i].boxBool == true){
 				ctx.beginPath();
-				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord)
-				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+45)
-				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+45)
-				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord)
-				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord)
+				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+15);
+				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+30);
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+45);
+				ctx.lineTo(towersOnBoard[i].xCoord+15, towersOnBoard[i].yCoord+45);
+				ctx.moveTo(towersOnBoard[i].xCoord+30, towersOnBoard[i].yCoord+45);
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+45);
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+30);
+				ctx.moveTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+15);
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord);
+				ctx.lineTo(towersOnBoard[i].xCoord+30, towersOnBoard[i].yCoord);
+				ctx.moveTo(towersOnBoard[i].xCoord+15, towersOnBoard[i].yCoord);
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
+				ctx.lineWidth = 2.75;
+				ctx.strokeStyle = "#f0ff00";
 				ctx.stroke();
 			}
 		}
@@ -2234,6 +2247,8 @@ function hoverCheck(){
 				canvas.addEventListener ("click", boxStatus);
 				ctx.beginPath();
 				ctx.arc(towersOnBoard[i].xCoord+22.5, towersOnBoard[i].yCoord+22.5, towersOnBoard[i].range, 0, 2 * Math.PI);
+				ctx.lineWidth = 2.75;
+				ctx.strokeStyle = "#f0ff00";
 				ctx.stroke();
 			}
 		}
@@ -2518,6 +2533,8 @@ function drawRange() {
 	if (circleCheck === true) {
 		ctx.beginPath();
 		ctx.arc(cursorX+22.5, cursorY+22.5, tempRange, 0, 2 * Math.PI);
+		ctx.lineWidth = 2.75;
+		ctx.strokeStyle = "#f0ff00";
 		ctx.stroke();
 	}
 }
@@ -2532,13 +2549,13 @@ function stageWin() {
 		if (enemiesOnBoard[i] instanceof bigBoss || enemiesOnBoard[i] instanceof bigBlob || enemiesOnBoard[i] instanceof bigRoach || enemiesOnBoard[i] instanceof grimReaper) {
 			if (bossSpawned == false){
 				if (language === 0){
-					gameMessage = "BOSS INCOMING!";
+					gameMessage = "BOSS INCOMING! YOU HAVE TO STOP HIM!";
 				}
 				else if (language === 1){
-					gameMessage = "PATRON ENTRANT!";
+					gameMessage = "PATRON ENTRANT! VOUS DEVEZ ARRÊTER LUI!";
 				}
 				else if (language === 2){
-					gameMessage = "ENTRANTE JEFE!";
+					gameMessage = "ENTRANTE JEFE! USTED TIENE QUE PARAR EL!";
 				}
 			}
 			bActive = true;
@@ -2597,7 +2614,7 @@ stageWave[0][0] = ["sensei"];
 stageWave[0][1] = ["basicSkeleton", "basicSkeleton", "blueSkeleton"];
 stageWave[0][2] = ["basicSkeleton", "basicSkeleton","basicSkeleton", "blueSkeleton", "basicSkeleton", "redSkeleton"];
 stageWave[0][3] = ["redSkeleton", "basicSkeleton", "basicSkeleton", "blueSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", 				   "basicSkeleton"];
-stageWave[0][4] = ["redSkeleton", "redSkeleton", "redSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					"blueSkeleton"];
+stageWave[0][4] = ["redSkeleton", "redSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", 					"basicSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton"];
 stageWave[0][5] = ["blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "blueSkeleton", 					"blueSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", 					 "redSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "blueSkeleton", 					 "blueSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton"];
 stageWave[0][6] = ["basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", 				  "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", 					"blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", 				  "blueSkeleton", "blueSkeleton", "redSkeleton", "basicSkeleton", "blueSkeleton", "blueSkeleton", "redSkeleton"];
 stageWave[0][7] = ["basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", 					"basicSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", 					 "basicSkeleton", "basicSkeleton", "redSkeleton", "basicSkeleton", "basicSkeleton", "redSkeleton", "redSkeleton",
