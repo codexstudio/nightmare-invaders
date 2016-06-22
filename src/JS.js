@@ -2607,6 +2607,11 @@ function renderPauseUI() {
 
 }
 
+document.addEventListener( "visibilitychange", function() { 
+	if (document.hidden || !document.hidden) {
+		pauseGame();
+	}
+} );
 function pauseGame(){
 	if(!pause) {
 		bkgAudio.volume = 0.2;
