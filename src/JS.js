@@ -760,7 +760,6 @@ function miniBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isSlowed);
 	this.startHealth = 200;
 	this.health = 200;
-	console.log(this.health);
 	this.damage = 1;
 	this.speed = 20;
 	this.killReward = 5;
@@ -2071,7 +2070,6 @@ function boxStatus(){
 	for (var i = 0; i <= towersOnBoard.length-1;i++){
 		if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
 			if ((towersOnBoard[i].xCoord == tempX) && (towersOnBoard[i].yCoord == tempY)){
-				console.log("setting");
 				if (towersOnBoard[i].boxBool == false){
 					towersOnBoard[i].boxBool = true;
 				}
