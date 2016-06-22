@@ -212,12 +212,9 @@ var HTMLBTN_playTgl = document.getElementById("btnPlayTgl");
 var SVG_pause = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 60"><g class="btnUI"><path d="M33,46h8V14h-8V46z"/><path d="M19,46h8V14h-8V46z"/></g></svg>'
 var SVG_play = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 294.843 294.843"><g class="btnUI"><path d="M109.699,78.969c-1.876,1.067-3.035,3.059-3.035,5.216v131.674c0,3.314,2.687,6,6,6s6-2.686,6-6V94.74l88.833,52.883l-65.324,42.087c-2.785,1.795-3.589,5.508-1.794,8.293c1.796,2.786,5.508,3.59,8.294,1.794l73.465-47.333c1.746-1.125,2.786-3.073,2.749-5.15c-0.037-2.077-1.145-3.987-2.93-5.05L115.733,79.029C113.877,77.926,111.575,77.902,109.699,78.969z"/></g>'
 var HTMLID_pauseUI = document.getElementById("pauseUI");
-var HTMLBTN_resume = document.getElementById("pauseUI-play");
 var HTMLBTN_muteTgl = document.getElementById("pauseUI-mute");
 var HTMLBTN_mainMenu = document.getElementById("pauseUI-mainMenu");
 var HTMLBTN_pauseTitle = document.getElementById("pauseTitle");
-var HTMLID_langMenu = document.getElementById("languageList");
-var HTMLBTN_langMenuTgl = document.getElementById("pauseUI-lang");
 var HTMLID_langMenuWrapper = document.getElementById("languageDrop");
 var HTMLBTN_pauseButton = document.getElementById("pauseButton");
 var langMenuShow = false;
@@ -1703,8 +1700,9 @@ function createTowerObject(towerType, x, y){
 }
 
 var tempRange;
-
+var placingTower = false;
 function placeTower(towerType){
+	placingTower = true;
 	document.body.style.cursor = "url('../images/" + towerType + ".png'),auto";
 	document.getElementById('canvas').addEventListener ("click", handler); 
 	if (circleCheck == false){
@@ -1717,6 +1715,7 @@ function placeTower(towerType){
 	tempRange = towerPlaceholder.range;
 	
 	function handler(e){
+	placingTower = false;
 	event = e;
 		towerxy.x = event.clientX+5;     // Get the horizontal coordinate, 5 pixel offset as a margin of error for the player
 		towerxy.y = event.clientY+5;     // Get the vertical coordinate, 5 pixel offset as a margin of error for the player
@@ -1846,23 +1845,41 @@ function muteToggle(e) {
 
 	HTMLBTN_muteTgl.innerHTML = mute ? SVG_soundOff : SVG_soundOn;
 }
+
 HTMLBTN_playTgl.addEventListener( "click", pauseGame );
-HTMLBTN_muteTgl.addEventListener( "click", function(e) { muteToggle(e); });
-HTMLBTN_resume.addEventListener( "click", pauseGame );
-HTMLBTN_mainMenu.addEventListener( "click", menu );
-HTMLBTN_langMenuTgl.addEventListener( "click", function() {
-	if (!langMenuShow) {
-		HTMLID_langMenuWrapper.style.animation = "animation-lang-window 0.4s";
-		HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
-		HTMLID_langMenuWrapper.style.pointerEvents = 'auto';
-	} else {
-		HTMLID_langMenuWrapper.style.animation = "animation-lang-window-reverse 0.4s";
-		HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
-		HTMLID_langMenuWrapper.style.pointerEvents = 'none';
+
+document.getElementById("pauseUI-btns-wrapper").addEventListener( "click", function (e) {
+
+	var target = e.target;
+	while ( target.tagName !== "DIV" ) {
+		target = target.parentNode;
 	}
-	langMenuShow = !langMenuShow;
+
+	switch (target.id) {
+	
+		case "btnPlayTgl" :
+		case "pauseUI-play" : pauseGame(); break;
+		case "pauseUI-mute" : muteToggle(e); break;
+		case "pauseUI-mainMenu" : menu(); break;
+		case "pauseUI-lang" : 
+				if (!langMenuShow) {
+					HTMLID_langMenuWrapper.style.animation = "animation-lang-window 0.4s";
+					HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
+					HTMLID_langMenuWrapper.style.pointerEvents = 'auto';
+				} else {
+					HTMLID_langMenuWrapper.style.animation = "animation-lang-window-reverse 0.4s";
+					HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
+					HTMLID_langMenuWrapper.style.pointerEvents = 'none';
+				}
+				langMenuShow = !langMenuShow;
+
+				break;
+		case "languageDrop" : changeLanguage(e); break;
+		default:
+
+	}
+	
 } );
-HTMLID_langMenu.addEventListener( "click", function(e) { changeLanguage(e); } );
 function changeLanguage(e) {
 	language = (e.target == HTMLID_langEN) ? 0 :
 		(e.target == HTMLID_langFR) ? 1 :
@@ -1895,11 +1912,11 @@ function changeLanguage(e) {
 
 HTMLID_turretWrapper.addEventListener("mouseout", clearTowerStats);
 HTMLID_turretWrapper.addEventListener("mouseover", function(e) { if (e.target.tagName === "IMG") {getStats(e.target.id);}});
-HTMLID_turretWrapper.addEventListener("click", function(e) { if (e.target.tagName === "IMG") {placeTower(e.target.id);}});
+HTMLID_turretWrapper.addEventListener("click", function(e) { if (e.target.tagName === "IMG" && !pause && !placingTower) {placeTower(e.target.id);}});
 
 // end tower events -------------------------------------------------------------
 
-canvas.addEventListener( "mousemove", function(e) { cursorX = e.clientX; cursorY = e.clientY; })	
+canvas.addEventListener( "mousemove", function(e) { cursorX = e.clientX; cursorY = e.clientY; });
 canvas.addEventListener("mouseout", function(){resetCoord();});
 
 function getStats(turret) {
@@ -2134,6 +2151,7 @@ initGame();
 function initGame()
 {
 	currentStageImage.src = "../images/" + stageImages[currentStage];
+	nextWave();
 	towerAvailable();
 	render();
 }
@@ -2198,6 +2216,9 @@ function update(){
 	else if (enemiesOnBoard.length > 0 && !pause){
 		awardGoldOverTime = true;
 	}
+	if ( enemiesOnBoard.length === 0 ) {
+		setTimeout( nextWave, 5000 );
+	}
 }
 
 
@@ -2206,8 +2227,8 @@ function render(){
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 	
 	renderLampCheck();
-	renderEnemyMovement();	
 	renderTowerAndBullet();
+	renderEnemyMovement();	
 	drawRange();
 	hoverCheck();
 	stageWin();
