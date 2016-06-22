@@ -1149,7 +1149,15 @@ grimReaper.prototype.spawnMomDad = function(){
 		tempObj2.yCoord = (stagePaths[currentStage])[tempObj2.pathPos].y;
 		enemiesOnBoard.push(tempObj2);
 		tempObj2.enemyMovement(tempObj2);
-		gameMessage = "Mom?... Dad?...!";
+		if (language === 0){
+			gameMessage = "Mom?... Dad?...!";
+		}
+		else if (language === 1){
+			gameMessage = "Maman?... Papa?...!";
+		}
+		else if (language === 2){
+			gameMessage = "¿Mama... Papa?...!";
+		}
 		
 		clearInterval(this.enemyNextMove);
 		this.speed *= 5;
@@ -1179,7 +1187,15 @@ grimReaper.prototype.spawnKid = function(){
 		var tempObj = new kid;
 		enemiesOnBoard.push(tempObj);
 		tempObj.enemyMovement(tempObj);
-		gameMessage = "NOW YOU WILL UNDERSTAND HOW IT FEELS!";
+		if (language === 0){
+			gameMessage = "NOW YOU WILL UNDERSTAND HOW IT FEELS!";
+		}
+		else if (language === 1){
+			gameMessage = "Vous comprendrez maintenant comment il se sent!";
+		}
+		else if (language === 2){
+			gameMessage = "Ahora vas a entender como se siente!";
+		}
 		clearInterval(this.enemyNextMove);
 		this.speed *= 10;
 		this.enemyMovement(this);
@@ -1220,7 +1236,15 @@ function spawnEnemy(enemyType){
 	}
 	enemiesOnBoard[enemiesOnBoard.length-1].enemyMovement(tempEnemyObj);
 	if (tempEnemyObj instanceof sensei) {
-		gameMessage = "Hello, I am the sensei of Tommy's wonderful dreams. But unfortunately you have fallen into his Nightmare. Try clicking on a tower and placing it on the floor!";
+		if (language === 0){
+			gameMessage = "Hello, I am the sensei of Tommy's wonderful dreams. But unfortunately you have fallen into his Nightmare. Try clicking on a tower and placing it on the floor!";
+		}
+		else if (language === 1){
+			gameMessage = "Bonjour, Je suis le sensei de reves merveilleux de Tommy. Mais malheureusement, vous etes tombe dans son cauchemar. Essayez de cliquer sur une tour et en le placant sur ​​le sol!";
+		}
+		else if (language === 2){
+			gameMessage = "Hola, yo soy el sensei de suenos maravillosos de Tommy. Pero, por desgracia que ha caido en su pesadilla. Intente hacer clic en una torre y colocarla en el suelo!";
+		}
 	}
 }
 //End of enemy related section-------------------------------------------------------------------------------------------------------------
@@ -1390,7 +1414,15 @@ tower.prototype.attack = function(towerObj, towerName){
 								enemiesOnBoard[j].bigBlobSplit();
 							}
 							if (enemiesOnBoard[j] instanceof sensei) {
-								gameMessage = "Thanks for getting me outta hereeeeeee! Take 100 gold to help you on your adventure. Good luck!";
+								if (language === 0){
+									gameMessage = "Thanks for getting me outta hereeeeeee! Take 100 gold to help you on your adventure. Good luck!";
+								}
+								else if (language === 1){
+									gameMessage = "Merci de me faire sort d'iciiiiiiiiiii! Prenez 100 pieces d'or pour vous aider dans votre aventure. Bonne chance!";
+								}
+								else if (language === 2){
+									gameMessage = "Gracias por hacer que me fuera de aquiiiiiiiii! Tomar 100 de oro para ayudarle en su aventura. ¡Buena suerte!";
+								}
 							}
 							
 							enemiesOnBoard.splice(j,1);
