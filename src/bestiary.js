@@ -59,7 +59,7 @@ function getBeastStats(enemy) {
 		case "ghost":
 			HTMLID_outputEnemyStats.innerHTML = "Ghost:<br> Invisible to other towers unless it comes into contact with the light. Who you gonna call?"; break;
 		case "clown":
-			HTMLID_outputEnemyStats.innerHTML = "Clown:<br> Steal a fraction of your gold. Don't invite him to your kids birthday party."; break;
+			HTMLID_outputEnemyStats.innerHTML = "Clown:<br> Steals a fraction of your gold. Don't invite him to your kid's birthday party."; break;
 		case "bigRoach":
 			HTMLID_outputEnemyStats.innerHTML = "Big Roach:<br> Kill one and another one shows up. Cockroaches are immune to nuclear radiation. "; break;
 		case "blob":
@@ -77,9 +77,9 @@ function getBeastStats(enemy) {
 		case "grizzlyBear":
 			HTMLID_outputEnemyStats.innerHTML = "Grizzly Bear:<br> Stronger than your basic enemy. Thank grizzly for Leo's Oscar. "; break;
 		case "bigBlob":
-			HTMLID_outputEnemyStats.innerHTML = "Big Blob:<br> Splits into to three normal blobs. Ughhh so annoying. "; break;			
+			HTMLID_outputEnemyStats.innerHTML = "Big Blob:<br> Splits into three normal blobs. Ughhh so annoying. "; break;			
 		case "grimReaper":
-			HTMLID_outputEnemyStats.innerHTML = "Grim Reaper:<br> Phase two he spawns a zombie form of mom and dad, beware! Phase two he gives the kid a change to run along the path to his parents, but the towers on board target him. "; break;				
+			HTMLID_outputEnemyStats.innerHTML = "Grim Reaper:<br> Phase one he spawns a zombie in the form of mom and dad, beware! Phase two he gives the kid a chance to run along the path to his parents, but the towers on board target him. "; break;				
 			 
 	
 	}

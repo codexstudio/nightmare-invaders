@@ -395,18 +395,18 @@ var tips = setInterval(function(){
 	
 	var displayTip = Math.random() * 100;
 	if (currentStage == 0 && waveCounter >= 2) {
-		if (displayTip < 100 && displayTip >= 75){
+		if (displayTip < 100 && displayTip >= 80){
 			if (language === 0) {
-				gameMessage = "Tip: Sometimes sacrificing health for more gold over time can be a good strategy.";
+				gameMessage = "Tip: Sometimes sacrificing health for more gold can be a good strategy.";
 			}
 			if (language === 1) {
-				gameMessage = "Astuce: Parfois sacrifier la santé pour plus d'or au fil du temps peut être une bonne stratégie.";
+				gameMessage = "Astuce: Parfois sacrifier la santé pour plus d'or peut être une bonne stratégie.";
 			}
 			if (language === 2) {
-				gameMessage = "Consejo: A veces sacrificar la salud para más de oro con el tiempo puede ser una buena estrategia.";
+				gameMessage = "Consejo: A veces sacrificar la salud para más de oro puede ser una buena estrategia.";
 			}
 		}
-		else if (displayTip < 75 && displayTip >= 50){
+		else if (displayTip < 80 && displayTip >= 60){
 			if (language === 0) {
 				gameMessage = "Tip: Tower placement is important! Look at your range indicator surrounding the tower.";
 			}
@@ -419,7 +419,7 @@ var tips = setInterval(function(){
 				gameMessage = "Consejo: La colocación de la torre es importante! Mire a su indicador de rango que rodea la torre.";
 			}
 		}
-		else if (displayTip < 50 && displayTip >= 25){
+		else if (displayTip < 60 && displayTip >= 40){
 			if (language === 0) {
 				gameMessage = "Tip: You can sell towers to upgrade to better towers.";
 			}
@@ -430,12 +430,26 @@ var tips = setInterval(function(){
 				gameMessage = "Consejo: Usted puede vender torres para actualizar a mejores torres.";
 			}
 		}
-		else if (displayTip < 25 && displayTip >= 0){
+		else if (displayTip < 40 && displayTip >= 20){
 			if (language === 0) {
 				gameMessage = "Tip: If you are able to clear all enemies, save money for better towers.";
 			}
 			if (language === 1) {
-				gamMessage = "Astuce: Si vous êtes en mesure d' effacer tous les ennemis , économiser de l'argent pour de meilleurs tours.";
+				gameMessage = "Astuce: Si vous êtes en mesure d' effacer tous les ennemis , économiser de l'argent pour de meilleurs tours.";
+			}
+			if (language === 2){
+				gameMessage = "Si usted es capaz de eliminar a todos los enemigos , ahorrar dinero para mejores torres.";
+			}
+		}
+		else if (displayTip < 20 && displayTip >= 0){
+			if (language === 0) {
+				gameMessage = "Warning! Gold resets back to 100 at the end of each stage!";
+			}
+			if (language === 1) {
+				gameMessage = "Attention! Or réinitialise retour à 100 à la fin de chaque étape!";
+			}
+			if (language === 2){
+				gameMessage = "¡Advertencia! Oro restablece de nuevo a 100 al final de cada etapa!";
 			}
 		}
 	}
@@ -444,7 +458,7 @@ var tips = setInterval(function(){
 		gameMessage = "Tip: Calculators help you in the long run.";
 		}
 		else if (displayTip < 75 && displayTip >= 50){
-		gameMessage = "Tip: Killing a blob makes three small fast blobs. Be careful as they can get away quickly.";
+		gameMessage = "Tip: Killing a big blob makes three smaller, faster blobs appear in its place!";
 		}
 	}
 }, 30000);
@@ -602,10 +616,10 @@ sensei.prototype.tutorial = function(){
 		gameMessage = "As enemies walk through the path, you will have to place more towers to deal with them. Make sure you have enough gold for the tower you want."; 
 	}
 	if (this.health <= 125){
-		gameMessage = "You can always click on a tower to sell it for half your gold back.";
+		gameMessage = "You can always click on a tower and sell it for half its original cost.";
 	}
 	if (this.health <= 75) {
-		gameMessage = "If you allow an enemy to travel through the path, Tommy's health will be lowered. Don't let his health go to 0 or else you will lose."; 
+		gameMessage = "If you allow an enemy to travel to the end of the path, Tommy's health will be lowered. Don't let his health drop to 0 or else you will lose."; 
 	}
 };
 
@@ -1324,7 +1338,7 @@ tower.prototype.attack = function(towerObj, towerName){
 								enemiesOnBoard[j].bigBlobSplit();
 							}
 							if (enemiesOnBoard[j] instanceof sensei) {
-								gameMessage = "Thanks for getting me outa hereeeeeee! Take 100 gold to help you on your adventure. Good luck!";
+								gameMessage = "Thanks for getting me outta hereeeeeee! Take 100 gold to help you on your adventure. Good luck!";
 							}
 							
 							enemiesOnBoard.splice(j,1);
@@ -2142,7 +2156,7 @@ function update(){
 		HTMLBTN_mainMenu.innerHTML = "Main Menu";
 		outputPlayerStats.innerHTML = "<b>Health: </b>" + Hp;
 		outputPlayerStats.innerHTML += "<br><b>Gold: </b>" + Gold;
-		outputPlayerStats.innerHTML += "<br><b>Level: </b>" + (currentStage + 1);
+		outputPlayerStats.innerHTML += "<br><b>Stage: </b>" + (currentStage + 1);
 		outputPlayerStats.innerHTML += "<br><b>Wave: </b>" + (waveCounter + 1);
 	}
 	else if(language === 1){
