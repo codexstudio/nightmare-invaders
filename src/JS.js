@@ -2185,11 +2185,28 @@ function boxStatus(){
 		}
 	}
 }
-
+var sellButton = document.getElementById("sellTowers")
+function buttonToggle(){
+    if (towersOnBoard.length > 0){
+        for (i = 0; i <= towersOnBoard.length-1;i++){
+            if (towersOnBoard[i].boxBool == true){
+                sellButton.style.visibility = "visible";
+                console.log("testing");
+                break;
+            }
+            else{
+                tester.style.visibility = "hidden";
+            }
+        }
+    }
+    else{
+        sellButton.style.visibility = "hidden";
+    }
+}
 function drawBox(){
 	if (towersOnBoard.length > 0){
 		for (i = 0; i <= towersOnBoard.length-1;i++){
-			if (towersOnBoard[i].boxBool == true){
+			if ((towersOnBoard[i].boxBool == true)&&(towersOnBoard[i].range != 500000)){
 				ctx.beginPath();
 				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
 				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+15);
@@ -2203,6 +2220,25 @@ function drawBox(){
 				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord);
 				ctx.lineTo(towersOnBoard[i].xCoord+30, towersOnBoard[i].yCoord);
 				ctx.moveTo(towersOnBoard[i].xCoord+15, towersOnBoard[i].yCoord);
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
+				ctx.lineWidth = 2.75;
+				ctx.strokeStyle = "#f0ff00";
+				ctx.stroke();
+			}
+			else if((towersOnBoard[i].boxBool == true)&&(towersOnBoard[i].range == 500000)){
+				ctx.beginPath();
+				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+23);
+				ctx.moveTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+45);
+				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord+68);
+				ctx.lineTo(towersOnBoard[i].xCoord+23, towersOnBoard[i].yCoord+68);
+				ctx.moveTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord+68);
+				ctx.lineTo(towersOnBoard[i].xCoord+68, towersOnBoard[i].yCoord+68);
+				ctx.lineTo(towersOnBoard[i].xCoord+68, towersOnBoard[i].yCoord+45);
+				ctx.moveTo(towersOnBoard[i].xCoord+68, towersOnBoard[i].yCoord+23);
+				ctx.lineTo(towersOnBoard[i].xCoord+68, towersOnBoard[i].yCoord);
+				ctx.lineTo(towersOnBoard[i].xCoord+45, towersOnBoard[i].yCoord);
+				ctx.moveTo(towersOnBoard[i].xCoord+23, towersOnBoard[i].yCoord);
 				ctx.lineTo(towersOnBoard[i].xCoord, towersOnBoard[i].yCoord);
 				ctx.lineWidth = 2.75;
 				ctx.strokeStyle = "#f0ff00";
@@ -2321,6 +2357,7 @@ function render(){
 	hoverCheck();
 	stageWin();
 	drawBox();
+	buttonToggle();
 }
 
 // functions for render to call --------------------------------------------------------------------------------------------
