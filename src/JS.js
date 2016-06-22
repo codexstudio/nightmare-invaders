@@ -77,7 +77,7 @@ if (language === 0){
 	stages[0] = "Child's Bedroom";
 	stages[1] = "Basement";
 	stages[2] = "Kitchen";
-	stages[3] = "Parent's Bedroom";
+	stages[3] = "Parents' Bedroom";
 }
 else if(language === 1){
 	stages[0] = "Chambre D'enfant";
@@ -212,12 +212,9 @@ var HTMLBTN_playTgl = document.getElementById("btnPlayTgl");
 var SVG_pause = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 60"><g class="btnUI"><path d="M33,46h8V14h-8V46z"/><path d="M19,46h8V14h-8V46z"/></g></svg>'
 var SVG_play = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 294.843 294.843"><g class="btnUI"><path d="M109.699,78.969c-1.876,1.067-3.035,3.059-3.035,5.216v131.674c0,3.314,2.687,6,6,6s6-2.686,6-6V94.74l88.833,52.883l-65.324,42.087c-2.785,1.795-3.589,5.508-1.794,8.293c1.796,2.786,5.508,3.59,8.294,1.794l73.465-47.333c1.746-1.125,2.786-3.073,2.749-5.15c-0.037-2.077-1.145-3.987-2.93-5.05L115.733,79.029C113.877,77.926,111.575,77.902,109.699,78.969z"/></g>'
 var HTMLID_pauseUI = document.getElementById("pauseUI");
-var HTMLBTN_resume = document.getElementById("pauseUI-play");
 var HTMLBTN_muteTgl = document.getElementById("pauseUI-mute");
 var HTMLBTN_mainMenu = document.getElementById("pauseUI-mainMenu");
 var HTMLBTN_pauseTitle = document.getElementById("pauseTitle");
-var HTMLID_langMenu = document.getElementById("languageList");
-var HTMLBTN_langMenuTgl = document.getElementById("pauseUI-lang");
 var HTMLID_langMenuWrapper = document.getElementById("languageDrop");
 var HTMLBTN_pauseButton = document.getElementById("pauseButton");
 var langMenuShow = false;
@@ -264,6 +261,7 @@ var SVG_soundOff = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:
 var bkgAudio = document.getElementById('background_audio');
 var mute = false;
 // end muting
+var HTMLID_turretWrapper = document.getElementById("turrets");
 var HTMLID_toyCarLauncher = document.getElementById("toyCarLauncher");
 var HTMLID_actionFigure = document.getElementById("actionFigure");
 var HTMLID_marbleShooter = document.getElementById("marbleShooter");
@@ -294,8 +292,9 @@ function gameOver(){
 
 function gameWin() {
 	ctx.drawImage(gameCleared, 0, 0);
-	var victory = document.getElementById('Victory');
-	victory.play();
+	setTimeout(function(){ 
+		window.location="Menu.html";
+	}, 4000);
 }
 
 function prevStage(){
@@ -393,18 +392,18 @@ var tips = setInterval(function(){
 	
 	var displayTip = Math.random() * 100;
 	if (currentStage == 0 && waveCounter >= 2) {
-		if (displayTip < 100 && displayTip >= 75){
+		if (displayTip < 100 && displayTip >= 80){
 			if (language === 0) {
-				gameMessage = "Tip: Sometimes sacrificing health for more gold over time can be a good strategy.";
+				gameMessage = "Tip: Sometimes sacrificing health for more gold can be a good strategy.";
 			}
 			if (language === 1) {
-				gameMessage = "Astuce: Parfois sacrifier la santé pour plus d'or au fil du temps peut être une bonne stratégie.";
+				gameMessage = "Astuce: Parfois sacrifier la sante pour plus d'or peut etre une bonne strategie.";
 			}
 			if (language === 2) {
-				gameMessage = "Consejo: A veces sacrificar la salud para más de oro con el tiempo puede ser una buena estrategia.";
+				gameMessage = "Consejo: A veces sacrificar la salud para mas de oro puede ser una buena estrategia.";
 			}
 		}
-		else if (displayTip < 75 && displayTip >= 50){
+		else if (displayTip < 80 && displayTip >= 60){
 			if (language === 0) {
 				gameMessage = "Tip: Tower placement is important! Look at your range indicator surrounding the tower.";
 			}
@@ -414,10 +413,10 @@ var tips = setInterval(function(){
 			}
 			if (language === 2) {
 				
-				gameMessage = "Consejo: La colocación de la torre es importante! Mire a su indicador de rango que rodea la torre.";
+				gameMessage = "Consejo: La colocacion de la torre es importante! Mire a su indicador de rango que rodea la torre.";
 			}
 		}
-		else if (displayTip < 50 && displayTip >= 25){
+		else if (displayTip < 60 && displayTip >= 40){
 			if (language === 0) {
 				gameMessage = "Tip: You can sell towers to upgrade to better towers.";
 			}
@@ -428,21 +427,51 @@ var tips = setInterval(function(){
 				gameMessage = "Consejo: Usted puede vender torres para actualizar a mejores torres.";
 			}
 		}
-		else if (displayTip < 25 && displayTip >= 0){
+		else if (displayTip < 40 && displayTip >= 20){
 			if (language === 0) {
 				gameMessage = "Tip: If you are able to clear all enemies, save money for better towers.";
 			}
 			if (language === 1) {
-				gamMessage = "Astuce: Si vous êtes en mesure d' effacer tous les ennemis , économiser de l'argent pour de meilleurs tours.";
+				gameMessage = "Astuce: Si vous etes en mesure d'effacer tous les ennemis , economiser de l'argent pour de meilleurs tours.";
+			}
+			if (language === 2){
+				gameMessage = "Si usted es capaz de eliminar a todos los enemigos , ahorrar dinero para mejores torres.";
+			}
+		}
+		else if (displayTip < 20 && displayTip >= 0){
+			if (language === 0) {
+				gameMessage = "Warning! Gold resets back to 100 at the end of each stage!";
+			}
+			if (language === 1) {
+				gameMessage = "Attention! Or reinitialise retour à 100 à la fin de chaque etape!";
+			}
+			if (language === 2){
+				gameMessage = "¡Advertencia! Oro restablece de nuevo a 100 al final de cada etapa!";
 			}
 		}
 	}
 	if (currentStage == 1) {
 		if (displayTip < 100 && displayTip >= 75){
-		gameMessage = "Tip: Calculators help you in the long run.";
+			if (language === 0) {
+				gameMessage = "Tip: Calculators help you in the long run.";
+			}
+			if (language === 1) {
+				gameMessage = "Astuce: Calculatrices vous aider dans le long terme.";
+			}
+			if (language === 2){
+				gameMessage = "Las calculadoras que ayudan en el largo plazo.";
+			}
 		}
 		else if (displayTip < 75 && displayTip >= 50){
-		gameMessage = "Tip: Killing a blob makes three small fast blobs. Be careful as they can get away quickly.";
+			if (language === 0) {
+				gameMessage = "Tip: Killing a big blob makes three smaller, faster blobs appear in its place!";
+			}
+			if (language === 1) {
+				gameMessage = "Astuce: Tuer un gros blob fait trois petites taches plus rapides apparaissent a sa place!";
+			}
+			if (language === 2){
+				gameMessage = "Consejo: Matar a una gran mancha hace tres, gotas mas pequenas parecen mas rapidos en su lugar!";
+			}
 		}
 	}
 }, 30000);
@@ -556,7 +585,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			}
 		}
 		if (enemyObj instanceof sensei) {
-			enemyObj.tutorial(); //runs tutorial function on 569
+			enemyObj.tutorial();
 		}
 		if (enemyObj instanceof ghost){
 			enemyObj.checkGhostVisibility();
@@ -568,16 +597,22 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			if (enemyObj.phaseOneComplete == false){
 				enemyObj.spawnMomDad();
 			}
-			else if (enemyObj.phaseThreeComplete == false) {
+			else if (enemyObj.phaseTwoComplete == false) {
 				enemyObj.spawnKid();
 			}
 		}
 		if (enemyObj instanceof kid) {
-			Hp = enemyObj.health;
-			if (Hp <= Hp / 2) {
-				gameMessage = "What are you doing!? Save him!";
+			if (enemyObj.health <= (enemyObj.startHealth/1.5)) {
+				if (language === 0) {
+					gameMessage = "What are you doing!? Save him! That's Tommy!";
+				}
+				if (language === 1) {
+					gameMessage = "Qu'est-ce que tu fais!? Sauve le! C'est Tommy!";
+				}
+				if (language === 2){
+					gameMessage = "¿¡Qué estás haciendo!? Salvarlo! Eso es Tommy !";
+				}
 			}
-			enemyObj.safeKid();
 		}
 	}, this.speed);
 }
@@ -595,22 +630,50 @@ sensei.prototype = Object.create(enemy.prototype);
 sensei.prototype.constructor = sensei;
 
 sensei.prototype.tutorial = function(){
-	if (this.health < this.startHealth) {
-		gameMessage = "Good job! Now use the towers to get me out of this Nightmare!"; 
+	if (towersOnBoard.length == 1) {
+		if (language === 0) {
+			gameMessage = "Good job! Now use the towers to get me out of this Nightmare!";
+		}
+		if (language === 1) {
+			gameMessage = "Bon travail! Maintenant, utilisez les tours pour me sortir de ce cauchemar!";
+		}
+		if (language === 2){
+			gameMessage = "¡Buen trabajo! Ahora usa las torres para que me saque de esta pesadilla!";
+		}
 	}
 	if (this.health <= 175) {
-		gameMessage = "As enemies walk through the path, you will have to place more towers to deal with them. Make sure you have enough gold for the tower you want."; 
+		if (language === 0) {
+			gameMessage = "As enemies walk through the path, you will have to place more towers to deal with them. Make sure you have enough gold for the tower you want.";
+		}
+		if (language === 1) {
+			gameMessage = "Comme les ennemis a pied par le chemin , vous devrez placer plus de tours pour y faire face . Assurez-vous que vous avez assez d'or pour la tour que vous voulez.";
+		}
+		if (language === 2){
+			gameMessage = "Como enemigos a pie por el camino, se tendra que colocar mas torres para tratar con ellos . Asegurate de que tienes suficiente oro para la torre que desea.";
+		}
 	}
 	if (this.health <= 125){
-		gameMessage = "You can always click on a tower to sell it for half your gold back.";
+		if (language === 0) {
+			gameMessage = "You can always click on a tower and sell it for half its original cost.";
+		}
+		if (language === 1) {
+			gameMessage = "Vous pouvez toujours cliquer sur une tour et de le vendre pour la moitie de son cout initial.";
+		}
+		if (language === 2){
+			gameMessage = "Siempre se puede hacer clic en una torre y lo venden por la mitad de su costo original.";
+		}
 	}
 	if (this.health <= 75) {
-		gameMessage = "If you allow an enemy to travel through the path, Tommy's health will be lowered. Don't let his health go to 0 or else you will lose."; 
+		if (language === 0) {
+			gameMessage = "If you allow an enemy to travel to the end of the path, Tommy's health will be lowered. Don't let his health drop to 0 or else you will lose.";
+		}
+		if (language === 1) {
+			gameMessage = "Si vous permettez a un ennemi de se rendre a la fin du chemin , la sante de Tommy sera abaisse . Ne pas laisser tomber sa sante à 0 ou bien vous perdrez.";
+		}
+		if (language === 2){
+			gameMessage = "Si permite que un enemigo para viajar hasta el final de la ruta , se reducira la salud de Tommy. No deje caer su salud a 0 o de lo contrario perdera.";
+		}
 	}
-	if (this.health <= 6) { //should prob move this to splice so it doesn't bring bugs :O
-		gameMessage = "Thanks for getting me outa hereeeeeee! Take 100 gold to help you on your adventure. Good luck!";
-	}
-	console.log("Don't be frightened!");
 };
 
 function basicSkeleton(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, direction, isSlowed){
@@ -750,7 +813,6 @@ function miniBlob(startHealth, health, damage, speed, killReward, xCoord, yCoord
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isSlowed);
 	this.startHealth = 200;
 	this.health = 200;
-	console.log(this.health);
 	this.damage = 1;
 	this.speed = 20;
 	this.killReward = 5;
@@ -901,8 +963,8 @@ grizzlyBear.prototype.thisChildMethodNeedsAName = function(){
 
 function bigRoach(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isSlowed);
-	this.startHealth = 2000;
-	this.health = 2000;
+	this.startHealth = 4000;
+	this.health = 4000;
 	this.damage = 20;
 	this.speed = 50;
 	this.killReward = 0;
@@ -1036,8 +1098,8 @@ zombieDad.prototype.afterDeaderThanCheddar = function(){
 
 function kid(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos);
-	this.startHealth = Hp * 2000;
-	this.health = Hp * 2000;
+	this.startHealth = Hp * 300;
+	this.health = Hp * 300;
 	this.damage = 0;
 	this.speed = 80;
 	this.killReward = 0;
@@ -1049,7 +1111,7 @@ kid.prototype.kidDies = function(){
 	gameOver();
 };
 
-function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, isVisible, hasPhaseOned, phaseOneComplete, hasPhaseTwoed, hasPhaseThreed, isSlowed){
+function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, phaseOne, isVisible, hasPhaseOned, phaseOneComplete, hasPhaseTwoed, isSlowed){
 	enemy.call(this, startHealth, health, damage, speed, killReward, xCoord, yCoord, pathPos, isSlowed);
 	this.startHealth = 15000;
 	this.health = 15000;
@@ -1057,14 +1119,11 @@ function grimReaper(startHealth, health, damage, speed, killReward, xCoord, yCoo
 	this.speed = 100;
 	this.killReward = 0;
 	this.phaseOne = this.startHealth * 0.75; //initiates boss phase one
-	this.phaseTwo = this.startHealth * 0.5; //initates boss phase two
-	this.phaseThree =  this.startHealth * 0.25; //initiates boss phase three 
+	this.phaseTwo = this.startHealth * 0.25; //initates boss phase two
 	this.hasPhaseOned = false;
 	this.phaseOneComplete = false;
 	this.hasPhaseTwoed = false;
 	this.phaseTwoComplete = false; 
-	this.hasPhaseThreed = false;
-	this.phaseThreeComplete = false; 
 	this.isVisible = true;
 }
 grimReaper.prototype = Object.create(enemy.prototype);
@@ -1090,7 +1149,15 @@ grimReaper.prototype.spawnMomDad = function(){
 		tempObj2.yCoord = (stagePaths[currentStage])[tempObj2.pathPos].y;
 		enemiesOnBoard.push(tempObj2);
 		tempObj2.enemyMovement(tempObj2);
-		gameMessage = "Mom?... Dad?...";
+		if (language === 0){
+			gameMessage = "Mom?... Dad?...!";
+		}
+		else if (language === 1){
+			gameMessage = "Maman?... Papa?...!";
+		}
+		else if (language === 2){
+			gameMessage = "¿Mama... Papa?...!";
+		}
 		
 		clearInterval(this.enemyNextMove);
 		this.speed *= 5;
@@ -1113,27 +1180,27 @@ grimReaper.prototype.spawnMomDad = function(){
 	}
 };
 	
-grimReaper.prototype.removeRandomTowers = function(){ //MAYBE LOL!
-	console.log("Undefined Child Method.");
-};
-	
 grimReaper.prototype.spawnKid = function(){ 	
-	if (this.health < this.phaseThree && this.hasPhaseThreed == false) {
-		this.hasPhaseThreed = true;
-		this.isVisible = false; 
+	if (this.health < this.phaseTwo && this.hasPhaseTwoed == false) {
+		this.hasPhaseTwoed = true;
+		this.isVisible = false;
 		var tempObj = new kid;
 		enemiesOnBoard.push(tempObj);
 		tempObj.enemyMovement(tempObj);
-		
-		gameMessage = "NOW YOU WILL UNDERTSTAND HOW IT FEELS!";
-		
+		if (language === 0){
+			gameMessage = "NOW YOU WILL UNDERSTAND HOW IT FEELS!";
+		}
+		else if (language === 1){
+			gameMessage = "Vous comprendrez maintenant comment il se sent!";
+		}
+		else if (language === 2){
+			gameMessage = "Ahora vas a entender como se siente!";
+		}
 		clearInterval(this.enemyNextMove);
-		console.log(this.speed);
-		this.speed *= 5;
-		console.log(this.speed);
+		this.speed *= 10;
 		this.enemyMovement(this);
 	}
-	if (this.health < this.phaseThree){
+	if (this.health < this.phaseTwo){
 		var kidActive = false;
 		for (var i = 0; i < enemiesOnBoard.length; i++){
 			if(enemiesOnBoard[i] instanceof kid){
@@ -1142,9 +1209,9 @@ grimReaper.prototype.spawnKid = function(){
 		}
 		if (!kidActive){
 			this.isVisible = true;
-			this.phaseThreedComplete = true;
+			this.phaseTwoComplete = true;
 			clearInterval(this.enemyNextMove);
-			this.speed /= 5;
+			this.speed /= 10;
 			this.enemyMovement(this);
 		}
 	}
@@ -1169,7 +1236,15 @@ function spawnEnemy(enemyType){
 	}
 	enemiesOnBoard[enemiesOnBoard.length-1].enemyMovement(tempEnemyObj);
 	if (tempEnemyObj instanceof sensei) {
-		gameMessage = "Hello, I am the sensei of Tommy's wonderful dreams. But unfortunately you have fallen into his Nightmare. Try clicking on a tower and placing it on the floor!";
+		if (language === 0){
+			gameMessage = "Hello, I am the sensei of Tommy's wonderful dreams. But unfortunately you have fallen into his Nightmare. Try clicking on a tower and placing it on the floor!";
+		}
+		else if (language === 1){
+			gameMessage = "Bonjour, Je suis le sensei de reves merveilleux de Tommy. Mais malheureusement, vous etes tombe dans son cauchemar. Essayez de cliquer sur une tour et en le placant sur ​​le sol!";
+		}
+		else if (language === 2){
+			gameMessage = "Hola, yo soy el sensei de suenos maravillosos de Tommy. Pero, por desgracia que ha caido en su pesadilla. Intente hacer clic en una torre y colocarla en el suelo!";
+		}
 	}
 }
 //End of enemy related section-------------------------------------------------------------------------------------------------------------
@@ -1338,6 +1413,18 @@ tower.prototype.attack = function(towerObj, towerName){
 							if (enemiesOnBoard[j] instanceof bigBlob) {
 								enemiesOnBoard[j].bigBlobSplit();
 							}
+							if (enemiesOnBoard[j] instanceof sensei) {
+								if (language === 0){
+									gameMessage = "Thanks for getting me outta hereeeeeee! Take 100 gold to help you on your adventure. Good luck!";
+								}
+								else if (language === 1){
+									gameMessage = "Merci de me faire sort d'iciiiiiiiiiii! Prenez 100 pieces d'or pour vous aider dans votre aventure. Bonne chance!";
+								}
+								else if (language === 2){
+									gameMessage = "Gracias por hacer que me fuera de aquiiiiiiiii! Tomar 100 de oro para ayudarle en su aventura. ¡Buena suerte!";
+								}
+							}
+							
 							enemiesOnBoard.splice(j,1);
 							
 						}
@@ -1550,7 +1637,7 @@ toaster.prototype.thisChildMethodNeedsAName = function(){
 
 function blenderDefender(cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, isBuffed){
 	tower.call(this, cost, damage, range, attackSpeed, xCoord, yCoord, upgraded, targetIndice, isShooting, isBuffed);
-	this.cost = 75;
+	this.cost = 90;
 	this.damage = 0.5;
 	this.range = 80;
 	this.attackSpeed = 15;
@@ -1701,8 +1788,9 @@ function createTowerObject(towerType, x, y){
 }
 
 var tempRange;
-
+var placingTower = false;
 function placeTower(towerType){
+	placingTower = true;
 	document.body.style.cursor = "url('../images/" + towerType + ".png'),auto";
 	document.getElementById('canvas').addEventListener ("click", handler); 
 	if (circleCheck == false){
@@ -1715,6 +1803,7 @@ function placeTower(towerType){
 	tempRange = towerPlaceholder.range;
 	
 	function handler(e){
+	placingTower = false;
 	event = e;
 		towerxy.x = event.clientX+5;     // Get the horizontal coordinate, 5 pixel offset as a margin of error for the player
 		towerxy.y = event.clientY+5;     // Get the vertical coordinate, 5 pixel offset as a margin of error for the player
@@ -1743,6 +1832,9 @@ function placeTower(towerType){
 				else if (language === 2){
 					gameMessage = "No se ha podido colocar. Demasiado cerca de la ruta.";
 				}
+				setTimeout(function(){ 
+					gameMessage = "";
+				}, 3000);
 				if (showGrid == false){
 					togGrid();
 				}
@@ -1764,6 +1856,9 @@ function placeTower(towerType){
 					else if (language === 2){
 						gameMessage = "No se ha podido colocar. Demasiado cerca de otra torre.";
 					}
+					setTimeout(function(){ 
+						gameMessage = "";
+					}, 3000);
 					togGrid();
 					circleCheck = false;
 				}
@@ -1838,23 +1933,41 @@ function muteToggle(e) {
 
 	HTMLBTN_muteTgl.innerHTML = mute ? SVG_soundOff : SVG_soundOn;
 }
+
 HTMLBTN_playTgl.addEventListener( "click", pauseGame );
-HTMLBTN_muteTgl.addEventListener( "click", function(e) { muteToggle(e); });
-HTMLBTN_resume.addEventListener( "click", pauseGame );
-HTMLBTN_mainMenu.addEventListener( "click", menu );
-HTMLBTN_langMenuTgl.addEventListener( "click", function() {
-	if (!langMenuShow) {
-		HTMLID_langMenuWrapper.style.animation = "animation-lang-window 0.4s";
-		HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
-		HTMLID_langMenuWrapper.style.pointerEvents = 'auto';
-	} else {
-		HTMLID_langMenuWrapper.style.animation = "animation-lang-window-reverse 0.4s";
-		HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
-		HTMLID_langMenuWrapper.style.pointerEvents = 'none';
+
+document.getElementById("pauseUI-btns-wrapper").addEventListener( "click", function (e) {
+
+	var target = e.target;
+	while ( target.tagName !== "DIV" ) {
+		target = target.parentNode;
 	}
-	langMenuShow = !langMenuShow;
+
+	switch (target.id) {
+	
+		case "btnPlayTgl" :
+		case "pauseUI-play" : pauseGame(); break;
+		case "pauseUI-mute" : muteToggle(e); break;
+		case "pauseUI-mainMenu" : menu(); break;
+		case "pauseUI-lang" : 
+				if (!langMenuShow) {
+					HTMLID_langMenuWrapper.style.animation = "animation-lang-window 0.4s";
+					HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
+					HTMLID_langMenuWrapper.style.pointerEvents = 'auto';
+				} else {
+					HTMLID_langMenuWrapper.style.animation = "animation-lang-window-reverse 0.4s";
+					HTMLID_langMenuWrapper.style.animationFillMode = "forwards";
+					HTMLID_langMenuWrapper.style.pointerEvents = 'none';
+				}
+				langMenuShow = !langMenuShow;
+
+				break;
+		case "languageDrop" : changeLanguage(e); break;
+		default:
+
+	}
+	
 } );
-HTMLID_langMenu.addEventListener( "click", function(e) { changeLanguage(e); } );
 function changeLanguage(e) {
 	language = (e.target == HTMLID_langEN) ? 0 :
 		(e.target == HTMLID_langFR) ? 1 :
@@ -1868,7 +1981,7 @@ function changeLanguage(e) {
 		stages[0] = "Child's Bedroom";
 		stages[1] = "Basement";
 		stages[2] = "Kitchen";
-		stages[3] = "Parent's Bedroom";
+		stages[3] = "Parents' Bedroom";
 	}
 	else if(language === 1){
 		stages[0] = "Chambre D'enfant";
@@ -1885,48 +1998,13 @@ function changeLanguage(e) {
 }
 // tower events -------------------------------------------------------------
 
-HTMLID_toyCarLauncher.addEventListener( "mouseout", clearTowerStats ); 
-HTMLID_actionFigure.addEventListener( "mouseout", clearTowerStats );
-HTMLID_marbleShooter.addEventListener( "mouseout", clearTowerStats );
-HTMLID_lamp.addEventListener( "mouseout", clearTowerStats );
-HTMLID_calculator.addEventListener( "mouseout", clearTowerStats );
-HTMLID_nutsAndBolts.addEventListener( "mouseout", clearTowerStats );
-HTMLID_blenderDefender.addEventListener( "mouseout", clearTowerStats );
-HTMLID_toaster.addEventListener( "mouseout", clearTowerStats );
-HTMLID_waterGun.addEventListener( "mouseout", clearTowerStats );
-HTMLID_airplaneLauncher.addEventListener( "mouseout", clearTowerStats );
-HTMLID_trophy.addEventListener( "mouseout", clearTowerStats );
-HTMLID_vanquishEvil.addEventListener( "mouseout", clearTowerStats );
-
-HTMLID_toyCarLauncher.addEventListener( "mouseover", function() { getStats('toyCarLauncher'); });
-HTMLID_actionFigure.addEventListener( "mouseover", function() { getStats('actionFigure'); });
-HTMLID_marbleShooter.addEventListener( "mouseover", function() { getStats('marbleShooter'); });
-HTMLID_lamp.addEventListener( "mouseover", function() { getStats('lamp'); });
-HTMLID_calculator.addEventListener( "mouseover", function() { getStats('calculator'); });
-HTMLID_nutsAndBolts.addEventListener( "mouseover", function() { getStats('nutsAndBolts'); });
-HTMLID_blenderDefender.addEventListener( "mouseover", function() { getStats('blenderDefender'); });
-HTMLID_toaster.addEventListener( "mouseover", function() { getStats('toaster'); });
-HTMLID_waterGun.addEventListener( "mouseover", function() { getStats('waterGun'); });
-HTMLID_airplaneLauncher.addEventListener( "mouseover", function() { getStats('airplaneLauncher'); });
-HTMLID_trophy.addEventListener( "mouseover", function() { getStats('trophy'); });
-HTMLID_vanquishEvil.addEventListener( "mouseover", function() { getStats('vanquishEvil'); });
-
-HTMLID_toyCarLauncher.addEventListener( "click", function() { placeTower('toyCarLauncher'); });
-HTMLID_actionFigure.addEventListener( "click", function() { placeTower('actionFigure'); });
-HTMLID_marbleShooter.addEventListener( "click", function() { placeTower('marbleShooter'); });
-HTMLID_lamp.addEventListener( "click", function() { placeTower('lamp'); });
-HTMLID_calculator.addEventListener( "click", function() { placeTower('calculator'); });
-HTMLID_nutsAndBolts.addEventListener( "click", function() { placeTower('nutsAndBolts'); });
-HTMLID_blenderDefender.addEventListener( "click", function() { placeTower('blenderDefender'); });
-HTMLID_toaster.addEventListener( "click", function() { placeTower('toaster'); });
-HTMLID_waterGun.addEventListener( "click", function() { placeTower('waterGun'); });
-HTMLID_airplaneLauncher.addEventListener( "click", function() { placeTower('airplaneLauncher'); });
-HTMLID_trophy.addEventListener( "click", function() { placeTower('trophy'); });
-HTMLID_vanquishEvil.addEventListener( "click", function() { placeTower('vanquishEvil'); });
+HTMLID_turretWrapper.addEventListener("mouseout", clearTowerStats);
+HTMLID_turretWrapper.addEventListener("mouseover", function(e) { if (e.target.tagName === "IMG") {getStats(e.target.id);}});
+HTMLID_turretWrapper.addEventListener("click", function(e) { if (e.target.tagName === "IMG" && !pause && !placingTower) {placeTower(e.target.id);}});
 
 // end tower events -------------------------------------------------------------
 
-canvas.addEventListener( "mousemove", function(e) { cursorX = e.clientX; cursorY = e.clientY; })	
+canvas.addEventListener( "mousemove", function(e) { cursorX = e.clientX; cursorY = e.clientY; });
 canvas.addEventListener("mouseout", function(){resetCoord();});
 
 function getStats(turret) {
@@ -2097,7 +2175,6 @@ function boxStatus(){
 	for (var i = 0; i <= towersOnBoard.length-1;i++){
 		if (((cursorX >= towersOnBoard[i].xCoord) && (cursorX <= (towersOnBoard[i].xCoord+45))) && ((cursorY >= towersOnBoard[i].yCoord) && (cursorY <= (towersOnBoard[i].yCoord+45)))){
 			if ((towersOnBoard[i].xCoord == tempX) && (towersOnBoard[i].yCoord == tempY)){
-				console.log("setting");
 				if (towersOnBoard[i].boxBool == false){
 					towersOnBoard[i].boxBool = true;
 				}
@@ -2162,6 +2239,7 @@ initGame();
 function initGame()
 {
 	currentStageImage.src = "../images/" + stageImages[currentStage];
+	nextWave();
 	towerAvailable();
 	render();
 }
@@ -2182,7 +2260,7 @@ function update(){
 		HTMLBTN_mainMenu.innerHTML = "Main Menu";
 		outputPlayerStats.innerHTML = "<b>Health: </b>" + Hp;
 		outputPlayerStats.innerHTML += "<br><b>Gold: </b>" + Gold;
-		outputPlayerStats.innerHTML += "<br><b>Level: </b>" + (currentStage + 1);
+		outputPlayerStats.innerHTML += "<br><b>Stage: </b>" + (currentStage + 1);
 		outputPlayerStats.innerHTML += "<br><b>Wave: </b>" + (waveCounter + 1);
 	}
 	else if(language === 1){
@@ -2226,6 +2304,9 @@ function update(){
 	else if (enemiesOnBoard.length > 0 && !pause){
 		awardGoldOverTime = true;
 	}
+	if ( enemiesOnBoard.length === 0 ) {
+		setTimeout( nextWave, 5000 );
+	}
 }
 
 
@@ -2234,8 +2315,8 @@ function render(){
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 	
 	renderLampCheck();
-	renderEnemyMovement();	
 	renderTowerAndBullet();
+	renderEnemyMovement();	
 	drawRange();
 	hoverCheck();
 	stageWin();
@@ -2303,6 +2384,21 @@ function renderEnemyMovement() {
 				ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-30, 55, 60);
 				//draw health bar
 				ctx.fillRect(enemiesOnBoard[i].xCoord-28, enemiesOnBoard[i].yCoord-35, (55 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+			}
+		}
+		else if (enemiesOnBoard[i] instanceof ghost) {
+			enemyImgToPrint.src = '../images/ghost.png';
+			if (enemiesOnBoard[i].isVisible == false) {
+				ctx.save();
+				ctx.globalAlpha = '0.3';
+				ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
+				ctx.restore();
+				ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
+			}
+			else{
+				ctx.drawImage(enemyImgToPrint, enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-15, 25, 32);
+				//draw health bar
+				ctx.fillRect(enemiesOnBoard[i].xCoord-13, enemiesOnBoard[i].yCoord-20, (25 * (enemiesOnBoard[i].health / enemiesOnBoard[i].startHealth)), 5);
 			}
 		}
 		else if (enemiesOnBoard[i] instanceof miniBlob){
@@ -2397,7 +2493,12 @@ function renderTowerAndBullet() {
 				if ( ang != 720 ) {
 					ctx.rotate(Math.PI / 180 * ang);
 					//draw bullet with respect to trajectory parameter
-					ctx.drawImage(bulletImg, 0, -(towersOnBoard[i].bulletArr[b].trajectory), 15, 15);
+					if (towersOnBoard[i] instanceof vanquishEvil){
+						ctx.drawImage(bulletImg, 0, -(towersOnBoard[i].bulletArr[b].trajectory), 30, 30);
+					}
+					else {
+						ctx.drawImage(bulletImg, 0, -(towersOnBoard[i].bulletArr[b].trajectory), 15, 15);
+					}
 					towersOnBoard[i].lastAngState = ang;
 				}
 				//restore canvas state
@@ -2553,7 +2654,7 @@ stageWave[3][4] = ["ghost", "witch", "bat", "witch", "ghost","witch", "bat", "wi
 stageWave[3][5] = ["grizzlyBear", "witch", "witch", "redSkeleton", "blob", "clown", "blueDemon"];
 stageWave[3][6] = ["clown", "grizzlyBear", "blob", "blob", "blob", "witch", "witch", "grizzlyBear", "redSkeleton", "blueSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "basicSkeleton", "redDemon"];
 stageWave[3][7] = ["grizzlyBear", "grizzlyBear", "blob", "grizzlyBear", "blob", "bat", "bat", "bat", "clown", "bat", "redSkeleton", "basicSkeleton", "blueSkeleton", "ghost", "redDemon", "redDemon", "redSkeleton"];
-stageWave[3][8] = ["basicSkeleton", "blueSkeleton", "redSkeleton", "ghost", "bat", "blob", "clown", "grizzlyBear", "blueDemon", "redDemon", "bigRoach", "basicSkeleton", "blueSkeleton", "redSkeleton", "ghost", "bat", "blob", "clown", "grizzlyBear", "blueDemon", "redDemon", "bigRoach"];
+stageWave[3][8] = ["basicSkeleton", "blueSkeleton", "redSkeleton", "ghost", "bat", "blob", "clown", "grizzlyBear", "blueDemon", "redDemon", "grizzlyBear", "basicSkeleton", "blueSkeleton", "redSkeleton", "ghost", "bat", "blob", "clown", "grizzlyBear", "blueDemon", "redDemon", "blob", "blob"];
 stageWave[3][9] = ["grimReaper"];
 
 var inAWave = false;
@@ -2594,6 +2695,11 @@ function renderPauseUI() {
 
 }
 
+document.addEventListener( "visibilitychange", function() { 
+	if (document.hidden || !document.hidden) {
+		pauseGame();
+	}
+} );
 function pauseGame(){
 	if(!pause) {
 		bkgAudio.volume = 0.2;
