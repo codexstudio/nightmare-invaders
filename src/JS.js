@@ -397,10 +397,10 @@ var tips = setInterval(function(){
 				gameMessage = "Tip: Sometimes sacrificing health for more gold can be a good strategy.";
 			}
 			if (language === 1) {
-				gameMessage = "Astuce: Parfois sacrifier la santé pour plus d'or peut être une bonne stratégie.";
+				gameMessage = "Astuce: Parfois sacrifier la sante pour plus d'or peut etre une bonne strategie.";
 			}
 			if (language === 2) {
-				gameMessage = "Consejo: A veces sacrificar la salud para más de oro puede ser una buena estrategia.";
+				gameMessage = "Consejo: A veces sacrificar la salud para mas de oro puede ser una buena estrategia.";
 			}
 		}
 		else if (displayTip < 80 && displayTip >= 60){
@@ -413,7 +413,7 @@ var tips = setInterval(function(){
 			}
 			if (language === 2) {
 				
-				gameMessage = "Consejo: La colocación de la torre es importante! Mire a su indicador de rango que rodea la torre.";
+				gameMessage = "Consejo: La colocacion de la torre es importante! Mire a su indicador de rango que rodea la torre.";
 			}
 		}
 		else if (displayTip < 60 && displayTip >= 40){
@@ -432,7 +432,7 @@ var tips = setInterval(function(){
 				gameMessage = "Tip: If you are able to clear all enemies, save money for better towers.";
 			}
 			if (language === 1) {
-				gameMessage = "Astuce: Si vous êtes en mesure d' effacer tous les ennemis , économiser de l'argent pour de meilleurs tours.";
+				gameMessage = "Astuce: Si vous etes en mesure d'effacer tous les ennemis , economiser de l'argent pour de meilleurs tours.";
 			}
 			if (language === 2){
 				gameMessage = "Si usted es capaz de eliminar a todos los enemigos , ahorrar dinero para mejores torres.";
@@ -443,7 +443,7 @@ var tips = setInterval(function(){
 				gameMessage = "Warning! Gold resets back to 100 at the end of each stage!";
 			}
 			if (language === 1) {
-				gameMessage = "Attention! Or réinitialise retour à 100 à la fin de chaque étape!";
+				gameMessage = "Attention! Or reinitialise retour à 100 à la fin de chaque etape!";
 			}
 			if (language === 2){
 				gameMessage = "¡Advertencia! Oro restablece de nuevo a 100 al final de cada etapa!";
@@ -452,10 +452,26 @@ var tips = setInterval(function(){
 	}
 	if (currentStage == 1) {
 		if (displayTip < 100 && displayTip >= 75){
-		gameMessage = "Tip: Calculators help you in the long run.";
+			if (language === 0) {
+				gameMessage = "Tip: Calculators help you in the long run.";
+			}
+			if (language === 1) {
+				gameMessage = "Astuce: Calculatrices vous aider dans le long terme.";
+			}
+			if (language === 2){
+				gameMessage = "Las calculadoras que ayudan en el largo plazo.";
+			}
 		}
 		else if (displayTip < 75 && displayTip >= 50){
-		gameMessage = "Tip: Killing a big blob makes three smaller, faster blobs appear in its place!";
+			if (language === 0) {
+				gameMessage = "Tip: Killing a big blob makes three smaller, faster blobs appear in its place!";
+			}
+			if (language === 1) {
+				gameMessage = "Astuce: Tuer un gros blob fait trois petites taches plus rapides apparaissent a sa place!";
+			}
+			if (language === 2){
+				gameMessage = "Consejo: Matar a una gran mancha hace tres, gotas mas pequenas parecen mas rapidos en su lugar!";
+			}
 		}
 	}
 }, 30000);
@@ -569,7 +585,7 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			}
 		}
 		if (enemyObj instanceof sensei) {
-			enemyObj.tutorial(); //runs tutorial function on 569
+			enemyObj.tutorial();
 		}
 		if (enemyObj instanceof ghost){
 			enemyObj.checkGhostVisibility();
@@ -586,8 +602,16 @@ enemy.prototype.enemyMovement = function(enemyObj){
 			}
 		}
 		if (enemyObj instanceof kid) {
-			if (enemyObj.health <= (enemyObj.startHealth/2)) {
-				gameMessage = "What are you doing!? Save him!";
+			if (enemyObj.health <= (enemyObj.startHealth/1.5)) {
+				if (language === 0) {
+					gameMessage = "What are you doing!? Save him! That's Tommy!";
+				}
+				if (language === 1) {
+					gameMessage = "Qu'est-ce que tu fais!? Sauve le! C'est Tommy!";
+				}
+				if (language === 2){
+					gameMessage = "¿¡Qué estás haciendo!? Salvarlo! Eso es Tommy !";
+				}
 			}
 		}
 	}, this.speed);
@@ -607,16 +631,48 @@ sensei.prototype.constructor = sensei;
 
 sensei.prototype.tutorial = function(){
 	if (towersOnBoard.length == 1) {
-		gameMessage = "Good job! Now use the towers to get me out of this Nightmare!"; 
+		if (language === 0) {
+			gameMessage = "Good job! Now use the towers to get me out of this Nightmare!";
+		}
+		if (language === 1) {
+			gameMessage = "Bon travail! Maintenant, utilisez les tours pour me sortir de ce cauchemar!";
+		}
+		if (language === 2){
+			gameMessage = "¡Buen trabajo! Ahora usa las torres para que me saque de esta pesadilla!";
+		}
 	}
 	if (this.health <= 175) {
-		gameMessage = "As enemies walk through the path, you will have to place more towers to deal with them. Make sure you have enough gold for the tower you want."; 
+		if (language === 0) {
+			gameMessage = "As enemies walk through the path, you will have to place more towers to deal with them. Make sure you have enough gold for the tower you want.";
+		}
+		if (language === 1) {
+			gameMessage = "Comme les ennemis a pied par le chemin , vous devrez placer plus de tours pour y faire face . Assurez-vous que vous avez assez d'or pour la tour que vous voulez.";
+		}
+		if (language === 2){
+			gameMessage = "Como enemigos a pie por el camino, se tendra que colocar mas torres para tratar con ellos . Asegurate de que tienes suficiente oro para la torre que desea.";
+		}
 	}
 	if (this.health <= 125){
-		gameMessage = "You can always click on a tower and sell it for half its original cost.";
+		if (language === 0) {
+			gameMessage = "You can always click on a tower and sell it for half its original cost.";
+		}
+		if (language === 1) {
+			gameMessage = "Vous pouvez toujours cliquer sur une tour et de le vendre pour la moitie de son cout initial.";
+		}
+		if (language === 2){
+			gameMessage = "Siempre se puede hacer clic en una torre y lo venden por la mitad de su costo original.";
+		}
 	}
 	if (this.health <= 75) {
-		gameMessage = "If you allow an enemy to travel to the end of the path, Tommy's health will be lowered. Don't let his health drop to 0 or else you will lose."; 
+		if (language === 0) {
+			gameMessage = "If you allow an enemy to travel to the end of the path, Tommy's health will be lowered. Don't let his health drop to 0 or else you will lose.";
+		}
+		if (language === 1) {
+			gameMessage = "Si vous permettez a un ennemi de se rendre a la fin du chemin , la sante de Tommy sera abaisse . Ne pas laisser tomber sa sante à 0 ou bien vous perdrez.";
+		}
+		if (language === 2){
+			gameMessage = "Si permite que un enemigo para viajar hasta el final de la ruta , se reducira la salud de Tommy. No deje caer su salud a 0 o de lo contrario perdera.";
+		}
 	}
 };
 
